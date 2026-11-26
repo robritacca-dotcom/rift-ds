@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor } from 'storybook/test';
 import { AppLayout } from './AppLayout';
 
 const sampleSections = [
@@ -159,4 +160,38 @@ export const Flush: Story = {
 /** Flush at full width. */
 export const FlushFullWidth: Story = {
   args: { ...Default.args, layout: 'flush', width: 'full' },
+};
+
+/** `sidebarProps` passes the rest of the rail's options through, so an app
+    on AppLayout has the same rail as the templates: here its sections fold
+    from a chevron at each heading, and a full-width action sits under the
+    profile. */
+export const WithSidebarProps: Story = {
+  args: {
+    sidebarProps: {
+      collapsibleSections: true,
+      footerAction: (
+        <button type="button" style={{ width: '100%', height: 40, borderRadius: 999 }}>
+          Upgrade plan
+        </button>
+      ),
+    },
+    children: (
+      <div>
+        <h1 style={{ fontSize: 40, fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: 8 }}>
+          Dashboard
+        </h1>
+      </div>
+    ),
+  },
+  play: async ({ canvasElement }) => {
+    const fold = canvasElement.querySelector<HTMLButtonElement>('.ds-app-sidebar__fold');
+    await expect(fold).not.toBeNull();
+    await userEvent.click(fold!);
+    await waitFor(() => expect(fold).toHaveAttribute('aria-expanded', 'false'));
+    // Rest open, as the snapshot expects.
+    await userEvent.click(fold!);
+    await waitFor(() => expect(fold).toHaveAttribute('aria-expanded', 'true'));
+    await expect(canvasElement.querySelector('.ds-app-sidebar__footer-action')).not.toBeNull();
+  },
 };

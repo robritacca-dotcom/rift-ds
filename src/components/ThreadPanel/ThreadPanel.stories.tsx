@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, waitFor } from 'storybook/test';
 import { Button } from '../Button/Button';
@@ -473,5 +474,34 @@ export const Keyboard: Story = {
     toggle.focus();
     await userEvent.keyboard('{Enter}');
     await waitFor(() => expect(args.onExpandedChange).toHaveBeenCalled());
+  },
+};
+
+/** `collapsibleSections` lets the reader fold the projects and each
+ *  labelled history group under its heading. ThreadPanel is stateless, so
+ *  the host keeps the folded list (`collapsedSections`) and hears each
+ *  press through `onCollapsedSectionsChange`; ChatThreads keeps it for a
+ *  chat. Off by default, where the headings stay plain labels. */
+export const CollapsibleSections: Story = {
+  args: {
+    logoText: 'Skylark',
+    projects: PROJECTS,
+    onProjectSelect: fn(),
+    collapsibleSections: true,
+  },
+  render: function Render(args) {
+    const [collapsed, setCollapsed] = useState<string[]>([]);
+    return <ThreadPanel {...args} collapsedSections={collapsed} onCollapsedSectionsChange={setCollapsed} />;
+  },
+  play: async ({ canvas, userEvent }) => {
+    const heading = canvas.getByRole('button', { name: 'Projects' });
+    await expect(heading).toHaveAttribute('aria-expanded', 'true');
+    await userEvent.click(heading);
+    await expect(heading).toHaveAttribute('aria-expanded', 'false');
+    await waitFor(() => expect(heading.closest('.ds-thread-panel__projects-header')!.nextElementSibling).toHaveAttribute('inert'));
+
+    // Rest open, as the snapshot expects.
+    await userEvent.click(heading);
+    await expect(heading).toHaveAttribute('aria-expanded', 'true');
   },
 };

@@ -142,6 +142,13 @@
   color: var(--color-text-tertiary);
 }
 
+/* A section's own content after its rows (`content`), held to the menu's
+   inset so it lines up with the rows above it. */
+.ds-drill-menu__section-content {
+  min-width: 0;
+  padding-inline: var(--ds-drill-menu-inset);
+}
+
 .ds-drill-menu__list {
   display: flex;
   flex-direction: column;

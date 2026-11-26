@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { AppSidebar } from './AppSidebar';
@@ -535,6 +536,32 @@ export const LongNavCollapsed: Story = {
   },
 };
 
+/** A crowded collapsed rail with a persistent top slot: the rows scroll
+    and the slot keeps its content's full height, so a switcher's mark is
+    never squeezed under the slot's clip. */
+export const TopSlotCrowded: Story = {
+  args: {
+    ...LongNavCollapsed.args,
+    persistentTopSlot: true,
+    topSlot: (
+      <div data-testid="crowded-slot" style={{ height: 52, display: 'grid', placeItems: 'center' }}>
+        <span
+          aria-hidden="true"
+          style={{ display: 'block', width: 32, height: 32, borderRadius: 8, background: 'var(--color-chart-series-2)' }}
+        />
+      </div>
+    ),
+  },
+  parameters: { contentOffset: 80 },
+  render: LongNavCollapsed.render,
+  play: async ({ canvasElement }) => {
+    const top = canvasElement.querySelector('.ds-app-sidebar__top') as HTMLElement;
+    await waitFor(() => expect(top.scrollHeight).toBeGreaterThan(top.clientHeight));
+    const slot = canvasElement.querySelector('.ds-app-sidebar__top-slot') as HTMLElement;
+    await expect(slot.getBoundingClientRect().height).toBeGreaterThanOrEqual(52);
+  },
+};
+
 /** `subNav="panel"` skips the accordion: Reports opens its sub-items straight
     into the side panel, with Financial planning as the panel's own accordion.
     The collapsed rail names every destination under its icon. */
@@ -621,6 +648,32 @@ export const PanelBehaviour: Story = {
   },
 };
 
+/** `collapsibleSections` lets the reader fold each titled section under
+    its heading: the heading becomes a toggle with a chevron, every section
+    starts open, and a folded section's rows glide shut and go inert. Off by
+    default, where the headings stay plain labels. */
+export const CollapsibleSections: Story = {
+  args: {
+    defaultExpanded: true,
+    collapsibleSections: true,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const heading = canvas.getByRole('button', { name: 'Design' });
+    const panel = canvasElement.ownerDocument.getElementById(heading.getAttribute('aria-controls') ?? '');
+    await expect(heading).toHaveAttribute('aria-expanded', 'true');
+    await expect(panel).not.toHaveAttribute('inert');
+
+    await userEvent.click(heading);
+    await expect(heading).toHaveAttribute('aria-expanded', 'false');
+    await expect(panel).toHaveAttribute('inert');
+
+    // Rest open, as the snapshot expects.
+    await userEvent.click(heading);
+    await expect(heading).toHaveAttribute('aria-expanded', 'true');
+  },
+};
+
 /** `fixed={false}` lays the rail out in its parent instead of fixing
     it to the viewport: here a bordered 720 x 480 frame, a flex row with the
     rail as its first item. The rail runs the frame's height, the side panel
@@ -678,5 +731,149 @@ export const Contained: Story = {
       expect(Math.round(panelBox.left)).toBe(Math.round(railBox.right));
       expect(panelBox.bottom).toBeLessThanOrEqual(outer.bottom);
     });
+  },
+};
+
+/* ---- Unique content in the shared rail ---- */
+
+const CONTENT_SECTIONS = [
+  { items: [{ key: 'new', icon: 'edit_square', label: 'New chat', keys: 'mod+shift+o' }] },
+  {
+    category: 'Projects',
+    action: { label: 'New project', icon: 'add', onClick: () => {} },
+    items: [
+      { key: 'atlas-app', label: 'Atlas app', pixelAvatar: 'atlas-app' },
+      { key: 'atlas-docs', label: 'Atlas docs', pixelAvatar: 'atlas-docs' },
+    ],
+  },
+  {
+    category: 'History',
+    items: [],
+    content: (
+      <ul data-testid="history" style={{ margin: 0, padding: 0, listStyle: 'none' }}>
+        <li style={{ padding: 'var(--padding-200) var(--padding-300)' }}>Rework the onboarding flow</li>
+        <li style={{ padding: 'var(--padding-200) var(--padding-300)' }}>Speed up the search index</li>
+      </ul>
+    ),
+  },
+];
+
+/** A section's `content` carries the rail's own content after its rows (a
+    chat's history), and its `action` puts a button on the heading. An item's
+    `keys` draws a shortcut hint at the row's end. Collapsed, the rail folds
+    the content away. */
+export const WithContentSection: Story = {
+  args: { defaultExpanded: true, sections: CONTENT_SECTIONS },
+  parameters: { contentOffset: 280 },
+  render: (args) => (
+    <div style={{ display: 'flex', height: 560 }}>
+      <AppSidebar {...args} fixed={false} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByTestId('history')).toBeVisible();
+    await expect(canvas.getByRole('button', { name: 'New project' })).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole('button', { name: 'Collapse sidebar' }));
+    const content = canvasElement.querySelector('.ds-app-sidebar__section-content')!;
+    await waitFor(() => expect(content).toHaveAttribute('inert'));
+    // Collapsed, the logo and the toggle both expand; press the toggle.
+    await userEvent.click(canvasElement.querySelector<HTMLElement>('.ds-app-sidebar__toggle')!);
+    await waitFor(() => expect(content).not.toHaveAttribute('inert'));
+  },
+};
+
+/** `responsive="drawer"` with a controlled drawer: the host opens it, focus
+    moves inside and stays there, and Escape closes it without reaching a
+    parent that closes on Escape, with focus back on the opener. */
+export const HostDrawer: Story = {
+  args: { sections: CONTENT_SECTIONS },
+  parameters: { contentOffset: 0 },
+  render: function Render(args) {
+    const [open, setOpen] = React.useState(false);
+    const [parentHeard, setParentHeard] = React.useState(false);
+    return (
+      <div
+        data-testid="host"
+        data-parent-heard={parentHeard || undefined}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape' && !event.defaultPrevented) setParentHeard(true);
+        }}
+        style={{ display: 'flex', flexDirection: 'column', width: 420, height: 560 }}
+      >
+        <button type="button" onClick={() => setOpen(true)}>
+          Open history
+        </button>
+        <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
+          <AppSidebar {...args} fixed={false} responsive="drawer" showMobileTrigger={false} drawerOpen={open} onDrawerOpenChange={setOpen} />
+        </div>
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const opener = canvas.getByRole('button', { name: 'Open history' });
+    await userEvent.click(opener);
+    const nav = canvasElement.querySelector('.ds-app-sidebar') as HTMLElement;
+    await waitFor(() => expect(nav).toHaveClass('ds-app-sidebar--mobile-open'));
+    await waitFor(() => expect(nav.contains(document.activeElement)).toBe(true));
+    for (let step = 0; step < 6; step += 1) {
+      await userEvent.tab();
+      await expect(nav.contains(document.activeElement)).toBe(true);
+    }
+    // A tooltip may hold the first Escape (one press, one layer), so press
+    // again only once the first has settled and the drawer is still open.
+    await userEvent.keyboard('{Escape}');
+    try {
+      await waitFor(() => expect(nav).not.toHaveClass('ds-app-sidebar--mobile-open'), { timeout: 400 });
+    } catch {
+      await userEvent.keyboard('{Escape}');
+    }
+    await waitFor(() => expect(nav).not.toHaveClass('ds-app-sidebar--mobile-open'));
+    await expect(canvas.getByTestId('host')).not.toHaveAttribute('data-parent-heard');
+    await waitFor(() => expect(opener).toHaveFocus());
+  },
+};
+
+/** `responsive="container"` decides the form by the parent's width: in a
+    700px frame the rail is the drawer form, and its built-in trigger opens
+    it inside the frame. */
+export const ContainerResponsive: Story = {
+  args: { defaultExpanded: true, sections: CONTENT_SECTIONS },
+  parameters: { contentOffset: 0 },
+  render: (args) => (
+    <div style={{ display: 'flex', width: 700, height: 520, border: '1px solid var(--color-bg-container-border)' }}>
+      <AppSidebar {...args} fixed={false} responsive="container" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const nav = canvasElement.querySelector('.ds-app-sidebar') as HTMLElement;
+    await waitFor(() => expect(nav).toHaveClass('ds-app-sidebar--drawer-form'));
+    const trigger = canvasElement.querySelector<HTMLElement>('.ds-app-sidebar__mobile-trigger')!;
+    await userEvent.click(trigger);
+    await waitFor(() => expect(nav).toHaveClass('ds-app-sidebar--mobile-open'));
+    await userEvent.click(within(nav).getByRole('button', { name: 'Close navigation' }));
+    await waitFor(() => expect(nav).not.toHaveClass('ds-app-sidebar--mobile-open'));
+  },
+};
+
+/** `foldForPanel` folds the expanded rail to its icon form when the side
+    panel opens in a parent too narrow for the rail, the panel and a
+    readable column. */
+export const FoldForPanel: Story = {
+  args: { defaultExpanded: true, subNav: 'panel', sections: threeLevelSections, foldForPanel: true, defaultPanelOpen: false },
+  parameters: { contentOffset: 0 },
+  render: (args) => (
+    <div style={{ display: 'flex', width: 900, height: 560 }}>
+      <AppSidebar {...args} fixed={false} responsive="rail" />
+      <div style={{ flex: 1 }} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const nav = canvasElement.querySelector('.ds-app-sidebar') as HTMLElement;
+    await expect(nav).toHaveClass('ds-app-sidebar--expanded');
+    await userEvent.click(canvas.getByRole('button', { name: /Reports/ }));
+    await waitFor(() => expect(nav).not.toHaveClass('ds-app-sidebar--expanded'));
   },
 };

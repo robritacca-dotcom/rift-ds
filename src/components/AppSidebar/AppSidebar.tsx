@@ -2,15 +2,19 @@
 
 import React, { useState, useCallback, useEffect, useId, useRef } from 'react';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
-import { useLayer } from '../../behaviors/useLayer';
+import { handleLayerEscape, useLayer } from '../../behaviors/useLayer';
 import { useFocusScope } from '../../behaviors/useFocusScope';
+import { useFoldedSections } from '../../behaviors/useFoldedSections';
 import { useScrollLock } from '../../behaviors/useScrollLock';
 import { BREAKPOINT_MOBILE_PX, BREAKPOINT_TABLET_PX, mediaAbove, mediaBelow } from '../../tokens/breakpoints';
 import { Avatar } from '../Avatar/Avatar';
+import { Kbd } from '../Kbd/Kbd';
+import type { Shortcut, ShortcutKeyLabels } from '../../behaviors/shortcut-keys';
 import { PixelAvatar, distinctPixelInks } from '../PixelAvatar/PixelAvatar';
 import type { PixelInk } from '../PixelAvatar/PixelAvatar';
 import { SubNavPanel } from '../SubNavPanel/SubNavPanel';
 import { warnOnce } from '../../behaviors/devWarning';
+import { MOTION_SCROLL_SETTLE_MS } from '../../tokens/motion';
 import { DrillMenu, type DrillMenuEntry, type DrillMenuItem } from '../DrillMenu/DrillMenu';
 import type { SubNavPanelItem } from '../SubNavPanel/SubNavPanel';
 import { Tooltip } from '../Tooltip/Tooltip';
@@ -79,23 +83,61 @@ export interface AppSidebarItem {
   value?: string;
   /** Sub-items: an accordion under the row, or the side panel's contents when `subNav="panel"` */
   children?: AppSidebarSubItem[];
+  /** A keyboard hint at the row's end while expanded, in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative: bind the action with `useShortcut` */
+  keys?: Shortcut;
+}
+
+/** What a section's `content` function is told about where it is drawn. */
+export interface AppSidebarSectionContext {
+  /** Whether the rail is expanded (the drawer always is). */
+  expanded: boolean;
+  /** Whether it is drawn in the drawer rather than on the rail. */
+  drawer: boolean;
+  /** Closes the drawer, for content whose rows are destinations. Does nothing on the rail. */
+  closeDrawer: () => void;
+}
+
+/** A button in a section's heading, such as a project list's add. */
+export interface AppSidebarSectionAction {
+  /** Its accessible name, and the row's text in the drawer. */
+  label: string;
+  /** A Material Symbol name. */
+  icon?: string;
+  /** What pressing it does. */
+  onClick: () => void;
 }
 
 export interface AppSidebarSection {
-  /** The heading above the group. Optional for a single section; with more than one, give each its heading, so every group the gaps set apart is named */
+  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */
   category?: string;
-  /** Nav items in this section */
+  /** Nav items in this section. Pass an empty list for a section that is all `content` */
   items: AppSidebarItem[];
+  /**
+   * The section's own content after its rows, for a rail whose content is
+   * more than destinations (a chat's history). On the expanded rail it sits
+   * under the section's fold, at the rail's expanded width; the collapsed
+   * rail, which has no room for it, folds it away; in the drawer it follows
+   * the section's rows on the first level. A function is told where it is
+   * drawn, so its rows can close the drawer.
+   */
+  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);
+  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */
+  action?: AppSidebarSectionAction;
 }
 
 export interface AppSidebarProfile {
   /** User display name */
   name: string;
-  /** User email */
-  email: string;
+  /** The quiet second line under the name, usually the email. Left empty, the row shows the name alone */
+  email?: string;
   /** Avatar image URL */
   avatarUrl?: string;
+  /** A mark of its own in the avatar's place, such as a generated avatar; wins over `avatarUrl` */
+  avatar?: React.ReactNode;
 }
+
+/** How the rail decides between its rail and drawer forms. */
+export type AppSidebarResponsive = 'viewport' | 'container' | 'rail' | 'drawer';
 
 /** The three app shell modes, how the rail meets the page: edge to edge behind a hairline, floating as a card, or flush beside a raised inset surface. */
 export type AppSidebarLayout = 'flush' | 'floating' | 'inset';
@@ -104,6 +146,22 @@ export type AppSidebarLayout = 'flush' | 'floating' | 'inset';
 type AppSidebarOwnProps = {
   /** Navigation sections */
   sections: AppSidebarSection[];
+  /**
+   * Let the reader fold each titled section under its heading: the heading
+   * becomes a toggle with a chevron, and the section's rows glide shut
+   * beneath it. Every section starts open. A section is known by its
+   * `category`, the id the fold state lists. The collapsed rail and the
+   * phone drawer show every row whatever is folded, since neither shows
+   * the headings.
+   * @default false
+   */
+  collapsibleSections?: boolean;
+  /** Controlled list of folded sections, by `category`. Needs `collapsibleSections`. */
+  collapsedSections?: string[];
+  /** Sections folded at first (uncontrolled), by `category`. Needs `collapsibleSections`. */
+  defaultCollapsedSections?: string[];
+  /** Fires with the full new list of folded sections whenever a heading is pressed, in both controlled and uncontrolled modes. */
+  onCollapsedSectionsChange?: (collapsedSections: string[]) => void;
   /** Profile data for the bottom section */
   profile?: AppSidebarProfile;
   /** Key of the currently active item. When one of its children is the current page (`activeSubKey` or `activeTertiaryKey`), that child carries `aria-current` instead, and this row drops its fill while the child shows below it. */
@@ -134,6 +192,39 @@ type AppSidebarOwnProps = {
   expanded?: boolean;
   /** Callback when expand/collapse changes */
   onExpandedChange?: (expanded: boolean) => void;
+  /**
+   * Whether the reader can collapse the rail. `false` keeps it expanded: no
+   * toggle, and a click on the rail opens nothing.
+   * @default true
+   */
+  collapsible?: boolean;
+  /**
+   * How the rail decides between its rail and its drawer form. `viewport`
+   * (the default) follows the window: the rail folds on entering the tablet
+   * band and turns into the drawer at the mobile breakpoint. `container`
+   * does the same by the width of the rail's parent, for a rail inside a
+   * framed host. `rail` and `drawer` leave the decision to the host, which
+   * measures its own room (a chat does, at its own widths). Every value but
+   * `viewport` needs `fixed={false}`: the drawer then covers the parent, not
+   * the page, and holds no page scroll lock.
+   * @default 'viewport'
+   */
+  responsive?: AppSidebarResponsive;
+  /** Controlled open state of the drawer form */
+  drawerOpen?: boolean;
+  /** Whether the drawer form starts open (uncontrolled) */
+  defaultDrawerOpen?: boolean;
+  /** Called when the drawer opens or closes, including every close of its own: the scrim, the close button, Escape, a destination row, and growing back into the rail form */
+  onDrawerOpenChange?: (open: boolean) => void;
+  /**
+   * Fold the rail to its icon form when the side panel opens and its parent
+   * has too little room for the expanded rail, the panel and a readable
+   * column beside them. For a rail in a narrow host, such as a chat.
+   * @default false
+   */
+  foldForPanel?: boolean;
+  /** Replaces any legend an item's `keys` hint is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard */
+  keyLabels?: ShortcutKeyLabels;
   /** Callback when profile more button clicked */
   onProfileMore?: () => void;
   /**
@@ -247,6 +338,11 @@ export interface AppSidebarProps
   extends AppSidebarOwnProps,
     Omit<React.ComponentPropsWithoutRef<'nav'>, keyof AppSidebarOwnProps | 'children'> {}
 
+/** The room a parent needs to keep the rail expanded beside an open side
+    panel (`foldForPanel`): the expanded rail (280), the panel (240) and a
+    readable column (480). */
+const FOLD_FOR_PANEL_ROOM = 280 + 240 + 480;
+
 /** A badge that is a count (`3`, `"12"`, `"99+"`), which takes the count
     badge pair; a word such as "New" keeps the quiet pill. */
 function isCount(badge: string | number) {
@@ -297,6 +393,10 @@ function DefaultLogo() {
  */
 export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(function AppSidebar({
   sections,
+  collapsibleSections = false,
+  collapsedSections,
+  defaultCollapsedSections,
+  onCollapsedSectionsChange,
   profile,
   activeKey,
   activeSubKey,
@@ -308,6 +408,13 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   defaultExpanded = false,
   expanded: controlledExpanded,
   onExpandedChange,
+  collapsible = true,
+  responsive = 'viewport',
+  drawerOpen: controlledDrawerOpen,
+  defaultDrawerOpen = false,
+  onDrawerOpenChange,
+  foldForPanel = false,
+  keyLabels,
   onProfileMore,
   layout: layoutProp,
   floating: floatingProp = false,
@@ -341,9 +448,15 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   const contained = !fixed;
   const Link = useLinkComponent(linkComponent);
   // A gap between groups always carries a heading naming the group, in
-  // the rail and in the phone drawer alike.
-  if (sections.length > 1 && sections.some((section) => !section.category)) {
-    warnOnce('AppSidebar: with more than one section, give each a `category`, so every group the gaps set apart is named.');
+  // the rail and in the phone drawer alike. The first section may lead
+  // unnamed (a chat's New chat row), and a section with content names its
+  // own groups.
+  if (sections.length > 1 && sections.some((section, index) => index > 0 && !section.category && !section.content)) {
+    warnOnce('AppSidebar: with more than one section, give each after the first a `category`, so every group the gaps set apart is named.');
+  }
+  const sized = responsive !== 'viewport';
+  if (sized && fixed) {
+    warnOnce('AppSidebar: `responsive` other than "viewport" needs `fixed={false}`: the drawer form covers the rail\'s parent.');
   }
 
   /* The avatar rows' inks, spread across the whole sidebar so neighbours
@@ -360,7 +473,8 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
 
   /* Expand / collapse */
   const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
-  const isExpanded = controlledExpanded ?? internalExpanded;
+  // A rail the reader cannot collapse is always expanded.
+  const isExpanded = collapsible ? (controlledExpanded ?? internalExpanded) : true;
   const onExpandedChangeRef = useRef(onExpandedChange);
   useEffect(() => {
     onExpandedChangeRef.current = onExpandedChange;
@@ -375,8 +489,11 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   /* Tablet band (769-959px): the expanded rail is a third of the
      viewport, so entering the band folds it to the icon rail once —
      through the same path a click takes, so controlled hosts hear it.
-     Deliberately entry-only: the visitor can re-expand by hand. */
+     Deliberately entry-only: the visitor can re-expand by hand. A rail
+     sized by its container or its host folds by that room instead (the
+     container measure below), never by the window. */
   useEffect(() => {
+    if (responsive !== 'viewport') return;
     const band = window.matchMedia(`${mediaAbove(BREAKPOINT_MOBILE_PX)} and ${mediaBelow(BREAKPOINT_TABLET_PX)}`);
     const onChange = () => {
       if (band.matches) {
@@ -387,7 +504,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
     onChange();
     band.addEventListener('change', onChange);
     return () => band.removeEventListener('change', onChange);
-  }, []);
+  }, [responsive]);
 
   /* Mobile drawer: below the breakpoint the rail is hidden and the
      trigger opens it as a modal overlay, on the shared behavior layer
@@ -395,7 +512,32 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
      lock). The trigger is CSS-gated to the mobile media query, so the
      overlay can only ever activate there; crossing back up while open
      closes it, or the scroll lock would outlive the drawer. */
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [internalDrawerOpen, setInternalDrawerOpen] = useState(defaultDrawerOpen);
+  const drawerOpenState = controlledDrawerOpen ?? internalDrawerOpen;
+  const onDrawerOpenChangeRef = useRef(onDrawerOpenChange);
+  useEffect(() => {
+    onDrawerOpenChangeRef.current = onDrawerOpenChange;
+  }, [onDrawerOpenChange]);
+  /* Every open and close goes through here, so a controlled host hears
+     the drawer's own closes too. */
+  const setMobileOpen = useCallback(
+    (next: boolean) => {
+      setInternalDrawerOpen(next);
+      if (next !== drawerOpenState) onDrawerOpenChange?.(next);
+    },
+    [drawerOpenState, onDrawerOpenChange],
+  );
+
+  /* The rail's form. By the window, CSS decides (the media blocks), so the
+     first paint never flashes the wrong one. By the container, the parent's
+     width is measured against the same breakpoints, and entering the
+     tablet band folds the rail once, as the window does. By the host, it
+     says. */
+  const [containerForm, setContainerForm] = useState<'rail' | 'drawer'>('rail');
+  const form: 'rail' | 'drawer' | null =
+    responsive === 'rail' ? 'rail' : responsive === 'drawer' ? 'drawer' : responsive === 'container' ? containerForm : null;
+  // The rail form has no drawer to show, so an open one waits unseen.
+  const mobileOpen = drawerOpenState && form !== 'rail';
   /* The toggle's one name, spoken and shown: closing the drawer on a phone,
      otherwise collapsing or expanding the rail. */
   const toggleLabel = mobileOpen ? closeLabel : isExpanded ? collapseLabel : expandLabel;
@@ -414,13 +556,23 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
       top.toggleAttribute('data-fade-start', top.scrollTop > 1);
       top.toggleAttribute('data-fade-end', top.scrollTop < max - 1);
     };
+    /* The scrollbar stays out of sight until the rail scrolls (SideNav's
+       rule): a scroll marks it, and the mark clears once it settles. */
+    let settle: ReturnType<typeof setTimeout> | undefined;
+    const onScroll = () => {
+      edges();
+      top.setAttribute('data-scrolling', '');
+      clearTimeout(settle);
+      settle = setTimeout(() => top.removeAttribute('data-scrolling'), MOTION_SCROLL_SETTLE_MS);
+    };
     edges();
-    top.addEventListener('scroll', edges, { passive: true });
+    top.addEventListener('scroll', onScroll, { passive: true });
     const resize = new ResizeObserver(edges);
     resize.observe(top);
     for (const child of Array.from(top.children)) resize.observe(child);
     return () => {
-      top.removeEventListener('scroll', edges);
+      top.removeEventListener('scroll', onScroll);
+      clearTimeout(settle);
       resize.disconnect();
     };
   }, []);
@@ -434,12 +586,41 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   // The trigger's aria-controls points here, so a consumer id must replace
   // the generated one rather than be overwritten by it.
   const drawerId = rest.id ?? generatedDrawerId;
-  const closeMobile = useCallback(() => setMobileOpen(false), []);
+  const closeMobile = useCallback(() => setMobileOpen(false), [setMobileOpen]);
   const layer = useLayer({ open: mobileOpen, onDismiss: closeMobile });
   useFocusScope(drawerRef, { active: mobileOpen });
-  useScrollLock(mobileOpen);
+  // A drawer over its parent leaves the page free to scroll.
+  useScrollLock(mobileOpen && !sized);
   useEffect(() => {
-    if (!mobileOpen) return;
+    if (responsive !== 'container') return;
+    const parent = drawerRef.current?.parentElement;
+    if (!parent) return;
+    let band = false;
+    const measure = () => {
+      const width = parent.clientWidth;
+      const next = width <= BREAKPOINT_MOBILE_PX ? 'drawer' : 'rail';
+      setContainerForm(next);
+      /* Growing back into the rail form closes the drawer, and says so. */
+      if (next === 'rail') {
+        setInternalDrawerOpen((open) => {
+          if (open) onDrawerOpenChangeRef.current?.(false);
+          return false;
+        });
+      }
+      const inBand = width > BREAKPOINT_MOBILE_PX && width < BREAKPOINT_TABLET_PX;
+      if (inBand && !band) {
+        setInternalExpanded(false);
+        onExpandedChangeRef.current?.(false);
+      }
+      band = inBand;
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(parent);
+    return () => observer.disconnect();
+  }, [responsive]);
+  useEffect(() => {
+    if (!mobileOpen || sized) return;
     const query = window.matchMedia(mediaAbove(BREAKPOINT_MOBILE_PX));
     const onChange = () => {
       if (query.matches) setMobileOpen(false);
@@ -447,7 +628,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
     onChange();
     query.addEventListener('change', onChange);
     return () => query.removeEventListener('change', onChange);
-  }, [mobileOpen]);
+  }, [mobileOpen, sized, setMobileOpen]);
 
   /* Accordion open keys. The accordion holding the current page starts
      open, so a three-level path is visible from the first render. */
@@ -547,9 +728,24 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   const panelVisible = Boolean(panelSource) && isPanelOpen;
   const panelId = useId();
 
+  /* In a narrow host the expanded rail and the side panel together would
+     leave the column beside them too little room, so opening the panel
+     folds the rail to its icon form (through the same path a click takes).
+     Room is the parent's width against the expanded rail, the panel and
+     a readable column. */
+  useEffect(() => {
+    if (!foldForPanel || !panelVisible || !isExpanded || mobileOpen) return;
+    const parent = drawerRef.current?.parentElement;
+    if (!parent) return;
+    if (parent.clientWidth < FOLD_FOR_PANEL_ROOM) {
+      setInternalExpanded(false);
+      onExpandedChangeRef.current?.(false);
+    }
+  }, [foldForPanel, panelVisible, isExpanded, mobileOpen]);
+
   /* The phone drawer draws its own levels (a DrillMenu, below), so opening
      it only flips the flag. */
-  const openMobile = useCallback(() => setMobileOpen(true), []);
+  const openMobile = useCallback(() => setMobileOpen(true), [setMobileOpen]);
 
   /** A row with children that feeds the panel was pressed. */
   const selectPanelSource = useCallback(
@@ -577,6 +773,8 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
      once its onClick has run, since in an app a row is a destination. It
      opens on the level that holds the current page. */
   const drawerClicks = new Map<string, (() => void) | undefined>();
+  const sectionContent = (section: AppSidebarSection, context: AppSidebarSectionContext) =>
+    typeof section.content === 'function' ? section.content(context) : section.content;
   const subEntries = (subs: AppSidebarSubItem[], deeper: boolean): DrillMenuEntry[] => {
     const entries: DrillMenuEntry[] = [];
     for (const sub of subs) {
@@ -637,7 +835,19 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
           type: 'section' as const,
           id: `section-${si}`,
           label: section.category,
-          items: section.items.map(itemRow),
+          items: [
+            ...section.items.map(itemRow),
+            // The heading's action, as a row after the section's own.
+            ...(section.action
+              ? [{
+                  id: `section-${si}-action`,
+                  label: section.action.label,
+                  icon: section.action.icon ?? 'add',
+                  onClick: section.action.onClick,
+                }]
+              : []),
+          ],
+          content: sectionContent(section, { expanded: true, drawer: true, closeDrawer: closeMobile }),
         })),
         ...(drawerBottomEntries ?? []),
       ]
@@ -654,7 +864,15 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   }
 
   const showExpanded = isExpanded || mobileOpen;
-  const expandOnClick = !showExpanded
+  /* Sections fold only where their headings show: the expanded rail. */
+  const sectionsId = useId();
+  const { isFolded, toggle: toggleSection } = useFoldedSections({
+    collapsed: collapsedSections,
+    defaultCollapsed: defaultCollapsedSections,
+    onChange: onCollapsedSectionsChange,
+  });
+  const foldsSections = collapsibleSections && isExpanded && !mobileOpen;
+  const expandOnClick = !showExpanded && collapsible
     ? (event: React.MouseEvent<HTMLElement>) => {
         rest.onClick?.(event);
         if (event.defaultPrevented) return;
@@ -675,9 +893,12 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
     // The drawer always shows the expanded layout: an icon rail inside
     // a modal overlay would be all cost and no labels.
     isExpanded || mobileOpen ? `${baseClass}--expanded` : '',
+    collapsibleSections ? `${baseClass}--collapsible-sections` : '',
     floating ? `${baseClass}--floating` : '',
     layout === 'inset' ? `${baseClass}--inset` : '',
     contained ? `${baseClass}--contained` : '',
+    sized ? `${baseClass}--sized` : '',
+    form ? `${baseClass}--${form}-form` : '',
     mobileOpen ? `${baseClass}--mobile-open` : '',
     isPanelMode ? `${baseClass}--panel-mode` : '',
     className,
@@ -690,7 +911,14 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
       {showMobileTrigger && (
         <button
           type="button"
-          className={`${baseClass}__mobile-trigger${contained ? ` ${baseClass}__mobile-trigger--contained` : ''}`}
+          className={[
+            `${baseClass}__mobile-trigger`,
+            contained ? `${baseClass}__mobile-trigger--contained` : '',
+            sized ? `${baseClass}__mobile-trigger--sized` : '',
+            form === 'drawer' ? `${baseClass}__mobile-trigger--drawer-form` : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
           aria-label={openLabel}
           aria-expanded={mobileOpen}
           aria-controls={drawerId}
@@ -702,7 +930,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
         </button>
       )}
       {mobileOpen && (
-        <div className={`${baseClass}__scrim${contained ? ` ${baseClass}__scrim--contained` : ''}`} onClick={() => layer.ownsPress() && closeMobile()} aria-hidden="true" />
+        <div className={`${baseClass}__scrim${contained ? ` ${baseClass}__scrim--contained` : ''}${sized ? ` ${baseClass}__scrim--sized` : ''}`} onClick={() => layer.ownsPress() && closeMobile()} aria-hidden="true" />
       )}
     <nav
       aria-label="App navigation"
@@ -711,6 +939,19 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
       id={drawerId}
       className={classes}
       onClick={expandOnClick ?? rest.onClick}
+      onKeyDown={(event) => {
+        rest.onKeyDown?.(event);
+        /* While the drawer is open, Escape goes to the layer stack here,
+           before it can bubble to a host that closes on Escape (a docked
+           chat panel): the topmost layer (a tooltip over the drawer, or the
+           drawer) is dismissed and the key marked handled. */
+        if (mobileOpen && !event.defaultPrevented) {
+          handleLayerEscape(event.nativeEvent);
+          /* React's event keeps its own flag, which a host's onKeyDown
+             reads: mark it handled there too. */
+          if (event.nativeEvent.defaultPrevented) event.preventDefault();
+        }
+      }}
     >
       {/* ---- TOP ---- */}
       <div ref={topRef} className={`${baseClass}__top`}>
@@ -718,7 +959,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
         <div className={`${baseClass}__logo`}>
           <div
             className={`${baseClass}__logo-inner`}
-            onClick={!isExpanded ? toggleExpanded : undefined}
+            onClick={!isExpanded && collapsible ? toggleExpanded : undefined}
             role={!isExpanded ? 'button' : undefined}
             tabIndex={!isExpanded ? 0 : undefined}
             aria-label={!isExpanded ? expandLabel : undefined}
@@ -737,6 +978,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
           {/* The tooltip names the control as ThreadPanel's toggle does, so
               every rail's collapse reads the same; it opens toward the
               rail's interior, where there is room for it. */}
+          {(collapsible || mobileOpen) && (
           <Tooltip content={toggleLabel} position="start" className={`${baseClass}__toggle-tip`}>
             <button
               className={`${baseClass}__toggle`}
@@ -748,6 +990,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
               </span>
             </button>
           </Tooltip>
+          )}
         </div>
 
         {/* Consumer slot under the logo row; hidden while collapsed, it is
@@ -787,11 +1030,59 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
         <div className={`${baseClass}__sections`}>
         {/* Nav sections */}
         {sections.map((section, si) => (
-          <div key={si} className={`${baseClass}__nav`}>
+          <div key={si} className={`${baseClass}__nav${section.content && section.items.length === 0 ? ` ${baseClass}__nav--content-only` : ''}`}>
+            {(section.category || section.action) && (
+            <div className={`${baseClass}__heading`}>
             {section.category && (
-              <div className={`${baseClass}__category`}>{section.category}</div>
+              <div className={`${baseClass}__category`} id={`${sectionsId}-heading-${si}`}>
+                {section.category}
+              </div>
+            )}
+            {/* The fold is the chevron alone, named by the heading, so the
+                heading keeps its seat on the icon line and only the chevron
+                answers the pointer. */}
+            {section.category && foldsSections && (
+              <button
+                type="button"
+                className={`${baseClass}__fold`}
+                aria-expanded={!isFolded(section.category)}
+                aria-controls={`${sectionsId}-section-${si}`}
+                aria-labelledby={`${sectionsId}-heading-${si}`}
+                onClick={() => toggleSection(section.category!)}
+              >
+                <span className={`${baseClass}__fold-chevron material-symbols-rounded`} aria-hidden="true">
+                  expand_more
+                </span>
+              </button>
+            )}
+            {section.action && (
+              <button
+                type="button"
+                className={`${baseClass}__section-action`}
+                aria-label={section.action.label}
+                onClick={section.action.onClick}
+                inert={!isExpanded}
+              >
+                <span className="material-symbols-rounded" aria-hidden="true">
+                  {section.action.icon ?? 'add'}
+                </span>
+              </button>
+            )}
+            </div>
             )}
 
+            {/* The section's rows, in a panel that glides shut when the
+                heading folds it (SideNav's grid-rows fold). Without
+                `collapsibleSections`, or while the headings are hidden (the
+                collapsed rail), it stays open and adds nothing. */}
+            <div
+              id={`${sectionsId}-section-${si}`}
+              className={`${baseClass}__section-panel ${
+                section.category && foldsSections && isFolded(section.category) ? '' : `${baseClass}__section-panel--open`
+              }`}
+              inert={Boolean(section.category && foldsSections && isFolded(section.category))}
+            >
+            <div className={`${baseClass}__section-rows`}>
             {section.items.map((item) => {
               const hasChildren = item.children && item.children.length > 0;
               const isOpen = openKeys.has(item.key);
@@ -871,6 +1162,11 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                     </span>
                   )}
                   {item.value && <span className={`${baseClass}__btn-value`}>{item.value}</span>}
+                  {item.keys && (
+                    <span className={`${baseClass}__btn-keys`} aria-hidden="true">
+                      <Kbd keys={item.keys} keyLabels={keyLabels} size="compact" aria-keyshortcuts={undefined} />
+                    </span>
+                  )}
                   {/* Accordion rows turn the chevron down when open; a row
                       feeding the panel points it at the panel and holds. */}
                   {hasChildren && (
@@ -1027,6 +1323,21 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                 </React.Fragment>
               );
             })}
+            </div>
+            {section.content && (
+              /* The section's own content, under its fold. The collapsed
+                 rail has no room for it, so it folds away there and leaves
+                 the tab order. */
+              <div
+                className={`${baseClass}__section-content${showExpanded ? ` ${baseClass}__section-content--shown` : ''}`}
+                inert={!showExpanded}
+              >
+                <div className={`${baseClass}__section-content-inner`}>
+                  {sectionContent(section, { expanded: isExpanded, drawer: false, closeDrawer: () => {} })}
+                </div>
+              </div>
+            )}
+            </div>
           </div>
         ))}
         </div>
@@ -1063,24 +1374,30 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                 one, the person's initials when there is not, and the generic
                 glyph when there is neither. The hand-rolled box this replaced
                 drew an empty disc for every profile with no avatarUrl. */}
-            <Avatar
-              className={`${baseClass}__avatar`}
-              size="md"
-              name={profile.name}
-              src={profile.avatarUrl}
-            />
+            {profile.avatar ? (
+              <span className={`${baseClass}__avatar ${baseClass}__avatar--node`}>{profile.avatar}</span>
+            ) : (
+              <Avatar
+                className={`${baseClass}__avatar`}
+                size="md"
+                name={profile.name}
+                src={profile.avatarUrl}
+              />
+            )}
             <div className={`${baseClass}__profile-info`}>
               <span className={`${baseClass}__profile-name`}>{profile.name}</span>
-              <span className={`${baseClass}__profile-email`}>{profile.email}</span>
+              {profile.email && <span className={`${baseClass}__profile-email`}>{profile.email}</span>}
             </div>
           </div>
-          <button
-            className={`${baseClass}__profile-more`}
-            onClick={onProfileMore}
-            aria-label={profileMoreLabel}
-          >
-            <span className="material-symbols-rounded">more_horiz</span>
-          </button>
+          {onProfileMore && (
+            <button
+              className={`${baseClass}__profile-more`}
+              onClick={onProfileMore}
+              aria-label={profileMoreLabel}
+            >
+              <span className="material-symbols-rounded">more_horiz</span>
+            </button>
+          )}
         </div>
         )}
         {footerAction && (
@@ -1106,6 +1423,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
             floating ? `${baseClass}__panel--floating` : '',
             layout === 'inset' ? `${baseClass}__panel--inset` : '',
             contained ? `${baseClass}__panel--contained` : '',
+            sized ? `${baseClass}__panel--sized` : '',
           ]
             .filter(Boolean)
             .join(' ')}

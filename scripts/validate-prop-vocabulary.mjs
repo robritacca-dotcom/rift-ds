@@ -552,6 +552,7 @@ const SANCTIONED_CONTROLLED_ONLY = {
   InterruptCard: 'fully controlled and stateless by design: the host owns the decision it records (design.md)',
   QuestionCard: 'fully controlled by design: the answers belong to the chat turn the host keeps (design.md)',
   ThreadPanel: 'fully controlled and stateless by design: the host owns selection, expansion and rename state (design.md)',
+  ThreadHistory: 'fully controlled and stateless by design, as ThreadPanel: the host owns selection, rename and folded groups (design.md)',
   RadioButton: "a radio's checked state belongs to its group, and RadioGroup carries the uncontrolled pair (design.md)",
   PromptSuggestions: 'value records a choice the host already acted on; the row never latches one itself (design.md)',
   ArtifactPanel: "the host owns the seat's size; expanded only names the toggle (design.md)",

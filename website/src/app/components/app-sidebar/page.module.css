@@ -302,3 +302,52 @@
   border-radius: var(--radius-pill);
   background: var(--color-chart-series-3);
 }
+
+/* ============================================
+   CONTAINED DEMOS
+   A rail laid out in its frame (fixed={false}): a flex row with a definite
+   height, the rail its first item and the content beside it.
+   ============================================ */
+.containedDemo {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  width: 100%;
+  height: 640px;
+  overflow: hidden;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background-color: var(--color-bg-app-shell);
+  transition: max-width var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+/* Narrow enough that the rail takes its drawer form. */
+.containedDemoNarrow {
+  max-width: 600px;
+}
+
+.containedContent {
+  flex: 1;
+  min-width: 0;
+  margin: var(--padding-300);
+  border-radius: var(--radius-400);
+  background-color: var(--color-bg-container-secondary);
+}
+
+/* The demo's stand-in history, set on the rows' text seat. */
+.contentList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contentList li {
+  padding: var(--padding-200) var(--padding-400);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+}

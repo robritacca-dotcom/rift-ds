@@ -1,12 +1,10 @@
 import React from 'react';
 import type { LinkComponent } from '../../behaviors/LinkProvider';
 import { Avatar } from '../Avatar/Avatar';
-import { DropdownMenu } from '../DropdownMenu/DropdownMenu';
 import { Kbd } from '../Kbd/Kbd';
 import type { Shortcut, ShortcutKeyLabels } from '../../behaviors/shortcut-keys';
 import { PixelAvatar, distinctPixelInks } from '../PixelAvatar/PixelAvatar';
-import { StatusDot } from '../StatusDot/StatusDot';
-import type { StatusDotProps } from '../StatusDot/StatusDot';
+import { ThreadHistory } from '../ThreadHistory/ThreadHistory';
 import { Tooltip } from '../Tooltip/Tooltip';
 import './ThreadPanel.css';
 import '../../behaviors/direction.css';
@@ -163,6 +161,18 @@ type ThreadPanelOwnProps = {
   projects?: ThreadPanelProject[];
   /** The projects section's group heading text. */
   projectsLabel?: string;
+  /**
+   * Let the reader fold each titled section (the projects and every
+   * labelled history group) under its heading: the heading becomes a toggle
+   * with a chevron, and the rows glide shut beneath it. The collapsed rail
+   * shows no headings, so it folds nothing.
+   * @default false
+   */
+  collapsibleSections?: boolean;
+  /** The folded sections, by heading text (`projectsLabel` for the projects, a group's `label` for a group). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`. */
+  collapsedSections?: string[];
+  /** Fires with the full new list of folded sections when a heading is pressed. */
+  onCollapsedSectionsChange?: (collapsedSections: string[]) => void;
   /** Id of the open project. Its row renders filled and carries `aria-current`. */
   activeProjectId?: string;
   /** Fires with the clicked project's id. Rows with an `href` navigate as well. */
@@ -189,6 +199,8 @@ type ThreadPanelOwnProps = {
   profile?: ThreadPanelProfile;
   /** Rendered in the footer above the profile row — a theme toggle, a storage meter. Fades out while collapsed, AppSidebar's contract. */
   footerSlot?: React.ReactNode;
+  /** Rendered below the profile row as the panel's last word, such as a full-width Button back to an index. AppSidebar's contract: it fills the panel's width, fades out with the labels while collapsed and is inert then. */
+  footerAction?: React.ReactNode;
   /** Rendered above the profile row while the panel is collapsed, in `footerSlot`'s place: the same controls at their smallest, such as a SegmentedControl's or ThemeToggle's `cycle` circle, stacked and centred on the rail's axis. AppSidebar's contract: the two forms share one cell and crossfade with the panel, and whichever is hidden is inert. */
   collapsedFooterSlot?: React.ReactNode;
   /** Additional CSS classes */
@@ -207,27 +219,6 @@ export interface ThreadPanelProps
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof ThreadPanelOwnProps> {}
 
 const baseClass = 'ds-thread-panel';
-
-/** How each thread status draws its StatusDot: fill for "wants you",
-    colour for what it wants, the pulse for live. */
-const STATUS_DOTS: Record<
-  ThreadPanelThreadStatus,
-  Pick<StatusDotProps, 'variant' | 'outline' | 'pulse'>
-> = {
-  idle: { variant: 'neutral', outline: true },
-  working: { variant: 'neutral', pulse: true },
-  unread: { variant: 'info' },
-  waiting: { variant: 'warning' },
-  error: { variant: 'error' },
-};
-
-const DEFAULT_STATUS_LABELS: Partial<Record<ThreadPanelThreadStatus, string>> =
-  {
-    working: 'Working',
-    unread: 'Unread',
-    waiting: 'Needs input',
-    error: 'Failed',
-  };
 
 /** A row that is a `<button>`, or an `<a>` when an href is supplied (Button's pattern). */
 function ActionRow({
@@ -270,77 +261,6 @@ function ActionRow({
     >
       {children}
     </button>
-  );
-}
-
-/** The inline rename field. Uncontrolled: Enter commits, Escape cancels,
-    and focus leaving the field commits too — an empty or unchanged value
-    cancels instead, since half a title is not a title. The keyboard paths
-    hand focus back to the row once the host swaps it in; a blur commit
-    leaves focus where the user sent it. Hook-free on purpose, so the
-    module stays renderable from a Server Component (the field itself only
-    renders when the host wires the rename callbacks, which already means
-    a client host). */
-function RenameField({
-  baseClass,
-  defaultValue,
-  label,
-  onSubmit,
-  onCancel,
-}: {
-  baseClass: string;
-  defaultValue: string;
-  label: string;
-  onSubmit: (value: string) => void;
-  onCancel?: () => void;
-}) {
-  const commit = (el: HTMLInputElement) => {
-    const value = el.value.trim();
-    if (value && value !== defaultValue) onSubmit(value);
-    else onCancel?.();
-  };
-  /* The row's button mounts only after the host clears the rename state,
-     so the hand-back polls a few frames for the swap to land — one frame
-     is a race against the host's re-render. */
-  const refocusRow = (el: HTMLInputElement) => {
-    const row = el.closest('li');
-    const tryFocus = (attempt: number) => {
-      const target = row?.querySelector<HTMLElement>('button, a');
-      if (target) target.focus();
-      else if (attempt < 3) requestAnimationFrame(() => tryFocus(attempt + 1));
-    };
-    requestAnimationFrame(() => tryFocus(0));
-  };
-  return (
-    <input
-      className={`${baseClass}__rename`}
-      type="text"
-      defaultValue={defaultValue}
-      aria-label={label}
-      ref={(el) => {
-        /* Focus and select once on mount; the activeElement guard keeps a
-           parent re-render from re-selecting mid-typing. */
-        if (el && document.activeElement !== el) {
-          el.focus();
-          el.select();
-        }
-      }}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          e.stopPropagation();
-          refocusRow(e.currentTarget);
-          commit(e.currentTarget);
-        } else if (e.key === 'Escape') {
-          /* Stop here so a host dialog (the chat sheet) doesn't close on
-             the same keystroke. */
-          e.stopPropagation();
-          refocusRow(e.currentTarget);
-          onCancel?.();
-        }
-      }}
-      onBlur={(e) => commit(e.currentTarget)}
-    />
   );
 }
 
@@ -401,6 +321,9 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
       onControlSelect,
       projects,
       projectsLabel = 'Projects',
+      collapsibleSections = false,
+      collapsedSections = [],
+      onCollapsedSectionsChange,
       activeProjectId,
       onProjectSelect,
       onProjectCreate,
@@ -414,6 +337,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
       expandLabel = 'Expand the panel',
       profile,
       footerSlot,
+      footerAction,
       collapsedFooterSlot,
       className = '',
       linkComponent,
@@ -421,18 +345,12 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
     },
     ref,
   ) => {
-    /* The dot column is all or nothing: one thread with a status seats a
-       dot on every row, so the titles keep a shared left edge. */
-    const dotted = groups.some((group) =>
-      group.threads.some((thread) => thread.status || thread.unread),
-    );
-    const labels = { ...DEFAULT_STATUS_LABELS, ...statusLabels };
     const Link = linkComponent ?? 'a';
 
     const classes = [
       baseClass,
       expanded && `${baseClass}--expanded`,
-      dotted && `${baseClass}--dotted`,
+      collapsibleSections && `${baseClass}--collapsible-sections`,
       className,
     ]
       .filter(Boolean)
@@ -445,7 +363,52 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
 
     const showHeader = Boolean(logo || logoText || onExpandedChange);
     const showNew = Boolean(newThreadLabel || onNewThread || newThreadHref);
-    const showFooter = Boolean(footerSlot || collapsedFooterSlot || profile);
+    /* Sections fold only where their headings show: the expanded panel. */
+    const folds = collapsibleSections && expanded;
+    const isFolded = (heading: string) => folds && collapsedSections.includes(heading);
+    const toggleSection = (heading: string) =>
+      onCollapsedSectionsChange?.(
+        collapsedSections.includes(heading)
+          ? collapsedSections.filter((entry) => entry !== heading)
+          : [...collapsedSections, heading],
+      );
+    /* A section's heading: the plain label, or with `collapsibleSections`
+       the same label as a toggle with a chevron. */
+    const heading = (text: string, className: string) => (
+      <div className={`${baseClass}__section-head`}>
+        <span className={className}>{text}</span>
+        {/* The fold is the chevron alone, named by the heading's own text,
+            so the heading keeps its seat on the icon line and only the
+            chevron answers the pointer. */}
+        {folds && (
+          <button
+            type="button"
+            className={`${baseClass}__fold`}
+            aria-label={text}
+            aria-expanded={!isFolded(text)}
+            onClick={() => toggleSection(text)}
+          >
+            <span className={`${iconClass} ${baseClass}__fold-chevron`} aria-hidden="true">
+              expand_more
+            </span>
+          </button>
+        )}
+      </div>
+    );
+    /* The rows under a heading, in a panel that glides shut when it folds
+       (SideNav's grid-rows fold); open, it adds nothing. */
+    const panel = (text: string | undefined, list: React.ReactNode) => {
+      const shut = Boolean(text && isFolded(text));
+      return (
+        <div
+          className={`${baseClass}__section-panel${shut ? '' : ` ${baseClass}__section-panel--open`}`}
+          inert={shut}
+        >
+          {list}
+        </div>
+      );
+    };
+    const showFooter = Boolean(footerSlot || collapsedFooterSlot || profile || footerAction);
 
     /* Collapsed, the logo is the expand affordance (AppSidebar's pattern);
        the toggle carries it only while expanded, or always when there is
@@ -605,9 +568,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
         {projects && projects.length > 0 && (
           <div className={`${baseClass}__projects`}>
             <div className={`${baseClass}__projects-header`}>
-              <span className={`${baseClass}__projects-label`}>
-                {projectsLabel}
-              </span>
+              {heading(projectsLabel, `${baseClass}__projects-label`)}
               {onProjectCreate && (
                 <button
                   type="button"
@@ -621,6 +582,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                 </button>
               )}
             </div>
+            {panel(projectsLabel, (
             <ul className={`${baseClass}__list`} aria-label={projectsLabel}>
               {projects.map((project, projectIndex) => {
                 const active = project.id === activeProjectId;
@@ -676,222 +638,36 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                 );
               })}
             </ul>
+            ))}
           </div>
         )}
 
-        <nav className={`${baseClass}__history`} aria-label={historyLabel}>
-          {groups.map(
-            (group, index) =>
-              group.threads.length > 0 && (
-                <div
-                  key={group.label ?? index}
-                  className={`${baseClass}__group`}
-                >
-                  {group.label && (
-                    <span className={`${baseClass}__group-label`}>
-                      {group.label}
-                    </span>
-                  )}
-                  <ul
-                    className={`${baseClass}__list`}
-                    aria-label={group.label}
-                  >
-                    {group.threads.map((thread) => {
-                      const active = thread.id === activeThreadId;
-                      const actions = thread.actions ?? threadActions;
-                      const showMenu = Boolean(
-                        actions &&
-                          actions.length > 0 &&
-                          onThreadAction &&
-                          !thread.pending,
-                      );
-                      /* A thread still being named is, by definition,
-                         mid-run. */
-                      const status: ThreadPanelThreadStatus | undefined =
-                        dotted
-                          ? thread.pending
-                            ? 'working'
-                            : (thread.status ??
-                              (thread.unread ? 'unread' : 'idle'))
-                          : undefined;
-                      const statusLabel =
-                        status && !thread.pending ? labels[status] : undefined;
-                      const renaming = Boolean(
-                        thread.id === renamingThreadId && onThreadRename,
-                      );
-                      return (
-                        <li
-                          key={thread.id}
-                          className={[
-                            `${baseClass}__row`,
-                            showMenu && `${baseClass}__row--with-menu`,
-                          ]
-                            .filter(Boolean)
-                            .join(' ')}
-                        >
-                          {renaming ? (
-                            <RenameField
-                              baseClass={baseClass}
-                              defaultValue={thread.title}
-                              label={renameLabel}
-                              onSubmit={(value) =>
-                                onThreadRename?.(thread.id, value)
-                              }
-                              onCancel={onRenameCancel}
-                            />
-                          ) : (
-                            <>
-                              <ActionRow
-                                link={Link}
-                                className={[
-                                  `${baseClass}__thread`,
-                                  active && `${baseClass}__thread--active`,
-                                  thread.description &&
-                                    !thread.pending &&
-                                    `${baseClass}__thread--detailed`,
-                                ]
-                                  .filter(Boolean)
-                                  .join(' ')}
-                                href={thread.href}
-                                onClick={
-                                  onThreadSelect
-                                    ? () => onThreadSelect(thread.id)
-                                    : undefined
-                                }
-                                ariaCurrent={
-                                  active
-                                    ? thread.href
-                                      ? 'page'
-                                      : 'true'
-                                    : undefined
-                                }
-                                title={thread.title}
-                              >
-                                {status && (
-                                  <StatusDot
-                                    className={`${baseClass}__status`}
-                                    size="xs"
-                                    decorative
-                                    {...STATUS_DOTS[status]}
-                                  />
-                                )}
-                                {thread.pending ? (
-                                  /* The naming state: the shimmer holds the
-                                     title's place; the row's accessible name
-                                     comes from its tooltip. */
-                                  <span
-                                    className={`${baseClass}__title ${baseClass}__title--pending`}
-                                  >
-                                    <span
-                                      className={`${baseClass}__title-shimmer`}
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                ) : (
-                                  <span className={`${baseClass}__title`}>
-                                    {thread.title}
-                                  </span>
-                                )}
-                                {statusLabel && (
-                                  <span className="ds-visually-hidden">
-                                    {statusLabel}
-                                  </span>
-                                )}
-                                {/* The pin glyph below is decorative, so its
-                                    meaning rides in the row's text, the
-                                    status label's manner. */}
-                                {thread.pinned && !thread.pending && (
-                                  <span className="ds-visually-hidden">
-                                    {pinnedLabel}
-                                  </span>
-                                )}
-                                {!thread.pending &&
-                                  (thread.icon ||
-                                    thread.pinned ||
-                                    thread.meta) && (
-                                    <span className={`${baseClass}__trail`}>
-                                      {thread.icon && (
-                                        <span
-                                          className={`${baseClass}__thread-icon${typeof thread.icon === 'string' ? ` ${iconClass} ${mirrorClass(thread.icon)}` : ''}`}
-                                          aria-hidden="true"
-                                        >
-                                          {thread.icon}
-                                        </span>
-                                      )}
-                                      {thread.pinned && (
-                                        <span
-                                          className={`${baseClass}__pin ${iconClass}`}
-                                          aria-hidden="true"
-                                        >
-                                          keep
-                                        </span>
-                                      )}
-                                      {thread.meta && (
-                                        <span className={`${baseClass}__meta`}>
-                                          {thread.meta}
-                                        </span>
-                                      )}
-                                    </span>
-                                  )}
-                                {thread.description && !thread.pending && (
-                                  <span
-                                    className={`${baseClass}__description`}
-                                  >
-                                    {thread.description}
-                                  </span>
-                                )}
-                              </ActionRow>
-                              {showMenu && actions && (
-                                <DropdownMenu
-                                  className={`${baseClass}__menu`}
-                                  align="end"
-                                  size="compact"
-                                  items={actions.map((action) => ({
-                                    label: action.label,
-                                    icon: action.icon,
-                                    destructive: action.destructive,
-                                    onClick: () =>
-                                      onThreadAction?.(thread.id, action.id),
-                                  }))}
-                                  trigger={
-                                    <button
-                                      type="button"
-                                      className={`${baseClass}__menu-trigger`}
-                                      aria-label={
-                                        typeof threadMenuLabel === 'function'
-                                          ? threadMenuLabel(thread.title)
-                                          : `${threadMenuLabel}: ${thread.title}`
-                                      }
-                                    >
-                                      <span
-                                        className={iconClass}
-                                        aria-hidden="true"
-                                      >
-                                        more_horiz
-                                      </span>
-                                    </button>
-                                  }
-                                />
-                              )}
-                            </>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              ),
-          )}
-          {moreLabel && (
-            <button
-              type="button"
-              className={`${baseClass}__more`}
-              onClick={onShowMore}
-            >
-              {moreLabel}
-            </button>
-          )}
-        </nav>
+        {/* The history, the one region that scrolls: ThreadHistory's rows,
+            which an AppSidebar section seats the same way. Its groups fold
+            only where their headings show, on the expanded panel. */}
+        <div className={`${baseClass}__history`}>
+          <ThreadHistory
+            aria-label={historyLabel}
+            groups={groups}
+            activeThreadId={activeThreadId}
+            onThreadSelect={onThreadSelect}
+            threadActions={threadActions}
+            onThreadAction={onThreadAction}
+            statusLabels={statusLabels}
+            pinnedLabel={pinnedLabel}
+            threadMenuLabel={threadMenuLabel}
+            renamingThreadId={renamingThreadId}
+            onThreadRename={onThreadRename}
+            onRenameCancel={onRenameCancel}
+            renameLabel={renameLabel}
+            moreLabel={moreLabel}
+            onShowMore={onShowMore}
+            collapsibleSections={collapsibleSections && expanded}
+            collapsedSections={collapsedSections}
+            onCollapsedSectionsChange={onCollapsedSectionsChange}
+            linkComponent={linkComponent}
+          />
+        </div>
 
         {showFooter && (
           <div className={`${baseClass}__footer`}>
@@ -929,6 +705,11 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                     {profile.meta}
                   </span>
                 )}
+              </div>
+            )}
+            {footerAction && (
+              <div className={`${baseClass}__footer-action`} inert={!expanded}>
+                {footerAction}
               </div>
             )}
           </div>

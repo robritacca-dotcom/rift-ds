@@ -41,6 +41,7 @@ import { ChatAgentPane } from './ChatAgentPane';
 import { ChatArtifactPane } from './ChatArtifactPane';
 import { ChatTabs, type ChatTabsProps } from './ChatTabs';
 import { ChatThreads, type ChatThreadsProps } from './ChatThreads';
+import { RailSeatContext } from './rail-seat';
 import { ArtifactSeatContext, useChatWidget } from './context';
 import {
   DEFAULT_GREETING_COPY,
@@ -228,10 +229,12 @@ export interface ChatWidgetProps {
   /** What the visitor can reference while typing: one source per trigger
       character, drawn as tags in the composer and in the sent bubble. */
   mentions?: MentionSource[];
-  /** A session-history rail. `true` seats the built-in ChatThreads over the
-      provider's thread lifecycle; a render prop seats your own. Wide hosts
-      seat it as an inline left rail, narrow ones summon it from a header
-      hamburger as a slide-over sheet behind a scrim. */
+  /** A session-history rail. `true` seats the built-in ChatThreads, an
+      AppSidebar over the provider's thread lifecycle, so it takes the app
+      rail's shell, sizes, side panel and drawer: inline beside the
+      conversation on a wide host, and on a narrow one the app rail's drawer,
+      opened from the header's menu button. A render prop seats your own,
+      inline on a wide host and as a slide-over sheet on a narrow one. */
   threads?: RailSlot;
   /** Props for the built-in threads rail when `threads` is `true`. */
   threadsProps?: Omit<ChatThreadsProps, 'overlay' | 'close'>;
@@ -709,6 +712,11 @@ export function ChatWidget({
 
   const hasRails = Boolean(renderThreads || renderAside || artifacts);
   const [threadsOpen, setThreadsOpen] = useState(false);
+  /* The built-in history is one AppSidebar, seated in the rails row in the
+     form the widget's room allows; a custom slot keeps the inline rail and
+     the sheet below. */
+  const builtInThreads = threads === true;
+  const historyId = useId();
   /* One piece of state for the agent panel, resting closed: it is the same
      panel in either seat, and it only ever opens because someone asked. The
      seat decides how it is drawn, never whether it is up. */
@@ -896,15 +904,23 @@ export function ChatWidget({
     const host = railsHostRef.current;
     if (!host) return;
     const measure = () => {
-      const threadsRail = host.querySelector<HTMLElement>(':scope > .ds-chat-widget__threads-rail');
+      /* The history's room: the legacy rail, or the built-in AppSidebar and
+         its side panel while it shows. */
+      const taken = Array.from(
+        host.querySelectorAll<HTMLElement>(
+          ':scope > .ds-chat-widget__threads-rail, :scope > .ds-chat-widget__history, :scope > .ds-app-sidebar__panel--visible',
+        ),
+      ).reduce((sum, el) => sum + el.offsetWidth, 0);
       const inset = parseFloat(getComputedStyle(host).getPropertyValue('--ds-chat-artifact-inset')) || 0;
-      const room = host.clientWidth - (threadsRail?.offsetWidth ?? 0) - ARTIFACT_MIN_COLUMN_WIDTH - inset * 2;
+      const room = host.clientWidth - taken - ARTIFACT_MIN_COLUMN_WIDTH - inset * 2;
       host.style.setProperty('--ds-chat-artifact-room', `${Math.max(0, Math.round(room))}px`);
     };
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(host);
-    const threadsRail = host.querySelector<HTMLElement>(':scope > .ds-chat-widget__threads-rail');
+    const threadsRail = host.querySelector<HTMLElement>(
+      ':scope > .ds-chat-widget__threads-rail, :scope > .ds-chat-widget__history',
+    );
     if (threadsRail) observer.observe(threadsRail);
     return () => observer.disconnect();
   }, [artifacts, threadsInline]);
@@ -1164,10 +1180,10 @@ export function ChatWidget({
            the takeover or the host panel hear anything: one layer per press. */
         if (
           e.key === 'Escape' &&
-          (threadsOpen || (asideShown && !asideWide) || (artifactShown && !asideWide))
+          ((threadsOpen && !builtInThreads) || (asideShown && !asideWide) || (artifactShown && !asideWide))
         ) {
           e.stopPropagation();
-          if (threadsOpen) closeThreads();
+          if (threadsOpen && !builtInThreads) closeThreads();
           else if (artifactShown) closeArtifactPanel();
           else closeAside();
           return;
@@ -1198,6 +1214,8 @@ export function ChatWidget({
                   variant="tertiary"
                   label={openThreadsLabel}
                   tooltipPosition="bottom"
+                  aria-controls={builtInThreads ? historyId : undefined}
+                  aria-expanded={builtInThreads ? threadsOpen : undefined}
                   onClick={() => setThreadsOpen(true)}
                 />
               )}
@@ -1410,10 +1428,30 @@ export function ChatWidget({
         }
       }}
     >
-      {renderThreads && threadsInline && (
-        <div className="ds-chat-widget__threads-rail">
-          {renderThreads({ overlay: false, close: closeThreads })}
-        </div>
+      {builtInThreads ? (
+        <RailSeatContext.Provider
+          value={{
+            form: threadsInline ? 'rail' : 'drawer',
+            drawerOpen: threadsOpen,
+            setDrawerOpen: setThreadsOpen,
+            layout: shellMode,
+            id: historyId,
+          }}
+        >
+          <ChatThreads
+            {...threadsProps}
+            logoText={threadsProps?.logoText ?? title}
+            overlay={!threadsInline}
+            close={closeThreads}
+          />
+        </RailSeatContext.Provider>
+      ) : (
+        renderThreads &&
+        threadsInline && (
+          <div className="ds-chat-widget__threads-rail">
+            {renderThreads({ overlay: false, close: closeThreads })}
+          </div>
+        )
       )}
       {chatColumn}
       {/* The widget's controls at the widget's edge, floating over the
@@ -1505,7 +1543,7 @@ export function ChatWidget({
           </div>
         </div>
       )}
-      {renderThreads && !threadsInline && (
+      {renderThreads && !builtInThreads && !threadsInline && (
         <div
           className={`ds-chat-widget__threads-overlay ${
             threadsOpen ? 'ds-chat-widget__threads-overlay--open' : ''

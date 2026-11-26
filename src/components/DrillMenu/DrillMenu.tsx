@@ -68,6 +68,12 @@ export interface DrillMenuSection {
   variant?: 'default' | 'prominent';
   /** Stable identity for the React key. Defaults to the label. */
   id?: string;
+  /**
+   * The section's own content after its rows, for a section that is more
+   * than a list of destinations: a chat's history in AppSidebar's drawer,
+   * say. It scrolls with the level and leaves with it on a drill.
+   */
+  content?: React.ReactNode;
 }
 
 /** An entry on a level: a row, or a section of rows. */
@@ -353,7 +359,10 @@ export function DrillMenu({
         {groups.map(({ key, section, rows }) => (
           <section key={key} className="ds-drill-menu__section">
             {section?.label && <h3 className="ds-drill-menu__section-label">{section.label}</h3>}
-            <ul className="ds-drill-menu__list">{rows.map((item) => renderRow(item, section?.variant))}</ul>
+            {rows.length > 0 && (
+              <ul className="ds-drill-menu__list">{rows.map((item) => renderRow(item, section?.variant))}</ul>
+            )}
+            {section?.content && <div className="ds-drill-menu__section-content">{section.content}</div>}
           </section>
         ))}
       </div>

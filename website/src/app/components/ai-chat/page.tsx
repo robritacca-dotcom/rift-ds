@@ -1,5 +1,6 @@
 "use client";
 
+import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { useState } from "react";
 import Link from "next/link";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
@@ -37,6 +38,26 @@ import {
 } from "rift-ds/chat/demo";
 import { ChatStage, type ChatStageSetup } from "./ChatStage";
 import styles from "./page.module.css";
+
+/* A section of the host's own in the history rail, in App sidebar's shape:
+   a setting whose choices open in the side panel beside the rail and drill
+   in on a phone. Fictional settings for a fictional assistant. */
+const WORKSPACE_SECTION: AppSidebarSection = {
+  category: "Workspace",
+  items: [
+    {
+      key: "workspace-model",
+      icon: "neurology",
+      label: "Default model",
+      value: "Sonnet 5",
+      children: [
+        { key: "model-sonnet", label: "Sonnet 5", description: "Fast and capable", selected: true, onClick: () => {} },
+        { key: "model-opus", label: "Opus 5", description: "The most thorough", selected: false, onClick: () => {} },
+      ],
+    },
+    { key: "workspace-settings", icon: "settings", label: "Settings" },
+  ],
+};
 
 /* The chat widget's component page: every option it takes, stated and
    shown on the chat itself, then the props. Each example is the whole
@@ -319,8 +340,9 @@ export default function AiChatPage() {
         <p className={styles.sectionNote}>
           The launcher picks one of three forms from the viewport; nothing to set. Inside the
           panel, the thread rail and the agent pane sit inline when the panel is at least{" "}
-          {THREADS_RAIL_MIN_WIDTH}px and {ASIDE_RAIL_MIN_WIDTH}px wide and open as sheets below
-          that, judged by the panel&apos;s own width rather than the screen&apos;s. The{" "}
+          {THREADS_RAIL_MIN_WIDTH}px and {ASIDE_RAIL_MIN_WIDTH}px wide, judged by the panel&apos;s
+          own width rather than the screen&apos;s. Below that the thread rail becomes App
+          sidebar&apos;s drawer and the agent pane a sheet. The{" "}
           <code>phone</code> prop on the surface stacks the welcome screen for a handset, which
           is what the Mobile tab above switches on.
         </p>
@@ -445,14 +467,19 @@ export default function AiChatPage() {
       <section id="threads" className={`${styles.section} animate-in animate-delay-3`}>
         <SectionTitle title="Threads and tabs" />
         <p className={styles.sectionNote}>
-          <code>threads</code> turns the history rail on. Every chat is kept and a new chat is
-          named after its first reply; a chat can be pinned, renamed or deleted from its row.{" "}
-          <code>threadsProps</code> sets the rail&apos;s brand, profile, footer and whether it
-          starts expanded; the provider&apos;s <code>threads</code> option seeds the history, switches
-          the detail lines and pins, and takes the rename, delete and pin callbacks.{" "}
-          <code>tabs</code> is a separate switch: a tab per open chat, in sync with the rail,
-          closing back to the welcome screen when the last one goes. On a phone the rail opens
-          as a sheet from the header.
+          <code>threads</code> turns the history rail on. The rail is App sidebar, so it has the
+          app rail&apos;s shell, sizes, side panel and drawer, and only its content is the
+          chat&apos;s own: New chat, the projects, the history, then any sections you add. Every
+          chat is kept and a new chat is named after its first reply; a chat can be pinned,
+          renamed or deleted from its row. <code>threadsProps</code> sets the rail&apos;s brand,
+          profile, footer and whether it starts expanded, and its <code>sections</code> take
+          your own rows in App sidebar&apos;s shape, whose choices open in the side panel beside
+          the rail, as Settings does here. The provider&apos;s <code>threads</code> option seeds the
+          history, switches the detail lines and pins, and takes the rename, delete and pin
+          callbacks. <code>tabs</code> is a separate switch: a tab per open chat, in sync with the
+          rail, closing back to the welcome screen when the last one goes. On a phone the rail
+          opens as App sidebar&apos;s drawer from the header&apos;s menu button, and a section&apos;s
+          choices drill in.
         </p>
         <ChatStage
           key={`threads-${viewport}`}
@@ -460,7 +487,13 @@ export default function AiChatPage() {
           height={phone ? 780 : 780}
           widget={{
             threads: true,
-            threadsProps: { defaultExpanded: !phone, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "jordan@acme.example" } },
+            threadsProps: {
+              defaultExpanded: !phone,
+              logoText: "Acme Assistant",
+              profile: { name: "Jordan Reyes", meta: "jordan@acme.example" },
+              collapsibleSections: true,
+              sections: [WORKSPACE_SECTION],
+            },
             tabs: true,
           }}
           setup={stageThreads}

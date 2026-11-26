@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { AppSidebar } from '../AppSidebar/AppSidebar';
-import type { AppSidebarSection, AppSidebarProfile, AppSidebarLayout } from '../AppSidebar/AppSidebar';
+import type { AppSidebarSection, AppSidebarProfile, AppSidebarLayout, AppSidebarProps } from '../AppSidebar/AppSidebar';
 import { MOTION_SCROLL_SETTLE_MS } from '../../tokens/motion';
 import type { LinkComponent } from '../../behaviors/LinkProvider';
 import '../../behaviors/shell.css';
@@ -68,9 +68,40 @@ type AppLayoutOwnProps = {
    * LinkProvider's; a plain `<a>` when neither is set.
    */
   linkComponent?: LinkComponent;
+  /**
+   * The rest of the AppSidebar rail's options, passed through as they are,
+   * so an app on AppLayout has the same rail as the templates and a chat:
+   * folding sections (`collapsibleSections`), a footer action, the top and
+   * footer slots, the profile's more button, the drawer's entries and
+   * labels. The props AppLayout sets itself (the sections, the profile, the
+   * active keys, `subNav`, the logo, `layout`, the expanded state, the link
+   * component and the rail's seat) are its own.
+   */
+  sidebarProps?: AppLayoutSidebarProps;
   /** Additional CSS classes on outer wrapper */
   className?: string;
 };
+
+/** The AppSidebar options AppLayout passes through untouched (`sidebarProps`). */
+export type AppLayoutSidebarProps = Omit<
+  AppSidebarProps,
+  | 'sections'
+  | 'profile'
+  | 'activeKey'
+  | 'activeSubKey'
+  | 'activeTertiaryKey'
+  | 'subNav'
+  | 'expanded'
+  | 'defaultExpanded'
+  | 'onExpandedChange'
+  | 'logo'
+  | 'logoText'
+  | 'layout'
+  | 'floating'
+  | 'fixed'
+  | 'responsive'
+  | 'linkComponent'
+>;
 
 export interface AppLayoutProps
   extends AppLayoutOwnProps,
@@ -101,6 +132,7 @@ export const AppLayout = React.forwardRef<HTMLDivElement, AppLayoutProps>(
       width = 'contained',
       theme = 'dark',
       linkComponent,
+      sidebarProps,
       className = '',
       ...rest
     },
@@ -151,6 +183,7 @@ export const AppLayout = React.forwardRef<HTMLDivElement, AppLayoutProps>(
         data-ds-width={width}
       >
         <AppSidebar
+          {...sidebarProps}
           sections={sections}
           profile={profile}
           activeKey={activeKey}

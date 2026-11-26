@@ -22,15 +22,16 @@ import styles from "./SidebarSwitchers.module.css";
 
 /**
  * The footer controls of the template screens outside TemplateShell (the
- * chat home, the landing page, the sign-in pane, the mobile dashboard),
- * whose rail carries its own Appearance section instead. Without the
+ * landing page, the sign-in pane, the mobile dashboard), whose rail
+ * carries its own Appearance section instead, as does the chat home's
+ * history rail, an AppSidebar too. Without the
  * layout switch they share one row: the theme (preset) switcher beside the
  * light/dark toggle, the same pair the site header carries. With it
- * (`showLayout`, the chat home's, which lays its own screen out) they
+ * (`showLayout`, for a chat lab that lays its own screen out) they
  * stack one per row, because a three-way shell strip beside
  * the pair runs past the rail's width: the theme, the colour mode, the
- * shell (flush, floating or inset, shared by every template), and on the
- * chat home in flush the backdrop (blur or solid) under it: blur says a
+ * shell (flush, floating or inset, shared by every template), and on a
+ * chat in flush the backdrop (blur or solid) under it: blur says a
  * chat rests above something, so a template, always the floor, has none. The strips are icon-only,
  * their labels tooltips (SegmentedControl's icon-only form). The menu opens
  * upward and left-aligned, because these sit at the sidebar's floor. One
@@ -180,4 +181,16 @@ export function TemplatesBackLink() {
       size="compact"
     />
   );
+}
+
+/**
+ * The templates' way back to the index as a rail's last word: the full-width
+ * primary button TemplateShell seats as AppSidebar's `footerAction`, for a
+ * rail that is not TemplateShell's (the chat home's, through ThreadPanel's
+ * `footerAction`). Gone while the playground stages the screen.
+ */
+export function AllTemplatesButton() {
+  const staged = useIsStaged();
+  if (staged) return null;
+  return <Button label="All templates" variant="primary" iconLeft="arrow_back" href="/templates" />;
 }

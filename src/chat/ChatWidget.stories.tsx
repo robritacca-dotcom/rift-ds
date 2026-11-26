@@ -838,7 +838,7 @@ export const ArtifactExpandedInset: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expandAndBack(canvasElement, async () => {
-      const rail = canvasElement.querySelector('.ds-chat-widget__threads-rail')!.getBoundingClientRect();
+      const rail = canvasElement.querySelector('.ds-chat-widget__history')!.getBoundingClientRect();
       const seat = canvasElement.querySelector('.ds-chat-widget__artifact-rail--open')!.getBoundingClientRect();
       await waitFor(() => expect(Math.abs(seat.left - rail.right)).toBeLessThan(1), { timeout: 2000 });
       // The card's own expand sits the controls' gap from the floating panel toggle.

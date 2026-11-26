@@ -146,8 +146,13 @@ const CHARS_PER_TOKEN = 2.85;
  * to write a scene of your own for ShaderScene) took the corpus about 1,500
  * tokens over from 850 of headroom. A new guide and its spec paragraph are
  * the growth this corpus exists to carry, and no section doubled.
+ *
+ * Raised to 170K on 2026-11-26, when ThreadHistory (a new component, its
+ * page and its spec, split out so the chat's rail can be an AppSidebar)
+ * took the corpus about 70 tokens over from a few tokens of headroom. A new
+ * component is the ordinary-growth case, and no section doubled.
  */
-const TOKEN_BUDGET = 160_000;
+const TOKEN_BUDGET = 170_000;
 
 /** Normalize CRLF so Windows checkouts generate byte-identical output to CI. */
 const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');

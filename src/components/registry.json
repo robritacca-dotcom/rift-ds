@@ -208,7 +208,10 @@
       "description": "Collapsible navigation rail whose sub-items open in a side panel beside it or an accordion beneath their row, with category headings and a profile section.",
       "category": "layout",
       "client": true,
-      "keys": { "by": "component", "note": "Below the mobile breakpoint the rail is a modal drawer: opening moves focus inside, Tab stays inside, and Escape closes it." }
+      "keys": { "by": "component", "note": "In its drawer form (below the mobile breakpoint, or when its host asks) the rail is a modal drawer: opening moves focus inside, Tab stays inside, and Escape closes it." },
+      "alternatives": [
+        { "name": "ThreadPanel", "when": "a standalone chat history rail is enough, one that renders on the server" }
+      ]
     },
     {
       "name": "AreaChart",
@@ -1844,13 +1847,29 @@
       "pattern": "tabs"
     },
     {
+      "name": "ThreadHistory",
+      "label": "Thread history",
+      "slug": "thread-history",
+      "description": "A chat’s grouped thread rows with status dots, row menus and inline rename, for a history rail or an app sidebar section.",
+      "category": "ai",
+      "client": false,
+      "keys": { "by": "component", "note": "Its threads are a list of buttons; the rename field commits on Enter and cancels on Escape." },
+      "alternatives": [
+        { "name": "ThreadPanel", "when": "the history is the whole rail, with its brand, new-thread row, projects and profile footer" }
+      ]
+    },
+    {
       "name": "ThreadPanel",
       "label": "Thread panel",
       "slug": "thread-panel",
       "description": "The session-history rail for chat products: brand header, new-thread action, standing controls, projects, grouped detail-rich threads, and a profile footer.",
       "category": "ai",
       "client": false,
-      "keys": { "by": "component", "note": "The rail’s toggle is an ordinary button, and its threads are a list of buttons." }
+      "keys": { "by": "component", "note": "The rail’s toggle is an ordinary button, and its threads are a list of buttons." },
+      "alternatives": [
+        { "name": "ThreadHistory", "when": "the history sits inside another rail, such as a section of an app sidebar" },
+        { "name": "AppSidebar", "when": "the rail also carries app sections, a side panel beside it and the phone drawer, as the templates’ rails do" }
+      ]
     },
     {
       "name": "ThreadTabs",

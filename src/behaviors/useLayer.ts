@@ -99,7 +99,15 @@ export const openLayerContains = (node: Node): boolean => layers.some((layer) =>
 /** Whether any layer is open. Escape belongs to the stack while one is, so keyboard shortcuts leave it alone. */
 export const hasOpenLayer = (): boolean => layers.length > 0;
 
-const handleKeyDown = (event: KeyboardEvent) => {
+/**
+ * The stack's Escape: the topmost open layer is dismissed and the key marked
+ * handled. Installed on the document while a layer is open; a layer whose
+ * keydown would otherwise reach a host first (a drawer inside a chat panel
+ * that closes on Escape in its own React handler) calls it from its own
+ * keydown, so the stack still decides which layer the key belongs to, and
+ * the host sees the key already handled.
+ */
+export const handleLayerEscape = (event: KeyboardEvent) => {
   if (event.key !== 'Escape' || event.defaultPrevented) return;
   const top = layers[layers.length - 1];
   if (!top) return;
@@ -126,13 +134,13 @@ const handlePointerDown = (event: PointerEvent) => {
 
 const syncListeners = () => {
   if (layers.length > 0 && !listenersInstalled) {
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleLayerEscape);
     // Capture, so the press owner is recorded before any handler on the page
     // (a modal's backdrop included) sees the press.
     document.addEventListener('pointerdown', handlePointerDown, true);
     listenersInstalled = true;
   } else if (layers.length === 0 && listenersInstalled) {
-    document.removeEventListener('keydown', handleKeyDown);
+    document.removeEventListener('keydown', handleLayerEscape);
     document.removeEventListener('pointerdown', handlePointerDown, true);
     listenersInstalled = false;
     pressOwner = null;

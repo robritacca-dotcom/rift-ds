@@ -2,7 +2,7 @@
 
 import React from "react";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import { AppSidebar } from "rift-ds/components/AppSidebar/AppSidebar";
+import { AppSidebar, type AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import {
@@ -199,6 +199,89 @@ const layoutNotes: Record<DemoLayout, string> = {
     "Inset, the default, runs the rail flush on the app shell colour, the panel continues it with a divider between them, and the content sits in a raised inset surface beyond both, as the templates draw it.",
 };
 
+/* ---- The rail's own content: a section that carries content (a short
+   history), a heading action, a key hint and folding sections. Fictional
+   threads for a fictional product. */
+const contentSections: AppSidebarSection[] = [
+  { items: [{ key: "new", icon: "edit_square", label: "New chat", keys: "mod+shift+o" }] },
+  {
+    category: "Projects",
+    action: { label: "New project", icon: "add", onClick: () => {} },
+    items: [
+      { key: "atlas-app", label: "Atlas app", pixelAvatar: "atlas-app" },
+      { key: "atlas-docs", label: "Atlas docs", pixelAvatar: "atlas-docs" },
+    ],
+  },
+  {
+    category: "Recent",
+    items: [],
+    content: (
+      <ul className={styles.contentList}>
+        <li>Rework the onboarding flow</li>
+        <li>Speed up the search index</li>
+        <li>Untangle the billing webhooks</li>
+      </ul>
+    ),
+  },
+  {
+    category: "Account",
+    items: [
+      { key: "support", icon: "headset_mic", label: "Support" },
+      { key: "settings", icon: "settings", label: "Settings" },
+    ],
+  },
+];
+
+function ContentDemo() {
+  return (
+    <div className={styles.containedDemo} data-anchor-ignore>
+      <AppSidebar
+        sections={contentSections}
+        profile={demoProfile}
+        fixed={false}
+        defaultExpanded
+        collapsibleSections
+      />
+      <div className={styles.containedContent} />
+    </div>
+  );
+}
+
+const frameWidths = [
+  { value: "wide", label: "Wide" },
+  { value: "narrow", label: "Narrow" },
+];
+
+function ContainerDemo() {
+  const [frame, setFrame] = React.useState("wide");
+  return (
+    <>
+      <div className={styles.layoutSwitch}>
+        <SegmentedControl
+          aria-label="Frame width"
+          size="compact"
+          segments={frameWidths}
+          value={frame}
+          onValueChange={setFrame}
+        />
+      </div>
+      <div
+        className={`${styles.containedDemo} ${frame === "narrow" ? styles.containedDemoNarrow : ""}`}
+        data-anchor-ignore
+      >
+        <AppSidebar
+          sections={contentSections}
+          profile={demoProfile}
+          fixed={false}
+          responsive="container"
+          defaultExpanded
+        />
+        <div className={styles.containedContent} />
+      </div>
+    </>
+  );
+}
+
 export default function AppSidebarPage() {
   const [demoLayout, setDemoLayout] = React.useState<DemoLayout>("inset");
 
@@ -393,6 +476,24 @@ export default function AppSidebarPage() {
             showMobileTrigger={false}
           />
         </div>
+      </section>
+
+      {/* The rail's own content */}
+      <section className={styles.section}>
+        <SectionTitle title="Content and folding sections" />
+        <p className={styles.sectionBody}>
+          A rail can carry more than destinations. A section&apos;s content follows its rows, as the recent threads do here, at the expanded rail&apos;s width; the collapsed rail has no room for it and folds it away. A section&apos;s action puts an icon button on its heading, such as a project list&apos;s add, and an item&apos;s keys draws a shortcut hint at the row&apos;s end. With collapsibleSections each heading takes a chevron that folds its rows, and every section starts open. In the drawer the content follows the section&apos;s rows and the action becomes a row of its own. A chat&apos;s history rail is built this way.
+        </p>
+        <ContentDemo />
+      </section>
+
+      {/* Sized by its container */}
+      <section className={styles.section}>
+        <SectionTitle title="Sized by its container" />
+        <p className={styles.sectionBody}>
+          By default the rail follows the window: it folds in the tablet band and becomes a drawer on a phone. With responsive set to container it follows its parent instead, so a rail in a framed host switches at the same widths; narrow the frame and the rail becomes a drawer behind its menu button, opening inside the frame. A host that measures its own room passes rail or drawer and opens the drawer through drawerOpen and onDrawerOpenChange, as a chat does from its header. foldForPanel folds the rail to its icon form when the side panel opens without room beside it. Every value but viewport needs fixed set to false.
+        </p>
+        <ContainerDemo />
       </section>
 
       <ComponentInstallStrip slug="app-sidebar" />

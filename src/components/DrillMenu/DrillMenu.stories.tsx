@@ -182,3 +182,31 @@ export const WithHeader: Story = {
     />
   ),
 };
+
+/** A section's `content` follows its rows on the level: AppSidebar's
+    drawer seats a chat's history there, after New chat and the projects. A
+    section with no rows draws no list. */
+export const WithSectionContent: Story = {
+  args: {
+    items: [
+      { type: 'section', items: [{ label: 'New chat', icon: 'edit_square', onClick: fn() }] },
+      {
+        type: 'section',
+        label: 'History',
+        items: [],
+        content: (
+          <ul data-testid="history" style={{ margin: 0, padding: 0, listStyle: 'none' }}>
+            <li>Rework the onboarding flow</li>
+            <li>Speed up the search index</li>
+          </ul>
+        ),
+      },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const history = canvasElement.querySelector('[data-testid="history"]');
+    await expect(history).not.toBeNull();
+    const section = history!.closest('.ds-drill-menu__section')!;
+    await expect(section.querySelector('.ds-drill-menu__list')).toBeNull();
+  },
+};

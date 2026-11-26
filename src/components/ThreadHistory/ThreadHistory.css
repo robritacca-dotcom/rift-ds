@@ -1,0 +1,516 @@
+/* ============================================
+   THREAD HISTORY
+   A chat's history: labelled groups of thread rows (a status dot, the
+   title and an optional description, a trailing icon, pin and meta, a
+   hover-revealed menu, an inline rename) and a quiet row that reveals
+   more. ThreadPanel seats it in its rail, and an AppSidebar section seats
+   it through `content`, so both draw the same rows. The rows are the
+   rails' shared 40px pill shape, AppSidebar's; the group heading is its
+   category's face.
+   ============================================ */
+
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
+/* The icon line inside a row's pill: where the host rail's own row icons
+   start, so the history's headings sit on that line and its dots and
+   titles a glyph's bearing inside it. A rail hands its own through
+   --ds-rail-icon-inset (AppSidebar's rows sit 16px in, in panel mode);
+   ThreadPanel's rows, and the history alone, sit 8px in. */
+.ds-thread-history {
+  --ds-thread-history-icon-inset: var(--ds-rail-icon-inset, var(--padding-200));
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  min-width: 0;
+}
+
+.ds-thread-history__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+}
+
+/* The rails' one group heading, AppSidebar's category and SubNavPanel's
+   group label: paragraph small in the tertiary text, mixed case. Its
+   20px line is the overline's it replaced, so the rhythm below is
+   unchanged. On the rail's leading line, the logo's. The vertical padding
+   is the rows' own inset restated — as if the label sat inside a row —
+   so the heading keeps the pills' rhythm instead of hugging the
+   new-thread row above and the first thread below. */
+.ds-thread-history__group-label {
+  padding: var(--padding-200);
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.ds-thread-history__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  /* A hairline of air between fills, so stacked hover and active pills
+     never read as one slab. */
+  gap: 1px;
+}
+
+/* Thread rows keep the shared 40px shape — no height override, so they
+   match the new-thread and control rows exactly. The <li> is the row's
+   frame: relative, so the overflow trigger can sit over the trailing
+   edge without living inside the row button (nested controls are
+   invalid markup). */
+
+.ds-thread-history__row {
+  position: relative;
+  min-width: 0;
+}
+
+.ds-thread-history__thread {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  width: 100%;
+  height: 40px;
+  min-width: 0;
+  padding: var(--padding-200);
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  cursor: pointer;
+  overflow: hidden;
+  text-align: start;
+  text-decoration: none;
+  transition: background-color var(--motion-duration-fast)
+    var(--motion-ease-standard);
+}
+
+/* One seat in both states: the 20px inset (12 + 8) the collapsed circle's
+   math needs is also where the expanded panel's marks sit, so no mark
+   shifts as the rail sweeps. Text-led content sits a bearing deeper — see
+   TEXT SEAT at the end of the file. */
+
+.ds-thread-history__thread:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-thread-history__thread:focus-visible,
+.ds-thread-history__more:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+.ds-thread-history__thread--active {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+/* A row with a description wraps to two lines: the title line keeps the
+   shared height's rhythm, the description takes the full second line, and
+   the row's gap becomes column-only so the lines sit close. */
+.ds-thread-history__thread--detailed {
+  height: auto;
+  min-height: 40px;
+  flex-wrap: wrap;
+  column-gap: var(--gap-200);
+  row-gap: 0;
+}
+
+/* The status dot: a StatusDot at its 8px list-row size leading the title.
+   The panel seats one on every row or on none, so titles share an edge. */
+.ds-thread-history__status {
+  flex: none;
+}
+
+.ds-thread-history__title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+  /* A long title dissolves at the trailing edge instead of clipping to an
+     ellipsis — the fade is where the overflow trigger lands, so revealed
+     text and control never fight. Short titles end before the fade zone
+     and are untouched; the full text stays in the row's tooltip.
+     ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    black calc(100% - var(--gap-1000)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    black calc(100% - var(--gap-1000)),
+    transparent
+  );
+}
+
+/* The trailing edge is the left in a right-to-left page. */
+.ds-thread-history__title:dir(rtl) {
+  /* ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+  -webkit-mask-image: linear-gradient(to left, black calc(100% - var(--gap-1000)), transparent);
+  mask-image: linear-gradient(to left, black calc(100% - var(--gap-1000)), transparent);
+}
+
+/* The naming state: a shimmer bar holds the title's place while the host
+   generates a name (Skeleton's sweep restated on the row's own geometry);
+   the row's accessible name stays on its tooltip. */
+.ds-thread-history__title--pending {
+  display: flex;
+  align-items: center;
+}
+
+.ds-thread-history__title-shimmer {
+  display: block;
+  /* Full width of the title's space — the row's inline padding is the
+     only inset; the title mask softens its trailing end. */
+  width: 100%;
+  height: 0.75em;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-bg-container-secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+.ds-thread-history__title-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-bg-container-primary) 50%,
+    transparent 100%
+  );
+  /* ds-allow(motion): Skeleton's shimmer — the sweep needs a symmetric
+     in-out curve no --motion-ease-* token provides; the duration is
+     tokenized. */
+  animation: ds-thread-history-shimmer var(--motion-duration-loop-shimmer)
+    ease-in-out infinite;
+}
+
+@keyframes ds-thread-history-shimmer {
+  0% {
+    transform: translateX(calc(-100% * var(--ds-inline-sign, 1)));
+  }
+  100% {
+    transform: translateX(calc(100% * var(--ds-inline-sign, 1)));
+  }
+}
+
+/* The description line: the caption face on the full second line, fading
+   at the trailing edge like the title above it. Indented past the status
+   dot's column, when the panel has one, so both lines share a left edge.
+   ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+.ds-thread-history__description {
+  flex-basis: 100%;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    black calc(100% - var(--gap-1000)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    black calc(100% - var(--gap-1000)),
+    transparent
+  );
+}
+
+/* The trailing edge is the left in a right-to-left page. */
+.ds-thread-history__description:dir(rtl) {
+  /* ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+  -webkit-mask-image: linear-gradient(to left, black calc(100% - var(--gap-1000)), transparent);
+  mask-image: linear-gradient(to left, black calc(100% - var(--gap-1000)), transparent);
+}
+
+.ds-thread-history--dotted .ds-thread-history__description {
+  /* The dot's width plus the row's column gap. */
+  margin-inline-start: calc(var(--gap-200) + var(--gap-200));
+}
+
+/* The trailing cluster: session glyph, pin marker, and the meta caption,
+   fading together when the overflow trigger needs their edge. */
+.ds-thread-history__trail {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--gap-100);
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-thread-history__thread-icon,
+.ds-thread-history__pin {
+  --icon-size: var(--icon-size-500);
+  flex: none;
+  color: var(--color-icon-secondary);
+}
+
+.ds-thread-history__meta {
+  flex: none;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* ============================================
+   THREAD MENU — the hover-revealed overflow trigger
+   A 28px circular trigger over the row's faded trailing edge, opening the
+   compact DropdownMenu. Hidden until the row is hovered or holds keyboard
+   focus, and held while its menu is open — never standing on a resting
+   row. The meta caption steps aside as the trigger arrives, since they
+   share the trailing edge.
+   ============================================ */
+
+.ds-thread-history__row .ds-thread-history__menu {
+  position: absolute;
+  top: var(--padding-150);
+  inset-inline-end: var(--padding-150);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-thread-history__row:hover .ds-thread-history__menu,
+.ds-thread-history__row:focus-within .ds-thread-history__menu,
+.ds-thread-history__row .ds-thread-history__menu:has([aria-expanded='true']) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ds-thread-history__row--with-menu:hover .ds-thread-history__trail,
+.ds-thread-history__row--with-menu:focus-within .ds-thread-history__trail,
+.ds-thread-history__row--with-menu:has([aria-expanded='true'])
+  .ds-thread-history__trail {
+  opacity: 0;
+}
+
+/* While the menu is open the pointer is off in the panel, so the row holds
+   its hover wash — the open menu and its row read as one thing. */
+.ds-thread-history__row:has(.ds-thread-history__menu [aria-expanded='true'])
+  .ds-thread-history__thread {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-thread-history__menu-trigger {
+  --icon-size: var(--icon-size-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast)
+    var(--motion-ease-standard);
+}
+
+.ds-thread-history__menu-trigger:hover {
+  background-color: var(--color-bg-container-tertiary);
+}
+
+.ds-thread-history__menu-trigger:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* ============================================
+   RENAME — the inline title editor
+   The input wears the row's exact shape and face; the action-colour border is the
+   active-input treatment, the one sanctioned "you are editing here" mark.
+   ============================================ */
+
+.ds-thread-history__rename {
+  box-sizing: border-box;
+  width: 100%;
+  height: 40px;
+  min-width: 0;
+  padding: 0 var(--padding-200);
+  border: var(--border-025) solid var(--color-action-primary-bg);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-bg-container-primary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+/* ============================================
+   MORE — the quiet trailing reveal
+   ============================================ */
+
+.ds-thread-history__more {
+  align-self: flex-start;
+  padding: var(--padding-150) var(--padding-200);
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  transition: color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-thread-history__more:hover {
+  color: var(--color-text-secondary);
+}
+
+
+/* ============================================
+   FOLDING SECTIONS — `collapsibleSections`
+   A heading stays a plain label on its seat; its fold is the chevron
+   alone, a 24px icon button at the heading's end with a hover circle,
+   named by the heading. The rows glide shut beneath it on SideNav's
+   grid-rows fold.
+   ============================================ */
+
+.ds-thread-history__section-head {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.ds-thread-history__section-head > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-thread-history__fold {
+  --icon-size: var(--icon-size-500);
+  margin-inline-end: var(--padding-200);
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  /* Taller than the heading's line by a step each side, given back so a
+     foldable heading sits where a plain one does. */
+  margin-block: calc(-1 * var(--gap-050));
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-icon-secondary);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-thread-history__fold:hover {
+  background-color: var(--color-action-passive-bg-hover);
+  color: var(--color-icon-primary);
+}
+
+.ds-thread-history__fold:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+.ds-thread-history__fold-chevron {
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-thread-history__fold[aria-expanded='false'] .ds-thread-history__fold-chevron {
+  transform: rotate(calc(-90deg * var(--ds-inline-sign, 1)));
+}
+
+.ds-thread-history__section-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-thread-history__section-panel--open {
+  grid-template-rows: 1fr;
+}
+
+.ds-thread-history__section-panel > .ds-thread-history__list {
+  min-height: 0;
+}
+
+/* The glide needs the rows clipped to the panel; a panel that never folds
+   keeps them unclipped. */
+.ds-thread-history--collapsible-sections .ds-thread-history__section-panel > .ds-thread-history__list {
+  overflow: hidden;
+}
+
+/* ============================================
+   TEXT SEAT — last, so it wins over each rule's padding shorthand
+   ============================================ */
+
+/* Text-led content — group labels, thread rows, the more row, the rename
+   field — sits a bearing deeper than the icon seat: a glyph's ink starts
+   that far inside its 24px box, so this is what lands the labels and status
+   dots under the pen's visible edge while the glyph itself stays centred
+   under the logo. None of it shows collapsed, so nothing moves. */
+.ds-thread-history__thread,
+.ds-thread-history__more,
+.ds-thread-history__rename {
+  padding-inline-start: calc(var(--ds-thread-history-icon-inset) + var(--padding-100));
+}
+
+/* Group headings sit on the rail's leading line, the logo's and the row
+   icons', where AppSidebar's category does. */
+.ds-thread-history__group-label {
+  padding-inline-start: var(--ds-thread-history-icon-inset);
+}
+
+/* A row's trailing item (the meta caption) keeps AppSidebar's badge room
+   from its pill's end, a step more than the pill's own inset. */
+.ds-thread-history__thread {
+  padding-inline-end: var(--padding-300);
+}
+
+/* Icon side padding, Button's rule (design.md): a glyph's box carries its
+   own side bearing, so a side that holds one takes the step below the text
+   side. A thread row that shows its icon leads with it, so it starts
+   on the icon rows' line rather than the text rows' (12 → 8). */
+.ds-thread-history__thread:has(.ds-thread-history__thread-icon) {
+  padding-inline-start: var(--ds-thread-history-icon-inset);
+}
+
+/* A host that seats the history on a touch surface (a phone drawer) keeps
+   the row menu showing, since there is no hover to reveal it. */
+@media (hover: none) {
+  .ds-thread-history__row .ds-thread-history__menu {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .ds-thread-history__row--with-menu .ds-thread-history__trail {
+    opacity: 0;
+  }
+}
+
+} /* @layer rift.components */

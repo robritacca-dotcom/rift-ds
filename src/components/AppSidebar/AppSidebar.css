@@ -93,10 +93,17 @@
    surface's shadow that falls on them, leaving a straight cut beside the
    surface. The phone drawer keeps its fill (its own rule below). */
 @media not (max-width: 768px) {
-  .ds-app-sidebar--inset:not(.ds-app-sidebar--mobile-open),
-  .ds-app-sidebar__panel--inset {
+  .ds-app-sidebar--inset:not(.ds-app-sidebar--mobile-open, .ds-app-sidebar--sized),
+  .ds-app-sidebar__panel--inset:not(.ds-app-sidebar__panel--sized) {
     background-color: transparent;
   }
+}
+
+/* A rail sized by its container or its host is clear in its rail form
+   whatever the window, as the rule above draws it on a wide screen. */
+.ds-app-sidebar--inset.ds-app-sidebar--rail-form:not(.ds-app-sidebar--mobile-open),
+.ds-app-sidebar__panel--inset.ds-app-sidebar__panel--sized {
+  background-color: transparent;
 }
 
 /* ============================================
@@ -261,6 +268,242 @@
 .ds-app-sidebar--expanded .ds-app-sidebar__category {
   opacity: 1;
   height: 20px;
+}
+
+/* A foldable section's fold (`collapsibleSections`): the chevron alone,
+   a 24px icon button at the heading's end with a hover circle, named by
+   the heading it folds. The heading keeps its seat on the icon line. It
+   points down while open and at the inline end while folded, and fades
+   with the heading as the rail collapses. */
+.ds-app-sidebar__fold {
+  --icon-size: var(--icon-size-500);
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  /* Taller than the heading's 20px line by a step each side, given back
+     so a foldable heading sits exactly where a plain one does. */
+  margin-block: calc(-1 * var(--gap-050));
+  margin-inline-end: var(--padding-500);
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-icon-secondary);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar__fold:hover {
+  background-color: var(--color-action-passive-bg-hover);
+  color: var(--color-icon-primary);
+}
+
+.ds-app-sidebar__fold:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+.ds-app-sidebar__fold-chevron {
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar__fold[aria-expanded='false'] .ds-app-sidebar__fold-chevron {
+  transform: rotate(calc(-90deg * var(--ds-inline-sign, 1)));
+}
+
+/* A heading with a fold and an action: the action follows the fold, one
+   small step apart, and only the last control takes the end inset. */
+.ds-app-sidebar__fold:has(+ .ds-app-sidebar__section-action) {
+  margin-inline-end: var(--gap-100);
+}
+
+/* The section's rows, in a panel that glides shut under a folded heading:
+   SideNav's grid-rows fold. Open (every section without the prop), it is
+   the rows' plain column. */
+.ds-app-sidebar__section-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-block-start: calc(-1 * var(--gap-100));
+  transition:
+    grid-template-rows var(--motion-duration-slow) var(--motion-ease-emphasized),
+    margin-block-start var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-app-sidebar__section-panel--open {
+  grid-template-rows: 1fr;
+  margin-block-start: 0;
+}
+
+.ds-app-sidebar__section-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  align-items: stretch;
+  min-height: 0;
+}
+
+/* The glide needs the rows clipped to the panel; a rail that never folds
+   keeps them unclipped. */
+.ds-app-sidebar--collapsible-sections .ds-app-sidebar__section-rows {
+  overflow: hidden;
+}
+
+/* A section's heading row: its label (or the fold toggle) and, when the
+   section has one, its action at the end, such as a project list's add. */
+.ds-app-sidebar__heading {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  transition: margin-block-end var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* Collapsed, the heading has no height, so it gives back the row gap after
+   it too: the group's first row starts as far below its divider as the
+   last row of the group above ends above it. */
+.ds-app-sidebar:not(.ds-app-sidebar--expanded) .ds-app-sidebar__heading {
+  margin-block-end: calc(-1 * var(--gap-100));
+}
+
+.ds-app-sidebar__heading > .ds-app-sidebar__category {
+  flex: 1;
+  min-width: 0;
+}
+
+/* The heading's action: an icon button on the heading's line, at the rows'
+   end inset, fading with the heading as the rail collapses. */
+.ds-app-sidebar__section-action {
+  --icon-size: var(--icon-size-500);
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  /* Taller than the heading's 20px line by a step each side, given back,
+     as the fold's is. */
+  margin-block: calc(-1 * var(--gap-050));
+  margin-inline-end: var(--padding-500);
+  padding: 0;
+  overflow: hidden;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard), height var(--motion-duration-base) var(--motion-ease-standard), margin var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__section-action {
+  opacity: 1;
+}
+
+/* Collapsed, the heading folds to no height, and its action with it, so a
+   group starts right under its divider, as a group with no action does. */
+.ds-app-sidebar:not(.ds-app-sidebar--expanded) .ds-app-sidebar__section-action {
+  height: 0;
+  margin-block: 0;
+}
+
+.ds-app-sidebar__section-action:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-app-sidebar__section-action:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* A row's keyboard hint (`keys`), decorative, at the row's end while
+   expanded, as the value is. */
+.ds-app-sidebar__btn-keys {
+  display: inline-flex;
+  flex: none;
+  gap: var(--gap-050);
+  margin-inline-start: auto;
+  align-self: center;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__btn-keys {
+  opacity: 1;
+}
+
+/* A section's own content (`content`): under the section's fold on the
+   expanded rail, at the rows' inset. The inner box holds the expanded
+   rail's width, so the rail's sweep clips it instead of reflowing it, and
+   the collapsed rail folds it to no height, so the rail never scrolls
+   through content it does not show. */
+.ds-app-sidebar__section-content {
+  /* Content that draws its own rows (ThreadHistory) reads the rail's
+     icon line here: its pills start where the rows' pills do, and its
+     icons, headings and dots line up with the rows'. Expanded, a row's
+     pill starts 8px in with its icon 12px inside it (the 20px seat);
+     panel mode keeps its own seat, the pill 12px in and the icon 16px
+     inside it. */
+  --ds-rail-icon-inset: var(--padding-300);
+  display: grid;
+  grid-template-rows: 0fr;
+  min-width: 0;
+  margin-inline: var(--padding-200) var(--padding-300);
+  opacity: 0;
+  transition:
+    grid-template-rows var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar--panel-mode .ds-app-sidebar__section-content {
+  --ds-rail-icon-inset: var(--padding-400);
+  margin-inline: var(--padding-300);
+}
+
+/* A section that is only content (a chat's history) has nothing to show
+   on the collapsed rail. It folds to no height there (the grid fold
+   above) and gives back the gap before it, on the rail's own glide, and
+   draws no divider of its own, so the groups either side meet at one
+   line. Nothing pops: the rows below glide with the rail's width. */
+.ds-app-sidebar__nav--content-only {
+  transition: margin-block-start var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-app-sidebar:not(.ds-app-sidebar--expanded) .ds-app-sidebar__nav--content-only {
+  margin-block-start: calc(-1 * var(--ds-app-sidebar-section-gap));
+}
+
+.ds-app-sidebar__sections > .ds-app-sidebar__nav--content-only::before {
+  display: none;
+}
+
+/* Entering, the content waits for the rail to widen and then fades in,
+   so text never appears in a rail too narrow for it; leaving, it fades
+   at once. */
+.ds-app-sidebar__section-content--shown {
+  transition:
+    grid-template-rows var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-base) var(--motion-ease-standard) var(--motion-duration-base);
+}
+
+.ds-app-sidebar__section-content--shown {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.ds-app-sidebar__section-content-inner {
+  min-height: 0;
+  min-width: calc(280px - 2 * var(--padding-300)); /* ds-allow(spacing): the expanded rail's width less the rows' inset, so the sweep clips the content rather than reflowing it */
+  overflow: hidden;
+}
+
+/* A profile mark of its own (`avatar`) in the Avatar's 40px seat. */
+.ds-app-sidebar__avatar--node {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
 }
 
 /* ============================================
@@ -666,6 +909,37 @@
 .ds-app-sidebar--expanded .ds-app-sidebar__footer-slot {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* The rail's scrollbar stays out of sight until it scrolls (SideNav's rule,
+   and the side panel's): no thumb at rest, a thin one while it moves. */
+.ds-app-sidebar__top {
+  scrollbar-width: none;
+}
+
+.ds-app-sidebar__top::-webkit-scrollbar {
+  width: 0;
+}
+
+.ds-app-sidebar__top[data-scrolling] {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-bg-container-border) transparent;
+}
+
+.ds-app-sidebar__top[data-scrolling]::-webkit-scrollbar {
+  width: var(--padding-150);
+}
+
+.ds-app-sidebar__top[data-scrolling]::-webkit-scrollbar-thumb {
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-container-border);
+}
+
+/* The top slot keeps its content's height in the scrolling top block: a
+   crowded rail scrolls its rows rather than squeezing the slot, whose
+   overflow clip would cut the content off (an entity switcher's mark). */
+.ds-app-sidebar__top-slot {
+  flex-shrink: 0;
 }
 
 /* A persistent top slot never fades: it holds the nav rows' inset, so a
@@ -1174,7 +1448,7 @@
 }
 
 @media (max-width: 768px) {
-  .ds-app-sidebar {
+  .ds-app-sidebar:not(.ds-app-sidebar--sized) {
     width: 0;
     padding: 0;
     overflow: hidden;
@@ -1185,11 +1459,11 @@
     visibility: hidden;
   }
 
-  .ds-app-sidebar__panel {
+  .ds-app-sidebar__panel:not(.ds-app-sidebar__panel--sized) {
     display: none;
   }
 
-  .ds-app-sidebar__mobile-trigger {
+  .ds-app-sidebar__mobile-trigger:not(.ds-app-sidebar__mobile-trigger--sized) {
     position: fixed;
     /* One padding step in from the corner, so hosts whose mobile
        content gutter is 16px get a trigger whose centre lines up with
@@ -1213,7 +1487,7 @@
     box-shadow: var(--shadow-floating);
   }
 
-  .ds-app-sidebar__scrim {
+  .ds-app-sidebar__scrim:not(.ds-app-sidebar__scrim--sized) {
     display: block;
     position: fixed;
     inset: 0;
@@ -1224,7 +1498,7 @@
   /* The drawer: the full expanded rail, fixed over the scrim, sliding
      in from the left on the motion tokens (the reduced-motion guard
      zeroes the duration system-wide). */
-  .ds-app-sidebar--mobile-open {
+  .ds-app-sidebar--mobile-open:not(.ds-app-sidebar--sized) {
     visibility: visible;
     position: fixed;
     top: 0;
@@ -1250,11 +1524,11 @@
    cover the parent's height from its start, each handing its width back
    with an end margin. The drawer's body scroll lock still holds the page. */
 @media (max-width: 768px) {
-  .ds-app-sidebar--contained.ds-app-sidebar--floating:not(.ds-app-sidebar--mobile-open) {
+  .ds-app-sidebar--contained.ds-app-sidebar--floating:not(.ds-app-sidebar--mobile-open, .ds-app-sidebar--sized) {
     margin: 0;
   }
 
-  .ds-app-sidebar__mobile-trigger--contained {
+  .ds-app-sidebar__mobile-trigger--contained:not(.ds-app-sidebar__mobile-trigger--sized) {
     position: absolute;
     top: auto;
     inset-inline-start: auto;
@@ -1263,7 +1537,7 @@
     margin-inline-start: var(--padding-400);
   }
 
-  .ds-app-sidebar__scrim--contained {
+  .ds-app-sidebar__scrim--contained:not(.ds-app-sidebar__scrim--sized) {
     position: sticky;
     inset: auto;
     top: 0;
@@ -1274,7 +1548,7 @@
     margin-inline-end: -100%;
   }
 
-  .ds-app-sidebar--contained.ds-app-sidebar--mobile-open {
+  .ds-app-sidebar--contained.ds-app-sidebar--mobile-open:not(.ds-app-sidebar--sized) {
     position: sticky;
     top: 0;
     bottom: auto;
@@ -1284,6 +1558,78 @@
     margin: 0;
     margin-inline-end: -100%;
   }
+}
+
+/* ============================================
+   DRAWER FORM — a rail sized by its container or its host
+   (`responsive` other than "viewport", always contained): the phone
+   rules above, keyed to the form the rail was given rather than the
+   window. The rail leaves its parent's row, the trigger sits at the
+   parent's top start corner, and the open drawer and its scrim cover the
+   parent, each handing its width back with an end margin.
+   ============================================ */
+.ds-app-sidebar--drawer-form:not(.ds-app-sidebar--mobile-open) {
+  width: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.ds-app-sidebar__mobile-trigger--drawer-form {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-block-start: var(--padding-400);
+  margin-inline-start: var(--padding-400);
+  padding: 0;
+  background: var(--color-bg-page-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  box-shadow: var(--shadow-floating);
+}
+
+.ds-app-sidebar__scrim--sized {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  flex: none;
+  width: 100%;
+  height: 100%;
+  margin-inline-end: -100%;
+  background: var(--color-scrim);
+}
+
+.ds-app-sidebar--drawer-form.ds-app-sidebar--mobile-open {
+  visibility: visible;
+  /* The whole parent, never squeezed by the row's other items. */
+  flex: none;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  margin-inline-end: -100%;
+  padding: var(--padding-500) 0;
+  overflow-y: auto;
+  background: var(--color-bg-page-primary);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  animation: ds-app-sidebar-slide-in var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* The rail form never shows the trigger, whatever the window. */
+.ds-app-sidebar__mobile-trigger--sized:not(.ds-app-sidebar__mobile-trigger--drawer-form) {
+  display: none;
 }
 
 @keyframes ds-app-sidebar-slide-in {

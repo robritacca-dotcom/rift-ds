@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useCallback, useId, useState } from 'react';
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { MOTION_SCROLL_SETTLE_MS } from '../../tokens/motion';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import './SubNavPanel.css';
 import { ChosenMark } from '../Dropdown/Dropdown';
@@ -115,6 +116,26 @@ export const SubNavPanel = React.forwardRef<HTMLElement, SubNavPanelProps>(
     const baseClass = 'ds-sub-nav-panel';
     const Link = useLinkComponent(linkComponent);
     const uid = useId();
+
+    /* The body's scrollbar stays out of sight until it scrolls, SideNav's
+       rule: a scroll marks it (straight on the DOM, so a scroll re-renders
+       nothing) and the mark clears once the scroll settles. */
+    const bodyRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+      const body = bodyRef.current;
+      if (!body) return;
+      let settle: ReturnType<typeof setTimeout> | undefined;
+      const onScroll = () => {
+        body.setAttribute('data-scrolling', '');
+        clearTimeout(settle);
+        settle = setTimeout(() => body.removeAttribute('data-scrolling'), MOTION_SCROLL_SETTLE_MS);
+      };
+      body.addEventListener('scroll', onScroll, { passive: true });
+      return () => {
+        body.removeEventListener('scroll', onScroll);
+        clearTimeout(settle);
+      };
+    }, []);
 
     /* The accordion holding the current page starts open, so the reader
        lands with their position already showing. */
@@ -293,7 +314,7 @@ export const SubNavPanel = React.forwardRef<HTMLElement, SubNavPanelProps>(
           </div>
         )}
 
-        <div className={`${baseClass}__body`}>
+        <div ref={bodyRef} className={`${baseClass}__body`}>
           {groupRuns(items).map((run, i) => (
             <div key={`${run.group ?? ''}-${i}`} className={`${baseClass}__group`}>
               {run.group && <div className={`${baseClass}__group-label`}>{run.group}</div>}

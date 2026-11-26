@@ -48,7 +48,10 @@
    the widget's own cleared surface and showed the scene sharp through
    their glass. Over a live scene there is no page colour to dissolve into
    anyway, so the shaded chat drops the mask and the board ends at the
-   card's own edge, with every tile frosted over the scene. */
+   card's own edge, with every tile frosted over the scene. The shell's
+   attributes sit on the rails wrapper around the root, or on the root
+   itself when there are no rails, so both shapes are named. */
+.shaded :global([data-ds-shell] > .ds-chat-widget[data-widgets="scroll"]),
 .shaded :global(.ds-chat-widget[data-ds-shell][data-widgets="scroll"]) {
   -webkit-mask-image: none;
   mask-image: none;
@@ -107,6 +110,8 @@
 }
 
 .shaded :global([data-ds-shell="inset"] > .ds-chat-widget__threads-rail),
+.shaded :global([data-ds-shell="inset"] > .ds-chat-widget__history),
+.shaded :global([data-ds-shell="inset"] > .ds-app-sidebar__panel),
 .shaded :global([data-ds-shell="inset"] > .ds-chat-widget__aside-rail),
 .shaded :global([data-ds-shell="inset"] > .ds-chat-widget__artifact-rail) {
   position: relative;

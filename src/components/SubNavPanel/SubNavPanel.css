@@ -129,6 +129,27 @@
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
+  /* The scrollbar stays out of sight until the body scrolls (SideNav's
+     rule): no thumb at rest, a thin one while it moves. */
+  scrollbar-width: none;
+}
+
+.ds-sub-nav-panel__body::-webkit-scrollbar {
+  width: 0;
+}
+
+.ds-sub-nav-panel__body[data-scrolling] {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-bg-container-border) transparent;
+}
+
+.ds-sub-nav-panel__body[data-scrolling]::-webkit-scrollbar {
+  width: var(--padding-150);
+}
+
+.ds-sub-nav-panel__body[data-scrolling]::-webkit-scrollbar-thumb {
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-container-border);
 }
 
 .ds-sub-nav-panel__group {

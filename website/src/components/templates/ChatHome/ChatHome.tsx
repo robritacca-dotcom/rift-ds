@@ -17,7 +17,7 @@
  *     it has no close and no full-screen toggle, and it fills the viewport
  *     at every width, which is the chat's takeover mode held permanently.
  *   - The screen takes a shell choice like every app-shell template, its
- *     own (the footer's shell switch writes it), flush until the visitor
+ *     own (the rail's Appearance section writes it), flush until the visitor
  *     picks: ChatWidget's `layout` seats the chat flush, floating or inset
  *     from the same shell recipe TemplateShell draws, and in flush its
  *     `backdrop` sets blur or solid, a lever only a chat has.
@@ -76,7 +76,8 @@ import shaded from "@/components/StagedShader/ShadedChat.module.css";
 import { useStagedProductName } from "../useStagedProductName";
 import styles from "./ChatHome.module.css";
 import { ProductMark } from "../ProductMark/ProductMark";
-import SidebarSwitchers, { CollapsedSidebarSwitchers } from "../SidebarSwitchers/SidebarSwitchers";
+import { AllTemplatesButton } from "../SidebarSwitchers/SidebarSwitchers";
+import { useAppearanceRailSection } from "../TemplateShell/appearance-section";
 import { useChatBackdrop, useTemplateLayout } from "../TemplateShell/useTemplateLayout";
 
 /* ------------------------------------------------------------- the page */
@@ -106,13 +107,14 @@ function ChatHomeShell() {
   /* A conversation frosts the scene, as on the playground's card. */
   const conversing = turns.length > 0 || Boolean(live);
   const takeover = useTakeoverViewport();
-  /* The chat home's own shell choice (its footer switch writes it), flush
+  /* The chat home's own shell choice (its rail's Appearance section writes it), flush
      until the visitor picks: the same three modes TemplateShell draws,
      through ChatWidget's layout, and the backdrop lever only a chat
      carries: under the scene the shaded recipe reads it for the frost's
      finish, glass for blur and the page floor for solid. */
   const layout = useTemplateLayout("chat");
   const backdrop = useChatBackdrop();
+  const appearance = useAppearanceRailSection({ scope: "chat" });
 
   /* The chat's state machine reads `open` for everything a visible chat
      does (composer focus, the welcome's reveal). Here the chat is the page,
@@ -149,6 +151,9 @@ function ChatHomeShell() {
           fileAttachments
           mentions={DEMO_MENTIONS}
           composerActions={<ModelPicker models={DEMO_MODELS} placement="top" />}
+          /* The composer stands on the scene, so it wears the tiles' glass
+             (the playground's chat card does the same under its shader). */
+          composerGlass
           widgets={<DemoBoard onAsk={(prompt) => send(prompt)} />}
           widgetsLayout="scroll"
           widgetsWidth="wide"
@@ -157,19 +162,21 @@ function ChatHomeShell() {
              the plain header, as on the playground stage. */
           tabs={!takeover}
           threadsProps={{
-            /* The sheet names the product and skips the collapse (its scrim is
-               the dismissal); the inline rail skips the name, since the chat
-               header already says it, and offers the collapse. */
+            /* The history rail is the app rail (AppSidebar), so its shell,
+               sizes, side panel and drawer are the templates' own: New
+               chat, the projects, the history, then the same Appearance
+               section the template rail carries (with Backdrop in place of
+               Width), whose choices open in the side panel beside the rail
+               and drill in on the drawer. */
             logo: <ProductMark />,
             logoText: product,
             defaultExpanded: true,
+            /* Projects, each history group and Appearance fold under their
+               headings. */
+            collapsibleSections: true,
             profile: { name: "Jordan Reyes", meta: "jordan@acme.example" },
-            /* The templates' shared footer: the way back to the index above
-               the theme controls. */
-            footerSlot: <SidebarSwitchers showLayout backLink scope="chat" />,
-            /* Collapsed, the same switchers at their smallest, as the app
-               shells' rail keeps them. */
-            collapsedFooterSlot: <CollapsedSidebarSwitchers showLayout scope="chat" />,
+            sections: [appearance],
+            footerAction: <AllTemplatesButton />,
           }}
           agent={{
             /* Closed on arrival, so the home screen opens on the board and the

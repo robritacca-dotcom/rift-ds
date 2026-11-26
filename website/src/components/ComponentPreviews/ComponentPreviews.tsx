@@ -2261,6 +2261,23 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
+  "thread-history": () => (
+    <>
+      <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", gap: "4px", width: "170px" }}>
+        {[
+          { title: "Plan the launch", dot: "var(--color-status-warning-icon)", meta: "32m" },
+          { title: "Import invoices", dot: "var(--color-icon-secondary)", meta: "2m", active: true },
+          { title: "Set up roles", dot: "var(--color-status-info-icon)", meta: "5d" },
+        ].map((thread) => (
+          <div key={thread.title} style={{ display: "flex", alignItems: "center", gap: "6px", padding: "5px 8px", borderRadius: "10px", background: thread.active ? "var(--color-bg-container-tertiary)" : "transparent" }}>
+            <span style={{ width: "6px", height: "6px", borderRadius: "999px", background: thread.dot, flex: "none" }} />
+            <span style={{ fontSize: "11px", color: "var(--color-text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flex: 1 }}>{thread.title}</span>
+            <span style={{ fontSize: "9px", color: "var(--color-text-tertiary)" }}>{thread.meta}</span>
+          </div>
+        ))}
+      </div>
+    </>
+  ),
   "thread-panel": () => (
     <>
       <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", gap: "4px", width: "160px" }}>

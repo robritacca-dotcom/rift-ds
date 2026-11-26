@@ -2,42 +2,64 @@
 
 import { useMemo, useState, type ReactNode } from 'react';
 import {
-  ThreadPanel,
-  type ThreadPanelProfile,
-  type ThreadPanelProps,
-} from '../components/ThreadPanel/ThreadPanel';
+  AppSidebar,
+  type AppSidebarSection,
+} from '../components/AppSidebar/AppSidebar';
+import type { DrillMenuEntry } from '../components/DrillMenu/DrillMenu';
+import { PixelAvatar } from '../components/PixelAvatar/PixelAvatar';
+import { ThreadHistory } from '../components/ThreadHistory/ThreadHistory';
+import type { ThreadPanelProfile, ThreadPanelProps } from '../components/ThreadPanel/ThreadPanel';
 import { useChatWidget } from './context';
+import { useRailSeat } from './rail-seat';
 
 export interface ChatThreadsProps {
-  /** The widget seated the rail as a sheet over the conversation rather than beside it. */
+  /** The widget seated the rail as a sheet over the conversation rather than beside it. A rail outside the widget's own seat (a custom `threads` slot) draws itself expanded there. */
   overlay: boolean;
   /** Closes the sheet; a no-op on the inline rail. */
   close: () => void;
-  /** The brand row's mark, in both seats. */
+  /** The brand row's mark. Defaults to a generated pixel avatar seeded by `logoText`. */
   logo?: ReactNode;
-  /** The brand row's text. Shown only on the sheet, where the chat header is hidden behind it; the inline rail leaves it out. */
+  /** The brand row's text, beside the mark while the rail is expanded. */
   logoText?: string;
-  /** The signed-in person, shown on the inline rail. */
+  /** The signed-in person, shown at the rail's foot. */
   profile?: ThreadPanelProfile;
-  /** Rendered in the rail's footer in both seats (above the profile row on the inline rail; the sheet has none): a theme toggle, a link out. Fades out while the inline rail is collapsed. */
+  /** Rendered in the rail's footer above the profile row: a theme toggle, a link out. Fades out while the rail is collapsed. */
   footerSlot?: ReactNode;
-  /** Rendered in the inline rail's footer while it is collapsed, in `footerSlot`'s place: the same controls at their smallest, stacked on the rail's axis, crossfading with the full form. The sheet never collapses, so it never shows. */
+  /** Let the reader fold the projects, each labelled history group and the host's `sections` under their headings. Every section starts open. */
+  collapsibleSections?: boolean;
+  /** Sections folded at first, by heading text, when `collapsibleSections` is on. */
+  defaultCollapsedSections?: string[];
+  /** Rendered below the profile row, such as a full-width Button back to an index. It fades out while the rail is collapsed. */
+  footerAction?: ReactNode;
+  /** Rendered in the rail's footer while it is collapsed, in `footerSlot`'s place: the same controls at their smallest, stacked on the rail's axis, crossfading with the full form. */
   collapsedFooterSlot?: ReactNode;
-  /** Whether the inline rail can collapse to its icon strip. */
+  /**
+   * The host's own sections after the history, in AppSidebar's shape: a
+   * section of setting rows (Appearance) whose choices open in the side
+   * panel beside the rail and drill in on the drawer, as the app rail's do.
+   */
+  sections?: AppSidebarSection[];
+  /** Rows above the sections in the drawer, in DrillMenu's shape, such as a workspace switcher that drills into its choices. */
+  drawerTopEntries?: DrillMenuEntry[];
+  /** Rows after the sections in the drawer, in DrillMenu's shape. */
+  drawerBottomEntries?: DrillMenuEntry[];
+  /** Whether the rail can collapse to its icon strip. */
   collapsible?: boolean;
   /**
-   * Whether the inline rail starts expanded. Defaults to `false`: it starts
-   * collapsed to its icon strip. The sheet, and a rail that is not
+   * Whether the rail starts expanded. Defaults to `false`: it starts
+   * collapsed to its icon strip. The drawer, and a rail that is not
    * `collapsible`, always show expanded.
    */
   defaultExpanded?: boolean;
-  /** Accessible heading over the history. */
+  /** Accessible name of the history inside the rail. */
   historyLabel?: string;
+  /** Accessible name of the rail's navigation landmark. */
+  railLabel?: string;
   /**
-   * The words the ThreadPanel writes, merged over its English defaults: the
+   * The words the rail writes, merged over their English defaults: the
    * spoken pin and status text ("Pinned", "Working"…), each row's menu
    * trigger ("Thread options"), the rename field ("Rename thread"), the
-   * projects header and its add button ("Projects", "New project"), and the
+   * projects heading and its add button ("Projects", "New project"), and the
    * collapse toggle ("Collapse the panel", "Expand the panel"). The history's
    * own name is `historyLabel`.
    */
@@ -57,9 +79,14 @@ export interface ChatThreadsProps {
 }
 
 /**
- * The built-in session-history rail: a ThreadPanel over the provider's
- * thread lifecycle (`useThreads`). The widget seats it inline on a wide
- * host and as a slide-over sheet on a narrow one, and tells it which.
+ * The built-in session-history rail: an AppSidebar over the provider's
+ * thread lifecycle (`useThreads`), so a chat's rail has the app rail's
+ * shell, sizes, side panel and drawer, and only its content is its own.
+ * New chat leads, the projects follow as a section with an add action, the
+ * history is a section's content (ThreadHistory, the rows ThreadPanel
+ * draws), and the host's `sections` come after. The widget seats it and
+ * says which form its room allows: the rail beside the conversation, or
+ * the drawer over the widget, opened from the header's menu button.
  */
 export function ChatThreads({
   overlay,
@@ -68,16 +95,26 @@ export function ChatThreads({
   logoText,
   profile,
   footerSlot,
+  footerAction,
+  collapsibleSections = false,
+  defaultCollapsedSections,
   collapsedFooterSlot,
+  sections: hostSections,
+  drawerTopEntries,
+  drawerBottomEntries,
   collapsible = true,
   defaultExpanded = false,
   historyLabel = 'Chat history',
+  railLabel = 'Chats',
   threadPanelLabels,
   actionLabels,
 }: ChatThreadsProps) {
   const { threads } = useChatWidget();
+  const seat = useRailSeat();
   const [expanded, setExpanded] = useState(defaultExpanded);
+  const [collapsedSections, setCollapsedSections] = useState<string[]>(() => defaultCollapsedSections ?? []);
   const hasProjects = threads.projects.length > 0;
+  const projectsLabel = threadPanelLabels?.projectsLabel ?? 'Projects';
 
   /* The lifecycle writes each row's menu in English; the labels are
      relabelled here by action id, so the ids the menu reports stay the ones
@@ -102,39 +139,108 @@ export function ChatThreads({
     }));
   }, [threads.groups, actionLabels]);
 
+  /* A rail outside the widget's seat in a sheet of its own (a custom slot)
+     has nowhere to collapse to. */
+  const fixedOpen = !seat && overlay;
+
+  const sections: AppSidebarSection[] = [
+    {
+      items: [
+        {
+          key: 'new-chat',
+          icon: 'edit_square',
+          label: threads.newThreadLabel,
+          onClick: () => {
+            threads.startNew();
+            close();
+          },
+        },
+      ],
+    },
+    ...(hasProjects
+      ? [
+          {
+            category: projectsLabel,
+            action: {
+              label: threadPanelLabels?.newProjectLabel ?? 'New project',
+              icon: 'add',
+              onClick: threads.createProject,
+            },
+            items: threads.projects.map((project) => ({
+              key: `project-${project.id}`,
+              label: project.label,
+              ...(project.icon ? { icon: project.icon } : { pixelAvatar: project.pixelAvatar ?? project.id }),
+              value: project.meta,
+              href: project.href,
+              onClick: () => {
+                threads.selectProject(project.id);
+                close();
+              },
+            })),
+          },
+        ]
+      : []),
+    {
+      items: [],
+      content: ({ closeDrawer }) => (
+        <ThreadHistory
+          aria-label={historyLabel}
+          statusLabels={threadPanelLabels?.statusLabels}
+          pinnedLabel={threadPanelLabels?.pinnedLabel}
+          threadMenuLabel={threadPanelLabels?.threadMenuLabel}
+          renameLabel={threadPanelLabels?.renameLabel}
+          groups={groups}
+          activeThreadId={threads.activeThreadId}
+          onThreadSelect={(id) => {
+            threads.select(id);
+            closeDrawer();
+            close();
+          }}
+          onThreadAction={threads.runAction}
+          renamingThreadId={threads.renamingId ?? undefined}
+          onThreadRename={threads.rename}
+          onRenameCancel={() => threads.setRenamingId(null)}
+          collapsibleSections={collapsibleSections}
+          collapsedSections={collapsedSections}
+          onCollapsedSectionsChange={setCollapsedSections}
+        />
+      ),
+    },
+    ...(hostSections ?? []),
+  ];
+
   return (
-    <ThreadPanel
-      {...threadPanelLabels}
-      groups={groups}
-      activeThreadId={threads.activeThreadId}
-      onThreadSelect={(id) => {
-        threads.select(id);
-        close();
-      }}
-      onThreadAction={threads.runAction}
-      renamingThreadId={threads.renamingId ?? undefined}
-      onThreadRename={threads.rename}
-      onRenameCancel={() => threads.setRenamingId(null)}
-      newThreadLabel={threads.newThreadLabel}
-      onNewThread={() => {
-        threads.startNew();
-        close();
-      }}
-      historyLabel={historyLabel}
-      projects={hasProjects ? threads.projects : undefined}
-      activeProjectId={threads.activeProjectId}
-      onProjectSelect={(id) => {
-        threads.selectProject(id);
-        close();
-      }}
-      onProjectCreate={hasProjects ? threads.createProject : undefined}
-      logo={logo}
-      logoText={overlay ? logoText : undefined}
-      expanded={overlay || !collapsible ? true : expanded}
-      onExpandedChange={overlay || !collapsible ? undefined : setExpanded}
-      profile={overlay ? undefined : profile}
+    <AppSidebar
+      aria-label={railLabel}
+      id={seat?.id}
+      className="ds-chat-widget__history"
+      fixed={false}
+      responsive={seat?.form ?? 'rail'}
+      layout={seat?.layout}
+      showMobileTrigger={false}
+      drawerOpen={seat?.drawerOpen ?? false}
+      onDrawerOpenChange={seat?.setDrawerOpen}
+      subNav="panel"
+      defaultPanelOpen={false}
+      foldForPanel
+      collapsible={collapsible && !fixedOpen}
+      expanded={expanded}
+      onExpandedChange={setExpanded}
+      logo={logo ?? <PixelAvatar name={logoText ?? railLabel} />}
+      logoText={logoText ?? ''}
+      sections={sections}
+      activeKey={threads.activeProjectId ? `project-${threads.activeProjectId}` : undefined}
+      collapsibleSections={collapsibleSections}
+      collapsedSections={collapsedSections}
+      onCollapsedSectionsChange={setCollapsedSections}
+      collapseLabel={threadPanelLabels?.collapseLabel ?? 'Collapse the panel'}
+      expandLabel={threadPanelLabels?.expandLabel ?? 'Expand the panel'}
+      profile={profile ? { name: profile.name, email: profile.meta, avatar: profile.avatar } : undefined}
       footerSlot={footerSlot}
-      collapsedFooterSlot={overlay ? undefined : collapsedFooterSlot}
+      collapsedFooterSlot={collapsedFooterSlot}
+      footerAction={footerAction}
+      drawerTopEntries={drawerTopEntries}
+      drawerBottomEntries={drawerBottomEntries}
     />
   );
 }

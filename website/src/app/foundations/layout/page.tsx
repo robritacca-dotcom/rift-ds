@@ -85,7 +85,7 @@ const appShells = [
 const appShellHosts = [
   { id: "app-layout", host: "AppLayout", how: "layout: a rail and a content area in any mode" },
   { id: "app-sidebar", host: "AppSidebar", how: "layout: the rail's own treatment, read from the host's mode" },
-  { id: "chat-widget", host: "ChatWidget", how: "layout and backdrop: the chat as the page, its history rail and trailing panels in the mode, and in flush blur or solid" },
+  { id: "chat-widget", host: "ChatWidget", how: "layout and backdrop: the chat as the page, its history rail (an AppSidebar) and trailing panels in the mode, and in flush blur or solid" },
   { id: "chat-launcher", host: "ChatLauncher", how: "surface=\"inset\": the docked chat as the inset surface's twin beside it" },
   { id: "block", host: "The app shell block", how: "SHELL_LAYOUT at the top of the file npx rift-ds init block writes" },
 ] as const;
@@ -141,7 +141,7 @@ const widthHosts = [
   { id: "app-layout", host: "AppLayout", how: "width: contained (1120px) or full, in flush, floating or inset" },
   { id: "site-layout", host: "SiteLayout", how: "width and containedWidth: the columns contained (narrow 1200px, default 1440px, wide 1680px) or full; the header and footer move with the sidebar's dock" },
   { id: "site-header", host: "SiteHeader", how: "width: the bar's contents contained or edge to edge, with the gutter; unset, it fills its host with none" },
-  { id: "templates", host: "The templates", how: "The Width row in the rail's Appearance section, kept for every template" },
+  { id: "templates", host: "The templates", how: "The Width row in the rail's Appearance section, kept for every template: narrow (960px), the template's own contained width, or full" },
   { id: "app-block", host: "The app shell block", how: "CONTENT_WIDTH beside SHELL_LAYOUT at the top of the file" },
   { id: "docs-block", host: "The docs block", how: "PAGE_WIDTH and SIDEBAR_DOCK at the top of the file; the header and footer move with the dock" },
 ] as const;
@@ -320,7 +320,7 @@ export default function LayoutPage() {
           bordered
         />
         <p className={styles.groupNote}>
-          The rails share one geometry in every mode: the logo, the row icons, the group headings, the footer controls and the avatar sit on one leading line; the collapse toggle sits on one trailing line; a row&apos;s own trailing item, a count or a time, keeps a step more room inside its pill. The two gaps are <code className={styles.query}>--ds-shell-inset</code>, the inset surface&apos;s, and <code className={styles.query}>--ds-sidebar-float-inset</code>, the floating card&apos;s. Below the mobile breakpoint every mode gives way to the plain page, and the rail becomes a drawer. A chat too narrow for its inline rail gives way the same way, flush on the solid backdrop, whatever the screen.
+          The rails share one geometry in every mode: the logo, the row icons, the group headings, the footer controls and the avatar sit on one leading line; the collapse toggle sits on one trailing line; a row&apos;s own trailing item, a count or a time, keeps a step more room inside its pill. The two gaps are <code className={styles.query}>--ds-shell-inset</code>, the inset surface&apos;s, and <code className={styles.query}>--ds-sidebar-float-inset</code>, the floating card&apos;s. Below the mobile breakpoint every mode gives way to the plain page, and the rail becomes a drawer. Every rail is the same rail: the templates&apos; and a chat&apos;s history rail are both AppSidebar, with the same sizes, the same side panel beside the rail for a row&apos;s choices, the same drawer that drills into them, and sections that fold; only what fills them differs. A rail decides between its rail and drawer forms by the window, by its container, or by its host, so a chat too narrow for its inline rail gives way the same way, its rail the drawer and the chat flush on the solid backdrop, whatever the screen.
         </p>
         <Table
           columns={[

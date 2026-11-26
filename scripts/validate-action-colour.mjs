@@ -63,7 +63,7 @@ export const SANCTIONED = {
   Slider: 'on state of a form control (the filled track and thumb)',
   Stepper: 'selected item (the active step)',
   Tabs: 'selected item (the active tab)',
-  ThreadPanel: 'active input border (the inline rename field)',
+  ThreadHistory: 'active input border (the inline rename field)',
   ToggleGroup: 'selected item (the active option)',
   ToggleSwitch: 'on state of a form control',
 };

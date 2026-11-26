@@ -679,11 +679,7 @@
   {"step":"validate-backdrop-layers","check":"1: -webkit- blur with a vmin inset (deep site file)","file":"website/src/app/foundations/themes/[id]/specimen.module.css","append":"\n.plant {\n  -webkit-backdrop-filter: blur(4px);\n  inset: -50vmin;\n}\n","expect":"grows past its host (inset: -50vmin)"},
   {"step":"validate-backdrop-layers","check":"2: mask-composite on a blur","file":"src/chat/selection.css","append":"\n.ds-chat-plant {\n  backdrop-filter: blur(8px);\n  mask-composite: exclude;\n}\n","expect":"blurs its backdrop through a composited mask (mask-composite)"},
   {"step":"validate-backdrop-layers","check":"2: composite keyword in a mask shorthand","file":"src/components/Badge/Badge.css","append":"\n.ds-badge__plant {\n  backdrop-filter: blur(8px);\n  -webkit-mask: linear-gradient(var(--color-text-primary) 0 0) content-box exclude;\n}\n","expect":"through a composited mask (-webkit-mask)"},
-  {"step":"validate-shader-linking","check":"a program linked with no wait","file":"src/behaviors/clipboard.ts","append":"
-export function plantLink(gl: WebGL2RenderingContext, program: WebGLProgram) {
-  gl.linkProgram(program);
-}
-","expect":"links a WebGL program and never calls whenProgramLinked"},
+  {"step":"validate-shader-linking","check":"a program linked with no wait","file":"src/behaviors/clipboard.ts","append":"\nexport function plantLink(gl: WebGL2RenderingContext, program: WebGLProgram) {\n  gl.linkProgram(program);\n}\n","expect":"links a WebGL program and never calls whenProgramLinked"},
   {"step":"validate-chat-widget","check":"registry has no widgets","file":"src/chat/registry.json","find":"\"widgets\": [","replace":"\"items\": [","expect":"src/chat/registry.json has no widgets"},
   {"step":"validate-chat-widget","check":"required field empty","file":"src/chat/registry.json","find":"\"command\": \"init chat\",","replace":"\"command\": \"\",","expect":"widget \"ChatWidget\": \"command\" must be a non-empty string"},
   {"step":"validate-chat-widget","check":"subpath description without a full stop","file":"src/chat/registry.json","find":"for a preview that needs no key.\"","replace":"for a preview that needs no key\"","expect":"subpath \"./chat/demo\"'s description must end with a full stop"},

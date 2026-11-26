@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 
 /**
  * The fold state of a nav's titled sections, for a nav whose sections can
- * fold under their headings (AppSidebar's and ThreadPanel's
+ * fold under their headings (AppSidebar's
  * `collapsibleSections`). Sections open by default, so the state is the
  * list of folded ids: controlled through `collapsed`, or kept here from
  * `defaultCollapsed`, with `onChange` told the whole new list either way.

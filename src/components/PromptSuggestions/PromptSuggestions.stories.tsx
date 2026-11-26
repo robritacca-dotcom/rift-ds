@@ -241,6 +241,22 @@ export const List: Story = {
   },
 };
 
+/** The list at a small phone's width: a description that does not fit beside its label drops to its own line, never cut. */
+export const ListNarrow: Story = {
+  args: { ...List.args, onValueChange: undefined },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 320 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvas }) => {
+    const description = canvas.getByText('Overdue invoices and who to nudge');
+    await expect(description.scrollWidth).toBeLessThanOrEqual(description.clientWidth);
+  },
+};
+
 /** Blocks hold their place while generating, the same as the chips. */
 export const CardsPending: Story = {
   args: {

@@ -670,24 +670,21 @@
   --icon-size: var(--icon-size-500);
 }
 
-/* Label and description share the line, baseline to baseline; the
-   description gives way first and ends in an ellipsis. */
+/* Label and description share the line, baseline to baseline, while it
+   has room for both; where it does not (a phone), the description drops to
+   a line of its own under the label rather than being cut, since what it
+   says is the reason to pick the row. */
 .ds-prompt-suggestions__row .ds-prompt-suggestions__text {
   flex: 1;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--gap-300);
-  white-space: nowrap;
-}
-
-.ds-prompt-suggestions__row .ds-prompt-suggestions__label {
-  flex: none;
+  column-gap: var(--gap-300);
+  row-gap: 0;
 }
 
 .ds-prompt-suggestions__row .ds-prompt-suggestions__description {
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);

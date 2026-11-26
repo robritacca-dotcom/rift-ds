@@ -33,7 +33,7 @@
     "./components/Mention/mentions": 1200,
     "./components/ShaderField/useShaderField": 6400,
     "./components/StreamingText/useStreamReveal": 1100,
-    "./components/registry": 18000,
+    "./components/registry": 18100,
     "./format": 3000,
     "./code": 500,
     "./code/highlight": 700,

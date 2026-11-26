@@ -596,10 +596,8 @@ export default function ChatView({
         tagline="How can we help you today?"
         /* The staged product's chat history: the widget's built-in rail over
            the provider's thread lifecycle, which the page shapes from the
-           rail levers. The slide-over sheet names the product and skips the
-           collapse (the scrim is its dismissal); the wide inline rail skips
-           the brand (the chat header already says it) and offers the
-           collapse instead. Simulated-transport set dressing like the mock
+           rail levers. It is the app rail (AppSidebar): inline when the chat
+           is wide, its drawer from the header when narrow. Simulated-transport set dressing like the mock
            picker: on Live the threads stand down and the widget reverts to
            the site's classic look. */
         threads={simControls}

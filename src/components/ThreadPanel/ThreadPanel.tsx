@@ -65,6 +65,8 @@ export interface ThreadPanelThread {
 export interface ThreadPanelGroup {
   /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */
   label?: string;
+  /** Stable identity for the group's fold state, the key `collapsedSections` lists. Defaults to `label`; set it when the label is translated or may change. */
+  id?: string;
   /** The group's threads, in display order. */
   threads: ThreadPanelThread[];
 }
@@ -169,7 +171,7 @@ type ThreadPanelOwnProps = {
    * @default false
    */
   collapsibleSections?: boolean;
-  /** The folded sections, by heading text (`projectsLabel` for the projects, a group's `label` for a group). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`. */
+  /** The folded sections: `projects` for the projects, and each group by its `id` (its `label` when it has none). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`. */
   collapsedSections?: string[];
   /** Fires with the full new list of folded sections when a heading is pressed. */
   onCollapsedSectionsChange?: (collapsedSections: string[]) => void;
@@ -374,7 +376,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
       );
     /* A section's heading: the plain label, or with `collapsibleSections`
        the same label as a toggle with a chevron. */
-    const heading = (text: string, className: string) => (
+    const heading = (text: string, className: string, key: string = text) => (
       <div className={`${baseClass}__section-head`}>
         <span className={className}>{text}</span>
         {/* The fold is the chevron alone, named by the heading's own text,
@@ -385,8 +387,8 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
             type="button"
             className={`${baseClass}__fold`}
             aria-label={text}
-            aria-expanded={!isFolded(text)}
-            onClick={() => toggleSection(text)}
+            aria-expanded={!isFolded(key)}
+            onClick={() => toggleSection(key)}
           >
             <span className={`${iconClass} ${baseClass}__fold-chevron`} aria-hidden="true">
               expand_more
@@ -397,8 +399,8 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
     );
     /* The rows under a heading, in a panel that glides shut when it folds
        (SideNav's grid-rows fold); open, it adds nothing. */
-    const panel = (text: string | undefined, list: React.ReactNode) => {
-      const shut = Boolean(text && isFolded(text));
+    const panel = (key: string | undefined, list: React.ReactNode) => {
+      const shut = Boolean(key && isFolded(key));
       return (
         <div
           className={`${baseClass}__section-panel${shut ? '' : ` ${baseClass}__section-panel--open`}`}
@@ -568,7 +570,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
         {projects && projects.length > 0 && (
           <div className={`${baseClass}__projects`}>
             <div className={`${baseClass}__projects-header`}>
-              {heading(projectsLabel, `${baseClass}__projects-label`)}
+              {heading(projectsLabel, `${baseClass}__projects-label`, 'projects')}
               {onProjectCreate && (
                 <button
                   type="button"
@@ -582,7 +584,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                 </button>
               )}
             </div>
-            {panel(projectsLabel, (
+            {panel('projects', (
             <ul className={`${baseClass}__list`} aria-label={projectsLabel}>
               {projects.map((project, projectIndex) => {
                 const active = project.id === activeProjectId;

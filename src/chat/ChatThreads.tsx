@@ -3,6 +3,7 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import {
   AppSidebar,
+  type AppSidebarProps,
   type AppSidebarSection,
 } from '../components/AppSidebar/AppSidebar';
 import type { DrillMenuEntry } from '../components/DrillMenu/DrillMenu';
@@ -13,9 +14,9 @@ import { useChatWidget } from './context';
 import { useRailSeat } from './rail-seat';
 
 export interface ChatThreadsProps {
-  /** The widget seated the rail as a sheet over the conversation rather than beside it. A rail outside the widget's own seat (a custom `threads` slot) draws itself expanded there. */
+  /** Set when a custom `threads` slot seats this rail in the widget's slide-over sheet, where it draws itself expanded; the built-in rail takes its form from the widget. */
   overlay: boolean;
-  /** Closes the sheet; a no-op on the inline rail. */
+  /** Closes that sheet; a no-op elsewhere. */
   close: () => void;
   /** The brand row's mark. Defaults to a generated pixel avatar seeded by `logoText`. */
   logo?: ReactNode;
@@ -25,10 +26,18 @@ export interface ChatThreadsProps {
   profile?: ThreadPanelProfile;
   /** Rendered in the rail's footer above the profile row: a theme toggle, a link out. Fades out while the rail is collapsed. */
   footerSlot?: ReactNode;
-  /** Let the reader fold the projects, each labelled history group and the host's `sections` under their headings. Every section starts open. */
+  /**
+   * Let the reader fold the projects, each labelled history group and the
+   * host's `sections` under their headings. Every section starts open.
+   * @default false
+   */
   collapsibleSections?: boolean;
-  /** Sections folded at first, by heading text, when `collapsibleSections` is on. */
+  /** Controlled list of folded sections: `projects`, then each group or section by `id` (else its heading). */
+  collapsedSections?: string[];
+  /** Sections folded at first (uncontrolled), keyed as `collapsedSections` is. */
   defaultCollapsedSections?: string[];
+  /** Fires with the new list of folded sections. */
+  onCollapsedSectionsChange?: (collapsedSections: string[]) => void;
   /** Rendered below the profile row, such as a full-width Button back to an index. It fades out while the rail is collapsed. */
   footerAction?: ReactNode;
   /** Rendered in the rail's footer while it is collapsed, in `footerSlot`'s place: the same controls at their smallest, stacked on the rail's axis, crossfading with the full form. */
@@ -43,7 +52,10 @@ export interface ChatThreadsProps {
   drawerTopEntries?: DrillMenuEntry[];
   /** Rows after the sections in the drawer, in DrillMenu's shape. */
   drawerBottomEntries?: DrillMenuEntry[];
-  /** Whether the rail can collapse to its icon strip. */
+  /**
+   * Whether the rail can collapse to its icon strip.
+   * @default true
+   */
   collapsible?: boolean;
   /**
    * Whether the rail starts expanded. Defaults to `false`: it starts
@@ -60,8 +72,9 @@ export interface ChatThreadsProps {
    * spoken pin and status text ("Pinned", "Working"…), each row's menu
    * trigger ("Thread options"), the rename field ("Rename thread"), the
    * projects heading and its add button ("Projects", "New project"), and the
-   * collapse toggle ("Collapse the panel", "Expand the panel"). The history's
-   * own name is `historyLabel`.
+   * collapse toggle ("Collapse the panel", "Expand the panel", which reach
+   * the rail; `railLabels` wins over them). The history's own name is
+   * `historyLabel`.
    */
   threadPanelLabels?: Pick<
     ThreadPanelProps,
@@ -73,6 +86,16 @@ export interface ChatThreadsProps {
     | 'newProjectLabel'
     | 'collapseLabel'
     | 'expandLabel'
+  >;
+  /**
+   * The words the rail's shell writes, merged over AppSidebar's English
+   * defaults: the collapse toggle, the drawer's close button ("Close
+   * navigation"), its menu and back rows ("Menu", "Back to …", "… overview")
+   * and the profile's more button ("Profile options").
+   */
+  railLabels?: Pick<
+    AppSidebarProps,
+    'collapseLabel' | 'expandLabel' | 'closeLabel' | 'menuLabel' | 'drawerBackLabel' | 'drawerOverviewLabel' | 'profileMoreLabel'
   >;
   /** The rows of each thread's menu, by action; a key left out keeps its English. Defaults to "Pin", "Unpin", "Rename" and "Delete". */
   actionLabels?: Partial<Record<'pin' | 'unpin' | 'rename' | 'delete', string>>;
@@ -97,7 +120,9 @@ export function ChatThreads({
   footerSlot,
   footerAction,
   collapsibleSections = false,
+  collapsedSections: controlledCollapsedSections,
   defaultCollapsedSections,
+  onCollapsedSectionsChange,
   collapsedFooterSlot,
   sections: hostSections,
   drawerTopEntries,
@@ -107,12 +132,18 @@ export function ChatThreads({
   historyLabel = 'Chat history',
   railLabel = 'Chats',
   threadPanelLabels,
+  railLabels,
   actionLabels,
 }: ChatThreadsProps) {
   const { threads } = useChatWidget();
   const seat = useRailSeat();
   const [expanded, setExpanded] = useState(defaultExpanded);
-  const [collapsedSections, setCollapsedSections] = useState<string[]>(() => defaultCollapsedSections ?? []);
+  const [ownCollapsedSections, setOwnCollapsedSections] = useState<string[]>(() => defaultCollapsedSections ?? []);
+  const collapsedSections = controlledCollapsedSections ?? ownCollapsedSections;
+  const setCollapsedSections = (next: string[]) => {
+    if (controlledCollapsedSections === undefined) setOwnCollapsedSections(next);
+    onCollapsedSectionsChange?.(next);
+  };
   const hasProjects = threads.projects.length > 0;
   const projectsLabel = threadPanelLabels?.projectsLabel ?? 'Projects';
 
@@ -160,6 +191,7 @@ export function ChatThreads({
     ...(hasProjects
       ? [
           {
+            id: 'projects',
             category: projectsLabel,
             action: {
               label: threadPanelLabels?.newProjectLabel ?? 'New project',
@@ -235,6 +267,7 @@ export function ChatThreads({
       onCollapsedSectionsChange={setCollapsedSections}
       collapseLabel={threadPanelLabels?.collapseLabel ?? 'Collapse the panel'}
       expandLabel={threadPanelLabels?.expandLabel ?? 'Expand the panel'}
+      {...railLabels}
       profile={profile ? { name: profile.name, email: profile.meta, avatar: profile.avatar } : undefined}
       footerSlot={footerSlot}
       collapsedFooterSlot={collapsedFooterSlot}

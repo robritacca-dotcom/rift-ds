@@ -652,9 +652,10 @@
 
 /* ============================================
    THE RAILS — the optional session-history rail (leading) and agent pane
-   (trailing). Wide widgets seat them inline; narrow ones summon the history
-   from the header hamburger as a slide-over sheet and the agent pane from a
-   header button as a bottom sheet, each behind a scrim.
+   (trailing). Wide widgets seat them inline; narrow ones open the built-in
+   history as AppSidebar's drawer from the header's menu button (a custom
+   rail as a slide-over sheet behind a scrim) and the agent pane from a
+   header button as a bottom sheet.
    ============================================ */
 
 .ds-chat-widget__rails {

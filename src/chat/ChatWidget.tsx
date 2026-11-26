@@ -230,11 +230,8 @@ export interface ChatWidgetProps {
       character, drawn as tags in the composer and in the sent bubble. */
   mentions?: MentionSource[];
   /** A session-history rail. `true` seats the built-in ChatThreads, an
-      AppSidebar over the provider's thread lifecycle, so it takes the app
-      rail's shell, sizes, side panel and drawer: inline beside the
-      conversation on a wide host, and on a narrow one the app rail's drawer,
-      opened from the header's menu button. A render prop seats your own,
-      inline on a wide host and as a slide-over sheet on a narrow one. */
+      AppSidebar: inline when wide, its drawer from the header when narrow.
+      A render prop seats your own, inline or as a slide-over sheet. */
   threads?: RailSlot;
   /** Props for the built-in threads rail when `threads` is `true`. */
   threadsProps?: Omit<ChatThreadsProps, 'overlay' | 'close'>;

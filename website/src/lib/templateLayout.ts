@@ -33,8 +33,9 @@ export const TEMPLATE_LAYOUTS: readonly { value: TemplateLayout; label: string; 
 
 /**
  * How wide a template's page runs, an axis apart from the layout (the shell
- * recipe's width axis): `contained` centres the content at the screen's own
- * width, `full` runs it the whole column, in any of the three layouts.
+ * recipe's width axis): `narrow` centres the content in a slim 960px
+ * column, `contained` at the screen's own width, and `full` runs it the
+ * whole column, in any of the three layouts.
  */
 export type TemplateWidth = "narrow" | "contained" | "full";
 

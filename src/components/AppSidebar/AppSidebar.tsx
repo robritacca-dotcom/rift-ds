@@ -101,7 +101,7 @@ export interface AppSidebarSectionContext {
 export interface AppSidebarSectionAction {
   /** Its accessible name, and the row's text in the drawer. */
   label: string;
-  /** A Material Symbol name. */
+  /** A Material Symbol name. Defaults to `add`. */
   icon?: string;
   /** What pressing it does. */
   onClick: () => void;
@@ -112,6 +112,8 @@ export interface AppSidebarSection {
   category?: string;
   /** Nav items in this section. Pass an empty list for a section that is all `content` */
   items: AppSidebarItem[];
+  /** Stable identity for the section's fold state, the key `collapsedSections` lists. Defaults to `category`; set it when the heading is translated or may change, or two headings share their text */
+  id?: string;
   /**
    * The section's own content after its rows, for a rail whose content is
    * more than destinations (a chat's history). On the expanded rail it sits
@@ -150,15 +152,15 @@ type AppSidebarOwnProps = {
    * Let the reader fold each titled section under its heading: the heading
    * becomes a toggle with a chevron, and the section's rows glide shut
    * beneath it. Every section starts open. A section is known by its
-   * `category`, the id the fold state lists. The collapsed rail and the
+   * `id`, or its `category` when it has none, the key the fold state lists. The collapsed rail and the
    * phone drawer show every row whatever is folded, since neither shows
    * the headings.
    * @default false
    */
   collapsibleSections?: boolean;
-  /** Controlled list of folded sections, by `category`. Needs `collapsibleSections`. */
+  /** Controlled list of folded sections, by each section's `id` (its `category` when it has none). Needs `collapsibleSections`. */
   collapsedSections?: string[];
-  /** Sections folded at first (uncontrolled), by `category`. Needs `collapsibleSections`. */
+  /** Sections folded at first (uncontrolled), by `id` (else `category`). Needs `collapsibleSections`. */
   defaultCollapsedSections?: string[];
   /** Fires with the full new list of folded sections whenever a heading is pressed, in both controlled and uncontrolled modes. */
   onCollapsedSectionsChange?: (collapsedSections: string[]) => void;
@@ -219,7 +221,8 @@ type AppSidebarOwnProps = {
   /**
    * Fold the rail to its icon form when the side panel opens and its parent
    * has too little room for the expanded rail, the panel and a readable
-   * column beside them. For a rail in a narrow host, such as a chat.
+   * column beside them: under 1000px (the 280px rail, the 240px panel and a
+   * 480px column). For a rail in a narrow host, such as a chat.
    * @default false
    */
   foldForPanel?: boolean;
@@ -1029,7 +1032,10 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
         ) : (
         <div className={`${baseClass}__sections`}>
         {/* Nav sections */}
-        {sections.map((section, si) => (
+        {sections.map((section, si) => {
+          /* The fold state's key: the section's id, else its heading. */
+          const foldKey = section.id ?? section.category;
+          return (
           <div key={si} className={`${baseClass}__nav${section.content && section.items.length === 0 ? ` ${baseClass}__nav--content-only` : ''}`}>
             {(section.category || section.action) && (
             <div className={`${baseClass}__heading`}>
@@ -1041,14 +1047,14 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
             {/* The fold is the chevron alone, named by the heading, so the
                 heading keeps its seat on the icon line and only the chevron
                 answers the pointer. */}
-            {section.category && foldsSections && (
+            {section.category && foldsSections && foldKey && (
               <button
                 type="button"
                 className={`${baseClass}__fold`}
-                aria-expanded={!isFolded(section.category)}
+                aria-expanded={!isFolded(foldKey)}
                 aria-controls={`${sectionsId}-section-${si}`}
                 aria-labelledby={`${sectionsId}-heading-${si}`}
-                onClick={() => toggleSection(section.category!)}
+                onClick={() => toggleSection(foldKey)}
               >
                 <span className={`${baseClass}__fold-chevron material-symbols-rounded`} aria-hidden="true">
                   expand_more
@@ -1078,9 +1084,9 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
             <div
               id={`${sectionsId}-section-${si}`}
               className={`${baseClass}__section-panel ${
-                section.category && foldsSections && isFolded(section.category) ? '' : `${baseClass}__section-panel--open`
+                section.category && foldsSections && foldKey && isFolded(foldKey) ? '' : `${baseClass}__section-panel--open`
               }`}
-              inert={Boolean(section.category && foldsSections && isFolded(section.category))}
+              inert={Boolean(section.category && foldsSections && foldKey && isFolded(foldKey))}
             >
             <div className={`${baseClass}__section-rows`}>
             {section.items.map((item) => {
@@ -1339,7 +1345,8 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
             )}
             </div>
           </div>
-        ))}
+          );
+        })}
         </div>
         )}
       </div>

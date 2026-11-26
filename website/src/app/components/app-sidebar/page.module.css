@@ -334,7 +334,7 @@
   background-color: var(--color-bg-container-secondary);
 }
 
-/* The demo's stand-in history, set on the rows' text seat. */
+/* The demo's stand-in history. */
 .contentList {
   display: flex;
   flex-direction: column;
@@ -344,8 +344,11 @@
   list-style: none;
 }
 
+/* On the rail's text seat: the icon line the rail hands its content
+   (--ds-rail-icon-inset), a glyph's bearing deeper, as a history's titles sit. */
 .contentList li {
   padding: var(--padding-200) var(--padding-400);
+  padding-inline-start: calc(var(--ds-rail-icon-inset, var(--padding-200)) + var(--padding-100));
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);

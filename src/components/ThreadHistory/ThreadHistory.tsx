@@ -5,6 +5,7 @@ import { StatusDot } from '../StatusDot/StatusDot';
 import type { StatusDotProps } from '../StatusDot/StatusDot';
 import type {
   ThreadPanelGroup,
+  ThreadPanelThread,
   ThreadPanelThreadAction,
   ThreadPanelThreadStatus,
 } from '../ThreadPanel/ThreadPanel';
@@ -55,7 +56,7 @@ type ThreadHistoryOwnProps = {
    * @default false
    */
   collapsibleSections?: boolean;
-  /** The folded groups, by label. Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`. */
+  /** The folded groups, by each group's `id` (its `label` when it has none). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`. */
   collapsedSections?: string[];
   /** Fires with the full new list of folded groups when a heading is pressed. */
   onCollapsedSectionsChange?: (collapsedSections: string[]) => void;
@@ -274,7 +275,7 @@ export function ThreadHistory({
       );
     /* A section's heading: the plain label, or with `collapsibleSections`
        the same label as a toggle with a chevron. */
-    const heading = (text: string, className: string) => (
+    const heading = (text: string, className: string, key: string = text) => (
       <div className={`${baseClass}__section-head`}>
         <span className={className}>{text}</span>
         {/* The fold is the chevron alone, named by the heading's own text,
@@ -285,8 +286,8 @@ export function ThreadHistory({
             type="button"
             className={`${baseClass}__fold`}
             aria-label={text}
-            aria-expanded={!isFolded(text)}
-            onClick={() => toggleSection(text)}
+            aria-expanded={!isFolded(key)}
+            onClick={() => toggleSection(key)}
           >
             <span className={`${iconClass} ${baseClass}__fold-chevron`} aria-hidden="true">
               expand_more
@@ -297,8 +298,8 @@ export function ThreadHistory({
     );
     /* The rows under a heading, in a panel that glides shut when it folds
        (SideNav's grid-rows fold); open, it adds nothing. */
-    const panel = (text: string | undefined, list: React.ReactNode) => {
-      const shut = Boolean(text && isFolded(text));
+    const panel = (key: string | undefined, list: React.ReactNode) => {
+      const shut = Boolean(key && isFolded(key));
       return (
         <div
           className={`${baseClass}__section-panel${shut ? '' : ` ${baseClass}__section-panel--open`}`}
@@ -322,11 +323,11 @@ export function ThreadHistory({
             (group, index) =>
               group.threads.length > 0 && (
                 <div
-                  key={group.label ?? index}
+                  key={group.id ?? group.label ?? index}
                   className={`${baseClass}__group`}
                 >
-                  {group.label && heading(group.label, `${baseClass}__group-label`)}
-                  {panel(group.label, (
+                  {group.label && heading(group.label, `${baseClass}__group-label`, group.id ?? group.label)}
+                  {panel(group.id ?? group.label, (
                   <ul
                     className={`${baseClass}__list`}
                     aria-label={group.label}
@@ -530,3 +531,12 @@ export function ThreadHistory({
     </nav>
   );
 }
+
+/** A labelled run of threads, ThreadPanel's group shape, under ThreadHistory's own name. */
+export type ThreadHistoryGroup = ThreadPanelGroup;
+/** One thread row, ThreadPanel's thread shape, under ThreadHistory's own name. */
+export type ThreadHistoryThread = ThreadPanelThread;
+/** A row menu action, under ThreadHistory's own name. */
+export type ThreadHistoryThreadAction = ThreadPanelThreadAction;
+/** A thread's status, under ThreadHistory's own name. */
+export type ThreadHistoryThreadStatus = ThreadPanelThreadStatus;

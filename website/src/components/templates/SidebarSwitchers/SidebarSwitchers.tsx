@@ -69,7 +69,7 @@ export default function SidebarSwitchers({
           showLabels={false}
         />
       </div>
-      {/* The page width, apart from the layout: any mode, contained or full. */}
+      {/* The page width, apart from the layout: any mode, narrow, contained or full. */}
       {scope === "templates" && (
         <div className={styles.shellSwitch}>
           <SegmentedControl

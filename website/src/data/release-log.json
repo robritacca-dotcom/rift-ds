@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.38.0",
+      "date": "2026-11-25",
+      "title": "A phone menu built for thumbs, and clearer navigation names",
+      "body": [
+        "DrillMenu is a menu for phones: one level at a time, rows a thumb tall, and a back row naming where it returns to. It opens on the level that holds the current page. SiteHeader’s drawer and AppSidebar’s phone drawer drill in on it, full screen on a phone.",
+        "AppSidebar and AppLayout default to `subNav=\"panel\"` and `layout=\"inset\"`, and SiteHeader’s tint arrives with the first pixel of scroll; pass `subNav=\"accordion\"`, `layout=\"flush\"` or `tintAfter={48}` for the old behaviour. A long nav on the collapsed rail scrolls with a fade.",
+        "`NavList` is now `SideNav` and `SidebarPanel` is now `SubNavPanel`, with the old names kept as deprecated aliases. Nav is removed in favour of SiteHeader. IconButton takes `glass`."
+      ]
+    },
+    {
       "version": "1.37.1",
       "date": "2026-11-25",
       "title": "Shaders that compile without freezing the page",

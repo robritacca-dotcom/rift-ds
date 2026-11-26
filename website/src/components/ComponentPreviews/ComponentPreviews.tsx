@@ -10,7 +10,6 @@
  */
 import { BottomNav } from "rift-ds/components/BottomNav/BottomNav";
 import { TopAppBar } from "rift-ds/components/TopAppBar/TopAppBar";
-import Image from "next/image";
 import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
 import { BentoTileArt } from "rift-ds/components/BentoTile/BentoTileArt";
 import { PixelAvatar } from "rift-ds/components/PixelAvatar/PixelAvatar";
@@ -117,7 +116,6 @@ import { MessageActions } from "rift-ds/components/MessageActions/MessageActions
 import { MessageCard } from "rift-ds/components/MessageCard/MessageCard";
 import type { ReactNode } from "react";
 import styles from "./ComponentPreviews.module.css";
-import { BRAND_SHORT } from "@/config/brand.generated";
 
 // Small fixed dataset for the contribution graph preview card
 // 10 weeks: the grid columns are minmax(12px, 1fr), so ten of them plus

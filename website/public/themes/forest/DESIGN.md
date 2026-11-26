@@ -120,14 +120,14 @@ typography:
     letterSpacing: 0.08em
 
 rounded:
-  xs: 2px
-  sm: 4px
-  md: 8px
-  input: 12px
-  lg: 16px
-  card: 24px
-  xl: 48px
-  pill: 999px
+  xs: 1px
+  sm: 2px
+  md: 4px
+  input: 6px
+  lg: 8px
+  card: 12px
+  xl: 24px
+  pill: 6px
 
 spacing:
   xxs: 2px
@@ -159,7 +159,7 @@ components:
 
 # Forest theme
 
-Forest: Montserrat headings over DM Sans text, #23573f for actions, pill buttons, 12px inputs and 24px cards. Soft shadows, kept for what floats: menus, popovers and dialogs.
+Forest: Montserrat headings over DM Sans text, #23573f for actions, buttons squared to 6px, 6px inputs and 12px cards. Soft shadows, kept for what floats: menus, popovers and dialogs.
 
 Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="forest"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/forest.
 
@@ -213,16 +213,16 @@ Montserrat headings over DM Sans text. Levels inside a tier share a weight and s
 
 ## Shape
 
-Pill buttons, 12px inputs and 24px cards. Radius belongs to the element type, never to one instance.
+Buttons squared to 6px, 6px inputs and 12px cards. Radius belongs to the element type, never to one instance.
 
-- `xs`: 2px (`--radius-050`)
-- `sm`: 4px (`--radius-100`)
-- `md`: 8px (`--radius-200`)
-- `input`: 12px (`--radius-300`)
-- `lg`: 16px (`--radius-400`)
-- `card`: 24px (`--radius-600`)
-- `xl`: 48px (`--radius-1200`)
-- `pill`: 999px (`--radius-pill`)
+- `xs`: 1px (`--radius-050`)
+- `sm`: 2px (`--radius-100`)
+- `md`: 4px (`--radius-200`)
+- `input`: 6px (`--radius-300`)
+- `lg`: 8px (`--radius-400`)
+- `card`: 12px (`--radius-600`)
+- `xl`: 24px (`--radius-1200`)
+- `pill`: 6px (`--radius-pill`)
 
 ## Space
 

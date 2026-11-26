@@ -36,19 +36,24 @@ export const TEMPLATE_LAYOUTS: readonly { value: TemplateLayout; label: string; 
  * recipe's width axis): `contained` centres the content at the screen's own
  * width, `full` runs it the whole column, in any of the three layouts.
  */
-export type TemplateWidth = "contained" | "full";
+export type TemplateWidth = "narrow" | "contained" | "full";
 
+/* Narrow is a fixed reading width well under any screen's own, so the step
+   shows at every window: a dashboard restacks into fewer columns. The
+   screens' own contained widths (1440 to 1680px) only part from full on a
+   window wider than that. */
 export const TEMPLATE_WIDTHS: readonly { value: TemplateWidth; label: string; icon: string; description: string }[] = [
-  { value: "contained", label: "Contained", icon: "width_normal", description: "Centred at the screen's own width" },
+  { value: "narrow", label: "Narrow", icon: "width_normal", description: "A slim centred column" },
+  { value: "contained", label: "Contained", icon: "width_wide", description: "Centred at the screen's own width" },
   { value: "full", label: "Full width", icon: "width_full", description: "The whole column, edge to edge" },
 ];
 
 export const DEFAULT_TEMPLATE_WIDTH: TemplateWidth = "contained";
 
 /** The chat home's flush backdrops. */
-export const CHAT_BACKDROPS: readonly { value: ChatBackdrop; label: string; icon: string }[] = [
-  { value: "solid", label: "Solid", icon: "rectangle" },
-  { value: "blur", label: "Blur", icon: "blur_on" },
+export const CHAT_BACKDROPS: readonly { value: ChatBackdrop; label: string; icon: string; description: string }[] = [
+  { value: "solid", label: "Solid", icon: "rectangle", description: "The chat on a floor of its own" },
+  { value: "blur", label: "Blur", icon: "blur_on", description: "Glass over what lies behind" },
 ];
 
 /** Each scope's opening mode, before the visitor picks one. */

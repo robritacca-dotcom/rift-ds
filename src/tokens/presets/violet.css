@@ -65,6 +65,8 @@
     --color-ambient-4: #6A5BE0;
     --color-ambient-5: #A57BCE;
     --color-ambient-6: #C7AEE1;
+    --color-chat-bubble-sent-bg: var(--primitive-purple-09);
+    --color-chat-bubble-sent-text: var(--primitive-purple-02);
     --color-core-accent-amber: #D9915E;
     --color-core-accent-cobalt: #6A5BE0;
     --color-core-accent-coral: #D96BA8;

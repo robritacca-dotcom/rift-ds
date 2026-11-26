@@ -82,7 +82,7 @@ export interface TemplateShellProps {
   fill?: "page" | "viewport";
   /** Forces a layout, over the visitor's stored choice. */
   layout?: TemplateLayout;
-  /** Forces the page width, over the visitor's stored choice: contained or full, in any layout. */
+  /** Forces the page width, over the visitor's stored choice: narrow, contained or full, in any layout. */
   width?: TemplateWidth;
   /** The template's content column class: its padding, gap and contained width (`--ds-shell-contained-width`), read in every layout. */
   contentClassName?: string;
@@ -161,7 +161,10 @@ export default function TemplateShell({
           .filter(Boolean)
           .join(" ")}
         data-ds-shell={layout}
-        data-ds-width={width}
+        /* Narrow is the recipe's contained width at the shell's narrow
+           step (the module's data-template-width rule). */
+        data-ds-width={width === "full" ? "full" : "contained"}
+        data-template-width={width}
       >
         {!appFrame && (
           <div className={styles.sidebar}>

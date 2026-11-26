@@ -165,6 +165,14 @@
     --primitive-purple-09: #412F56;
     --primitive-purple-10: #271C33;
     --primitive-purple-11: #1D1526;
+    --primitive-radius-050: 1px;
+    --primitive-radius-100: 2px;
+    --primitive-radius-1200: 24px;
+    --primitive-radius-200: 4px;
+    --primitive-radius-300: 6px;
+    --primitive-radius-400: 8px;
+    --primitive-radius-600: 12px;
+    --primitive-radius-pill: 6px;
     --primitive-red-00: #FDF7F7;
     --primitive-red-01: #FAEEED;
     --primitive-red-02: #F1D2D0;

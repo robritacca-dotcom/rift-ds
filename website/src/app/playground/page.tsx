@@ -98,7 +98,15 @@ import {
 } from "@/lib/theme/theme-overrides";
 import { PICKER_FONT_PARAMS, THEME_PRESETS, type ThemePreset } from "@/lib/theme/presets";
 
-import { BASE_THEME_ID, isBaseTheme, SERVED_THEME_ID } from "@/lib/theme/brand";
+import {
+  BASE_THEME_ID,
+  BRAND_PICK_EVENT,
+  isBaseTheme,
+  readStoredBrand,
+  SERVED_THEME_ID,
+  STAGED_CUSTOM_THEME_ATTR,
+  storeBrand,
+} from "@/lib/theme/brand";
 import { useAppliedOverrides, useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import {
   buildAgentPrompt,
@@ -191,7 +199,6 @@ const VIEWS = [
   { value: "templates", label: "Templates" },
   { value: "shaders", label: "Shaders" },
 ];
-
 
 /* Below the tool's desktop breakpoint there is no room for the edge
    panel: the controls move into a bottom Drawer summoned by a fixed pill,
@@ -976,10 +983,18 @@ export default function PlaygroundPage() {
     setHeadingFontLabel(p.headingFontLabel ?? HEADING_FONT_OPTIONS[0].label);
   };
 
+  /** A pick from the picker (or the reset) is the visitor's theme pick, the
+      one the header and the templates' Theme menu make: kept, so a staged
+      template, the next page and a return visit all open on it. A custom
+      mix is not a pick, so the stored one stands. */
+  const pickPreset = (value: string) => {
+    applyPreset(value);
+    if (isBaseTheme(value) || THEME_PRESETS[value]) storeBrand(value);
+  };
   /** Reset lands on Smoke, the served default (the raw token files stay
       reachable as the Tide row in the picker), and drops any theme source:
       the rail's reset and the source card's share it. */
-  const resetTheme = () => applyPreset(SERVED_THEME_ID);
+  const resetTheme = () => pickPreset(SERVED_THEME_ID);
 
   const font = FONT_OPTIONS.find((f) => f.label === fontLabel) ?? FONT_OPTIONS[0];
   const headingFont =
@@ -990,16 +1005,20 @@ export default function PlaygroundPage() {
      overrides against the shipped defaults. A site-wide data-brand theme
      (the landing's dot row) would sit underneath and bleed through every
      property a lever hasn't touched, so the attribute is suspended while
-     the playground is mounted and restored on the way out — the visitor's
-     stored pick is untouched. */
+     the playground is mounted and put back on the way out as the stored
+     pick then stands. */
   const suspendedBrandRef = useRef<string | undefined>(undefined);
   useEffect(() => {
     const root = document.documentElement;
     const suspended = root.dataset.brand;
     suspendedBrandRef.current = suspended;
     if (suspended !== undefined) delete root.dataset.brand;
+    /* On the way out, paint the pick as it stands now: one made here or
+       in a staged template replaces the one the visitor arrived with. */
     return () => {
-      if (suspended !== undefined) root.dataset.brand = suspended;
+      const pick = readStoredBrand() ?? suspended;
+      if (pick === undefined || isBaseTheme(pick)) delete root.dataset.brand;
+      else root.dataset.brand = pick;
     };
   }, []);
 
@@ -1223,6 +1242,32 @@ export default function PlaygroundPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /* The other way round: a pick from a staged template's Theme menu
+     (applyBrand in its frame raises BRAND_PICK_EVENT here) loads that
+     preset into the levers, and a custom mix tells the template so. */
+  const presetRef = useRef(preset);
+  const applyPresetRef = useRef(applyPreset);
+  useEffect(() => {
+    presetRef.current = preset;
+    applyPresetRef.current = applyPreset;
+  });
+  useEffect(() => {
+    const onPick = (event: Event) => {
+      const id = (event as CustomEvent<string>).detail;
+      const next = isBaseTheme(id) ? BASE_THEME_ID : id;
+      if (next === presetRef.current) return;
+      if (isBaseTheme(next) || THEME_PRESETS[next]) applyPresetRef.current(next);
+    };
+    window.addEventListener(BRAND_PICK_EVENT, onPick);
+    return () => window.removeEventListener(BRAND_PICK_EVENT, onPick);
+  }, []);
+  useEffect(() => {
+    const root = document.documentElement;
+    if (preset === "custom") root.setAttribute(STAGED_CUSTOM_THEME_ATTR, "");
+    else root.removeAttribute(STAGED_CUSTOM_THEME_ATTR);
+  }, [preset]);
+  useEffect(() => () => document.documentElement.removeAttribute(STAGED_CUSTOM_THEME_ATTR), []);
 
   /* What leaves the playground: the levers as one complete theme, and the
      three files built from it. The CSS comes from the composer the shipped
@@ -1570,7 +1615,7 @@ export default function PlaygroundPage() {
               agentsMd={exported.agents}
               themeMd={exported.markdown}
               agentPrompt={exported.prompt}
-              onPreset={applyPreset}
+              onPreset={pickPreset}
               onBrand={pickBrand}
               onTintOn={tintLever(setTintOn)}
               onTintSeed={tintLever(setTintSeed)}

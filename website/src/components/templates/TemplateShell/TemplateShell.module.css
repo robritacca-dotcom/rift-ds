@@ -63,6 +63,13 @@
    floating max width. A size container, so a template restacks by the room
    the column has (an open chat or an expanded rail narrows it without the
    viewport changing) with @container template-content queries. */
+/* The Narrow width: a slim centred column whatever the screen's own
+   contained width. Doubled to outrank the template's content class, which
+   sets its own on the same element. */
+.shell[data-template-width="narrow"] .content.content {
+  --ds-shell-contained-width: 960px;
+}
+
 .content {
   /* The shell recipe's width axis: centred at the screen's contained width
      (1440px from the shell root, or the template's own, set on its

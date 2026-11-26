@@ -131,6 +131,15 @@
   backdrop-filter: blur(24px);
 }
 
+/* Glass only while the shell is: flush on the blur backdrop. A phone-wide
+   chat lays every other mode out flush on the solid backdrop, which paints
+   the app surface, so the status bar and home strips take that surface
+   too, or they read as a grey band around the app. */
+.phoneScreen:has([data-ds-shell]:not([data-ds-shell-backdrop="blur"])) {
+  background: var(--color-bg-app-surface);
+  backdrop-filter: none;
+}
+
 /* The app between the strips: the widget fills it, without card chrome. */
 .phoneApp {
   display: flex;

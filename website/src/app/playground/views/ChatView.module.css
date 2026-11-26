@@ -253,6 +253,15 @@
   backdrop-filter: blur(24px);
 }
 
+/* Glass only while the shell is: flush on the blur backdrop. A phone-wide
+   chat lays every other mode out flush on the solid backdrop, which paints
+   the app surface, so the status bar and home strips take that surface
+   too, or they read as a grey band around the app. */
+.deviceScreen:has([data-ds-shell]:not([data-ds-shell-backdrop="blur"])) {
+  background: var(--color-bg-app-surface);
+  backdrop-filter: none;
+}
+
 /* A phone draws overlay scrollbars that take no room; a desktop gutter here
    pushed the app in from the right edge only (the templates' frames get the
    same from html[data-app-frame] in the site's globals). */

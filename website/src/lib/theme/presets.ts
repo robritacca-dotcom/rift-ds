@@ -355,6 +355,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       "--color-bg-app-shell": "var(--primitive-neutral-01)",
       "--color-bg-app-surface": "#FFFFFF",
       "--color-bg-container-primary-semi": "var(--primitive-neutral-01)",
+      // The sent bubble in the action's family, a step deeper than the
+      // button, so the person's turn reads as theirs and the send button
+      // still reads as the action. Both modes.
+      "--color-chat-bubble-sent-bg": "var(--primitive-blue-08)",
+      "--color-chat-bubble-sent-text": "var(--primitive-neutral-00)",
     },
     extraOverridesDark: {
       "--color-bg-page-primary": "var(--primitive-neutral-10)",
@@ -423,6 +428,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // brand's own label colour.
     extraOverrides: {
       "--color-action-primary-text": "var(--primitive-neutral-00)",
+      // The sent bubble in the action's coral, a step deeper than the
+      // button, under the same white label. Both modes.
+      "--color-chat-bubble-sent-bg": "var(--primitive-red-08)",
+      "--color-chat-bubble-sent-text": "var(--primitive-neutral-00)",
     },
   },
   plum: {
@@ -708,6 +717,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       "--color-action-primary-bg-active": "var(--primitive-green-05)",
       "--color-action-primary-text": "var(--primitive-green-11)",
       "--color-action-primary-text-active": "var(--primitive-green-11)",
+      "--color-chat-bubble-sent-bg": "var(--primitive-green-06)",
+      "--color-chat-bubble-sent-text": "var(--primitive-green-11)",
       "--color-brand-mark-end": "var(--color-action-primary-bg-active)",
       "--color-bg-page-primary": "var(--primitive-neutral-10)",
       "--color-bg-app-shell": "var(--primitive-neutral-09)",
@@ -752,6 +763,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       "--color-brand-mark-end": "var(--color-action-primary-bg)",
       "--color-action-primary-text": "var(--primitive-green-07)",
       "--color-action-primary-text-active": "var(--primitive-green-07)",
+      // The sent bubble in the action's forest, a step lighter than the
+      // button, under the same lime label (dark mode flips it below).
+      "--color-chat-bubble-sent-bg": "var(--primitive-green-10)",
+      "--color-chat-bubble-sent-text": "var(--primitive-green-07)",
       "--color-bg-page-primary": "var(--primitive-neutral-00)",
       // Main content on crisp white; the app shell and the cards a whisper
       // of grey off it.
@@ -850,9 +865,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tintOn: true,
     tintSeed: "#23573F",
     tintStrength: 6,
-    // Organic softness: the shipped corner scale, pills kept.
-    radiusScale: 100,
-    pill: true,
+    // Close to Smoke's tight corners, a touch softer, and no pill: buttons
+    // take the same corner as everything else.
+    radiusScale: 50,
+    pill: false,
     density: 100,
     typeScale: 100,
     // Unhurried — the woodland look moves at the shipped tempo under the
@@ -1041,6 +1057,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     extraOverrides: {
       "--color-action-primary-text": "var(--primitive-neutral-00)",
       "--color-action-primary-text-active": "var(--primitive-neutral-00)",
+      // The sent bubble in the action's pink, a step deeper than the
+      // button, under the same label. Both modes.
+      "--color-chat-bubble-sent-bg": "var(--primitive-red-08)",
+      "--color-chat-bubble-sent-text": "var(--primitive-neutral-00)",
     },
   },
   violet: {
@@ -1100,6 +1120,12 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       teal: "#4B8FB8",
       blue: "#5C63D8",
     }),
+    // The sent bubble in the action's purple, a step deeper than the
+    // button, under the same label. Both modes.
+    extraOverrides: {
+      "--color-chat-bubble-sent-bg": "var(--primitive-purple-09)",
+      "--color-chat-bubble-sent-text": "var(--primitive-purple-02)",
+    },
   },
 };
 

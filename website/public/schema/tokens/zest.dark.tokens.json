@@ -2213,11 +2213,11 @@
     },
     "chat-bubble-sent-bg": {
       "$type": "color",
-      "$value": "{color.bg-container-secondary}"
+      "$value": "{primitive.green-06}"
     },
     "chat-bubble-sent-text": {
       "$type": "color",
-      "$value": "{color.text-primary}"
+      "$value": "{primitive.green-11}"
     },
     "chat-card-bg": {
       "$type": "color",

@@ -43,6 +43,8 @@
     --color-bg-app-surface: #FFFFFF;
     --color-bg-container-primary-semi: var(--primitive-neutral-01);
     --color-bg-page-primary: #FFFFFF;
+    --color-chat-bubble-sent-bg: var(--primitive-blue-08);
+    --color-chat-bubble-sent-text: var(--primitive-neutral-00);
     --color-core-accent-amber: #FF8A3D;
     --color-core-accent-cobalt: #2E5BFF;
     --color-core-accent-coral: #FF3D7A;

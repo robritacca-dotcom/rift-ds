@@ -27,6 +27,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { MOTION_SCROLL_SETTLE_MS } from "rift-ds/tokens/motion";
 import { STAGED_PRODUCT_NAME_ATTR } from "@/components/templates/useStagedProductName";
 import { STAGED_SHADER_ATTR } from "@/lib/shaders/staged";
+import { STAGED_CUSTOM_THEME_ATTR } from "@/lib/theme/brand";
 import { APP_FRAME_ATTR } from "@/components/templates/AppFrame/AppFrame";
 import chatStyles from "./ChatView.module.css";
 import { templatesSidebarLinks } from "@/config/navigation";
@@ -115,6 +116,9 @@ export default function TemplatesView({
     const brand = root.getAttribute("data-brand");
     if (brand) frameRoot.setAttribute("data-brand", brand);
     else frameRoot.removeAttribute("data-brand");
+    /* A custom mix in the levers, which the template's Theme menu names. */
+    if (root.hasAttribute(STAGED_CUSTOM_THEME_ATTR)) frameRoot.setAttribute(STAGED_CUSTOM_THEME_ATTR, "");
+    else frameRoot.removeAttribute(STAGED_CUSTOM_THEME_ATTR);
 
     /* The Product name lever, which the template reads from this
        attribute (useStagedProductName), so typing never reloads the frame. */
@@ -202,7 +206,7 @@ export default function TemplatesView({
     const observer = new MutationObserver(sync);
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ["style", "data-theme", "data-brand", STAGED_SHADER_ATTR],
+      attributeFilter: ["style", "data-theme", "data-brand", STAGED_SHADER_ATTR, STAGED_CUSTOM_THEME_ATTR],
     });
     return () => observer.disconnect();
   }, [sync]);

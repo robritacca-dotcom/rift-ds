@@ -148,9 +148,9 @@
   ],
   "types": {
     "AvatarFill": {
-      "kind": "type",
-      "definition": "type AvatarFill = 1 | 2 | 3 | 4 | 5 | 6;",
-      "description": "One of the six avatar fills, by token number (`--color-avatar-bg-*`)."
+      "kind": "component-props",
+      "component": "Avatar",
+      "see": "get_component(\"Avatar\")"
     },
     "EntitySwitcherItem": {
       "kind": "interface",

@@ -201,12 +201,9 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         ]
       },
       "AppSidebarItem": {
-        "kind": "interface",
-        "definition": "interface AppSidebarItem {\n  /** Unique key for this item */\n  key: string;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */\n  icon?: string | React.ReactNode;\n  /**\n   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for\n   * rows that name a thing rather than a place — projects, workspaces,\n   * accounts. `true` seeds the character from `label`; a string seeds it\n   * from that value, so a renamed item can keep its character by passing a\n   * stable id. The sidebar spreads the inks across all of its avatar rows,\n   * so neighbours differ in colour as well as shape. The character is\n   * decorative: the label beside it is the name\n   */\n  pixelAvatar?: boolean | string;\n  /** Display label (shown when expanded) */\n  label: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end while expanded, such as \"Dark\" on a row whose sub-items are a setting's choices */\n  value?: string;\n  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav=\"panel\"` */\n  children?: AppSidebarSubItem[];\n  /** A keyboard hint at the row's end while expanded, in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative: bind the action with `useShortcut` */\n  keys?: Shortcut;\n}",
-        "refs": [
-          "AppSidebarSubItem",
-          "Shortcut"
-        ]
+        "kind": "component-props",
+        "component": "AppSidebar",
+        "see": "get_component(\"AppSidebar\")"
       },
       "AppSidebarLayout": {
         "kind": "type",
@@ -232,18 +229,14 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         ]
       },
       "AppSidebarSectionAction": {
-        "kind": "interface",
-        "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. Defaults to `add`. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
-        "description": "A button in a section's heading, such as a project list's add."
+        "kind": "component-props",
+        "component": "AppSidebar",
+        "see": "get_component(\"AppSidebar\")"
       },
       "AppSidebarSectionContext": {
-        "kind": "interface",
-        "definition": "interface AppSidebarSectionContext {\n  /** Whether the rail is expanded (the drawer always is). */\n  expanded: boolean;\n  /** Whether it is drawn in the drawer rather than on the rail. */\n  drawer: boolean;\n  /** Closes the drawer, for content whose rows are destinations. Does nothing on the rail. */\n  closeDrawer: () => void;\n}",
-        "description": "What a section's `content` function is told about where it is drawn."
-      },
-      "AppSidebarSubItem": {
-        "kind": "interface",
-        "definition": "interface AppSidebarSubItem {\n  /** Unique key for this sub-item */\n  key: string;\n  /** Display label */\n  label: string;\n  /** Click handler — also fires on a link sub-item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the sub-item as a real link to this URL instead of a button. Ignored when the sub-item has children, whose row opens them */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */\n  badge?: string | number;\n  /** A second line under the label, shown where the sub-item is listed in the side panel and the phone drawer */\n  description?: string;\n  /** Icon before the label in the side panel and the phone drawer: a Material Symbol name or a custom element, such as a swatch */\n  icon?: string | React.ReactNode;\n  /** In a list of choices (a setting's options), whether this one is chosen: true carries the chosen mark in the side panel and the phone drawer. Picking a choice is an action, so the panel and the drawer stay open */\n  selected?: boolean;\n  /** Group heading this entry sits under when it is listed in the panel (see `subNav`); ignored in the accordion */\n  group?: string;\n  /**\n   * The next level down. With `subNav=\"accordion\"` a sub-item's children are\n   * level 3 and open in the side panel; with `subNav=\"panel\"` they are the\n   * panel's own accordion. Navigation stops at three levels, so deeper\n   * children are not rendered.\n   */\n  children?: AppSidebarSubItem[];\n}"
+        "kind": "component-props",
+        "component": "AppSidebar",
+        "see": "get_component(\"AppSidebar\")"
       },
       "LinkComponent": {
         "kind": "type",
@@ -257,11 +250,6 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "kind": "type",
         "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
         "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
-      },
-      "Shortcut": {
-        "kind": "type",
-        "definition": "type Shortcut = string;",
-        "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
       }
     },
     "externalTypes": {
@@ -328,19 +316,14 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         ]
       },
       "DrillMenuItem": {
-        "kind": "interface",
-        "definition": "interface DrillMenuItem {\n  /** Row text. */\n  label: string;\n  /**\n   * Where the row links. On a row with `items` it is the level's landing\n   * page instead: the level opens with an overview row linking to it.\n   */\n  href?: string;\n  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */\n  id?: string;\n  /** A second line under the label, in the secondary text style. */\n  description?: string;\n  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */\n  icon?: string | React.ReactNode;\n  /** A pill after the label: a count (a number, or digits with an optional `+`) on the count badge pair, a word such as \"New\" as a quiet pill. */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end, such as \"Dark\", on a row that drills into a list of choices. */\n  value?: string;\n  /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */\n  title?: string;\n  /** Rows on the level this row opens. A row with items drills in instead of navigating. */\n  items?: DrillMenuEntry[];\n  /**\n   * Marks the row as the page being viewed, regardless of the exact match\n   * against `currentHref`, for a section that stays current on its child\n   * routes.\n   */\n  current?: boolean;\n  /** On an `onClick` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */\n  selected?: boolean;\n  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */\n  external?: boolean;\n  /**\n   * Makes the row an action rather than a link, such as a pick or a copy.\n   * The menu stays on its level; a choice list's rows set `selected` too.\n   */\n  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;\n}",
-        "refs": [
-          "DrillMenuEntry"
-        ]
+        "kind": "component-props",
+        "component": "DrillMenu",
+        "see": "get_component(\"DrillMenu\")"
       },
       "DrillMenuSection": {
-        "kind": "interface",
-        "definition": "interface DrillMenuSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: DrillMenuItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n  /**\n   * The section's own content after its rows, for a section that is more\n   * than a list of destinations: a chat's history in AppSidebar's drawer,\n   * say. It scrolls with the level and leaves with it on a drill.\n   */\n  content?: React.ReactNode;\n}",
-        "description": "A group of rows under an optional heading: one level's resources or\nsettings, say, set apart from the rows above it.",
-        "refs": [
-          "DrillMenuItem"
-        ]
+        "kind": "component-props",
+        "component": "DrillMenu",
+        "see": "get_component(\"DrillMenu\")"
       },
       "LinkComponent": {
         "kind": "type",
@@ -369,8 +352,6 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "externalTypes": {
       "ComponentPropsWithRef": "react",
       "ElementType": "react",
-      "HTMLButtonElement": "typescript",
-      "MouseEvent": "react",
       "Partial": "typescript",
       "ReactNode": "react",
       "Record": "typescript"
@@ -958,28 +939,19 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         ]
       },
       "DropdownMenuGroup": {
-        "kind": "interface",
-        "definition": "interface DropdownMenuGroup {\n  type: 'group';\n  /** Section heading */\n  label: string;\n  /** Items within the group */\n  items: DropdownMenuEntry[];\n}",
-        "refs": [
-          "DropdownMenuEntry"
-        ]
+        "kind": "component-props",
+        "component": "DropdownMenu",
+        "see": "get_component(\"DropdownMenu\")"
       },
       "DropdownMenuItem": {
-        "kind": "interface",
-        "definition": "interface DropdownMenuItem {\n  type?: 'item';\n  /** Display label */\n  label: string;\n  /** A line under the label, such as what the choice does or means. It wraps the row to two lines in the caption style; the icon stays centred on the pair. */\n  description?: string;\n  /** Keyboard shortcut hint as literal text (e.g. \"⇧ ⌘ P\"). `keys` writes it for the reader's platform instead. */\n  shortcut?: string;\n  /** Keyboard shortcut hint in the shortcut grammar (`mod+shift+p`), written for the reader's platform (⇧⌘P on a Mac, Ctrl+Shift+P elsewhere) and announced through `aria-keyshortcuts`. Display only: bind the action itself with `useShortcut`. Wins over `shortcut`. */\n  keys?: Shortcut;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** A trailing icon after the label, such as `open_in_new` on an item that opens another site. Decorative: say what the item does in its label. A Material Symbol name (string) or a custom element (ReactNode). Ignored on an item that opens a sub-menu. */\n  iconRight?: string | React.ReactNode;\n  /** Disabled state */\n  disabled?: boolean;\n  /** Marks a dangerous or irreversible item (delete, remove…): it takes the destructive colour, with the error tint on hover and focus */\n  destructive?: boolean;\n  /** Marks the item as the current choice of a set: it holds the passive wash and a trailing check, and is announced as a checked radio item. Leave undefined on plain action items; pass `false` on the unchosen members of a set so they are announced as radio items too. Ignored on an item that opens a sub-menu. */\n  selected?: boolean;\n  /** Marks the item as one of a set picked independently: it leads with the checkbox's box, ticked when true, and is announced as a checkbox item. Leave undefined on plain action items. The host toggles it in `onClick`. Ignored on an item that opens a sub-menu. */\n  checked?: boolean;\n  /** Whether choosing the item closes the menu. Defaults to false for a checkbox item, so several can be toggled in one visit, and true for every other item. */\n  closeOnSelect?: boolean;\n  /** Click handler */\n  onClick?: () => void;\n  /** Nested sub-menu items */\n  children?: DropdownMenuEntry[];\n}",
-        "refs": [
-          "DropdownMenuEntry",
-          "Shortcut"
-        ]
+        "kind": "component-props",
+        "component": "DropdownMenu",
+        "see": "get_component(\"DropdownMenu\")"
       },
       "DropdownMenuSeparator": {
-        "kind": "interface",
-        "definition": "interface DropdownMenuSeparator {\n  type: 'separator';\n}"
-      },
-      "Shortcut": {
-        "kind": "type",
-        "definition": "type Shortcut = string;",
-        "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+        "kind": "component-props",
+        "component": "DropdownMenu",
+        "see": "get_component(\"DropdownMenu\")"
       },
       "ShortcutKeyLabels": {
         "kind": "type",
@@ -1546,9 +1518,9 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
   "entity-switcher": {
     "types": {
       "AvatarFill": {
-        "kind": "type",
-        "definition": "type AvatarFill = 1 | 2 | 3 | 4 | 5 | 6;",
-        "description": "One of the six avatar fills, by token number (`--color-avatar-bg-*`)."
+        "kind": "component-props",
+        "component": "Avatar",
+        "see": "get_component(\"Avatar\")"
       },
       "EntitySwitcherItem": {
         "kind": "interface",
@@ -2060,32 +2032,9 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
   "menubar": {
     "types": {
       "DropdownMenuEntry": {
-        "kind": "type",
-        "definition": "type DropdownMenuEntry =\n  | DropdownMenuItem\n  | DropdownMenuSeparator\n  | DropdownMenuGroup;",
-        "refs": [
-          "DropdownMenuGroup",
-          "DropdownMenuItem",
-          "DropdownMenuSeparator"
-        ]
-      },
-      "DropdownMenuGroup": {
-        "kind": "interface",
-        "definition": "interface DropdownMenuGroup {\n  type: 'group';\n  /** Section heading */\n  label: string;\n  /** Items within the group */\n  items: DropdownMenuEntry[];\n}",
-        "refs": [
-          "DropdownMenuEntry"
-        ]
-      },
-      "DropdownMenuItem": {
-        "kind": "interface",
-        "definition": "interface DropdownMenuItem {\n  type?: 'item';\n  /** Display label */\n  label: string;\n  /** A line under the label, such as what the choice does or means. It wraps the row to two lines in the caption style; the icon stays centred on the pair. */\n  description?: string;\n  /** Keyboard shortcut hint as literal text (e.g. \"⇧ ⌘ P\"). `keys` writes it for the reader's platform instead. */\n  shortcut?: string;\n  /** Keyboard shortcut hint in the shortcut grammar (`mod+shift+p`), written for the reader's platform (⇧⌘P on a Mac, Ctrl+Shift+P elsewhere) and announced through `aria-keyshortcuts`. Display only: bind the action itself with `useShortcut`. Wins over `shortcut`. */\n  keys?: Shortcut;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** A trailing icon after the label, such as `open_in_new` on an item that opens another site. Decorative: say what the item does in its label. A Material Symbol name (string) or a custom element (ReactNode). Ignored on an item that opens a sub-menu. */\n  iconRight?: string | React.ReactNode;\n  /** Disabled state */\n  disabled?: boolean;\n  /** Marks a dangerous or irreversible item (delete, remove…): it takes the destructive colour, with the error tint on hover and focus */\n  destructive?: boolean;\n  /** Marks the item as the current choice of a set: it holds the passive wash and a trailing check, and is announced as a checked radio item. Leave undefined on plain action items; pass `false` on the unchosen members of a set so they are announced as radio items too. Ignored on an item that opens a sub-menu. */\n  selected?: boolean;\n  /** Marks the item as one of a set picked independently: it leads with the checkbox's box, ticked when true, and is announced as a checkbox item. Leave undefined on plain action items. The host toggles it in `onClick`. Ignored on an item that opens a sub-menu. */\n  checked?: boolean;\n  /** Whether choosing the item closes the menu. Defaults to false for a checkbox item, so several can be toggled in one visit, and true for every other item. */\n  closeOnSelect?: boolean;\n  /** Click handler */\n  onClick?: () => void;\n  /** Nested sub-menu items */\n  children?: DropdownMenuEntry[];\n}",
-        "refs": [
-          "DropdownMenuEntry",
-          "Shortcut"
-        ]
-      },
-      "DropdownMenuSeparator": {
-        "kind": "interface",
-        "definition": "interface DropdownMenuSeparator {\n  type: 'separator';\n}"
+        "kind": "component-props",
+        "component": "DropdownMenu",
+        "see": "get_component(\"DropdownMenu\")"
       },
       "MenubarMenu": {
         "kind": "interface",
@@ -2095,11 +2044,6 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
           "DropdownMenuEntry"
         ]
       },
-      "Shortcut": {
-        "kind": "type",
-        "definition": "type Shortcut = string;",
-        "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
-      },
       "ShortcutKeyLabels": {
         "kind": "type",
         "definition": "type ShortcutKeyLabels = Partial<Record<string, string>>;",
@@ -2108,7 +2052,6 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     },
     "externalTypes": {
       "Partial": "typescript",
-      "ReactNode": "react",
       "Record": "typescript"
     }
   },
@@ -2633,19 +2576,14 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         ]
       },
       "DrillMenuItem": {
-        "kind": "interface",
-        "definition": "interface DrillMenuItem {\n  /** Row text. */\n  label: string;\n  /**\n   * Where the row links. On a row with `items` it is the level's landing\n   * page instead: the level opens with an overview row linking to it.\n   */\n  href?: string;\n  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */\n  id?: string;\n  /** A second line under the label, in the secondary text style. */\n  description?: string;\n  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */\n  icon?: string | React.ReactNode;\n  /** A pill after the label: a count (a number, or digits with an optional `+`) on the count badge pair, a word such as \"New\" as a quiet pill. */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end, such as \"Dark\", on a row that drills into a list of choices. */\n  value?: string;\n  /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */\n  title?: string;\n  /** Rows on the level this row opens. A row with items drills in instead of navigating. */\n  items?: DrillMenuEntry[];\n  /**\n   * Marks the row as the page being viewed, regardless of the exact match\n   * against `currentHref`, for a section that stays current on its child\n   * routes.\n   */\n  current?: boolean;\n  /** On an `onClick` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */\n  selected?: boolean;\n  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */\n  external?: boolean;\n  /**\n   * Makes the row an action rather than a link, such as a pick or a copy.\n   * The menu stays on its level; a choice list's rows set `selected` too.\n   */\n  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;\n}",
-        "refs": [
-          "DrillMenuEntry"
-        ]
+        "kind": "component-props",
+        "component": "DrillMenu",
+        "see": "get_component(\"DrillMenu\")"
       },
       "DrillMenuSection": {
-        "kind": "interface",
-        "definition": "interface DrillMenuSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: DrillMenuItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n  /**\n   * The section's own content after its rows, for a section that is more\n   * than a list of destinations: a chat's history in AppSidebar's drawer,\n   * say. It scrolls with the level and leaves with it on a drill.\n   */\n  content?: React.ReactNode;\n}",
-        "description": "A group of rows under an optional heading: one level's resources or\nsettings, say, set apart from the rows above it.",
-        "refs": [
-          "DrillMenuItem"
-        ]
+        "kind": "component-props",
+        "component": "DrillMenu",
+        "see": "get_component(\"DrillMenu\")"
       },
       "LinkComponent": {
         "kind": "type",
@@ -2661,14 +2599,14 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
       },
       "MegaMenuItem": {
-        "kind": "interface",
-        "definition": "interface MegaMenuItem {\n  /** Where the row links. */\n  href: string;\n  /** The page's name. */\n  label: string;\n  /** One line on what the page holds, clamped to two lines in the panel. */\n  description?: string;\n  /** A Material Symbols name drawn in the row's icon tile. */\n  icon?: string;\n  /** An image path drawn in the icon tile instead of `icon`, for a brand or product mark. */\n  logo?: string;\n}",
-        "description": "One link row in a mega menu: a page and the line that says what is on it."
+        "kind": "component-props",
+        "component": "MegaMenu",
+        "see": "get_component(\"MegaMenu\")"
       },
       "MegaMenuShowcase": {
-        "kind": "interface",
-        "definition": "interface MegaMenuShowcase {\n  /** Where the card links. */\n  href: string;\n  /** A short kicker above the title, set in the overline face. */\n  overline?: string;\n  /** The card's title, followed by a forward arrow. */\n  label: string;\n  /** One or two lines under the title. */\n  description?: string;\n  /**\n   * A drawing that fills the card behind the copy. Decorative: the title and\n   * description carry the meaning, so mark it `aria-hidden`.\n   */\n  cover?: React.ReactNode;\n}",
-        "description": "The featured card beside a mega menu's link grid: one link that is the whole card."
+        "kind": "component-props",
+        "component": "MegaMenu",
+        "see": "get_component(\"MegaMenu\")"
       },
       "SiteHeaderDrawerItem": {
         "kind": "interface",
@@ -2689,8 +2627,6 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "externalTypes": {
       "ComponentPropsWithRef": "react",
       "ElementType": "react",
-      "HTMLButtonElement": "typescript",
-      "MouseEvent": "react",
       "ReactNode": "react"
     }
   },
@@ -2770,28 +2706,19 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         ]
       },
       "DropdownMenuGroup": {
-        "kind": "interface",
-        "definition": "interface DropdownMenuGroup {\n  type: 'group';\n  /** Section heading */\n  label: string;\n  /** Items within the group */\n  items: DropdownMenuEntry[];\n}",
-        "refs": [
-          "DropdownMenuEntry"
-        ]
+        "kind": "component-props",
+        "component": "DropdownMenu",
+        "see": "get_component(\"DropdownMenu\")"
       },
       "DropdownMenuItem": {
-        "kind": "interface",
-        "definition": "interface DropdownMenuItem {\n  type?: 'item';\n  /** Display label */\n  label: string;\n  /** A line under the label, such as what the choice does or means. It wraps the row to two lines in the caption style; the icon stays centred on the pair. */\n  description?: string;\n  /** Keyboard shortcut hint as literal text (e.g. \"⇧ ⌘ P\"). `keys` writes it for the reader's platform instead. */\n  shortcut?: string;\n  /** Keyboard shortcut hint in the shortcut grammar (`mod+shift+p`), written for the reader's platform (⇧⌘P on a Mac, Ctrl+Shift+P elsewhere) and announced through `aria-keyshortcuts`. Display only: bind the action itself with `useShortcut`. Wins over `shortcut`. */\n  keys?: Shortcut;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** A trailing icon after the label, such as `open_in_new` on an item that opens another site. Decorative: say what the item does in its label. A Material Symbol name (string) or a custom element (ReactNode). Ignored on an item that opens a sub-menu. */\n  iconRight?: string | React.ReactNode;\n  /** Disabled state */\n  disabled?: boolean;\n  /** Marks a dangerous or irreversible item (delete, remove…): it takes the destructive colour, with the error tint on hover and focus */\n  destructive?: boolean;\n  /** Marks the item as the current choice of a set: it holds the passive wash and a trailing check, and is announced as a checked radio item. Leave undefined on plain action items; pass `false` on the unchosen members of a set so they are announced as radio items too. Ignored on an item that opens a sub-menu. */\n  selected?: boolean;\n  /** Marks the item as one of a set picked independently: it leads with the checkbox's box, ticked when true, and is announced as a checkbox item. Leave undefined on plain action items. The host toggles it in `onClick`. Ignored on an item that opens a sub-menu. */\n  checked?: boolean;\n  /** Whether choosing the item closes the menu. Defaults to false for a checkbox item, so several can be toggled in one visit, and true for every other item. */\n  closeOnSelect?: boolean;\n  /** Click handler */\n  onClick?: () => void;\n  /** Nested sub-menu items */\n  children?: DropdownMenuEntry[];\n}",
-        "refs": [
-          "DropdownMenuEntry",
-          "Shortcut"
-        ]
+        "kind": "component-props",
+        "component": "DropdownMenu",
+        "see": "get_component(\"DropdownMenu\")"
       },
       "DropdownMenuSeparator": {
-        "kind": "interface",
-        "definition": "interface DropdownMenuSeparator {\n  type: 'separator';\n}"
-      },
-      "Shortcut": {
-        "kind": "type",
-        "definition": "type Shortcut = string;",
-        "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+        "kind": "component-props",
+        "component": "DropdownMenu",
+        "see": "get_component(\"DropdownMenu\")"
       }
     },
     "externalTypes": {
@@ -2919,12 +2846,9 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "definition": "interface DataTableSort {\n  /** The column being sorted. */\n  key: string;\n  /** Sort direction. */\n  direction: 'asc' | 'desc';\n}"
       },
       "DataTableView": {
-        "kind": "type",
-        "definition": "type DataTableView = TableView;",
-        "description": "One saved setup of a table: its sorts, filters, search, columns, pinning, widths, grouping, density and page size. Selection, the page and open details are the session, never part of a view.",
-        "refs": [
-          "TableView"
-        ]
+        "kind": "component-props",
+        "component": "DataTable",
+        "see": "get_component(\"DataTable\")"
       },
       "Filter": {
         "kind": "interface",
@@ -3121,12 +3045,9 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         ]
       },
       "ThreadPanelThread": {
-        "kind": "interface",
-        "definition": "interface ThreadPanelThread {\n  /** Stable identifier: `activeThreadId` matches against it and `onThreadSelect` reports it. */\n  id: string;\n  /** The thread's one-line title. Overflow fades out under a trailing mask rather than clipping; the full text stays readable in the row's native tooltip. */\n  title: string;\n  /** Optional href — the row renders as an `<a>` for real navigation instead of a `<button>`. */\n  href?: string;\n  /** Small trailing annotation in the caption face, e.g. a relative timestamp. */\n  meta?: string;\n  /** The title is still being generated: the row shows a shimmer bar in the title's place and hides its menu, keeping `title` (e.g. \"New chat\") as the accessible name. */\n  pending?: boolean;\n  /** This thread's own menu actions, overriding the panel-wide `threadActions`. */\n  actions?: ThreadPanelThreadAction[];\n  /** Quiet second line under the title in the caption face — a repo, an environment, a one-line summary. Overflows under the same trailing mask as the title. */\n  description?: string;\n  /** The thread's state, drawn as the dot leading the row: `idle` (nothing new, nothing running), `working` (an agent is running now), `unread` (finished, not yet seen), `waiting` (blocked on the reader) or `error` (stopped on a failure). Once any thread in the panel carries a status every row draws a dot, the rest reading `idle`, so the titles share one left edge. The dot is decorative; every state but `idle` is also read aloud through `statusLabels`. */\n  status?: ThreadPanelThreadStatus;\n  /** Legacy boolean for `status: 'unread'`, ignored when `status` is set. @deprecated Use `status: 'unread'` instead. */\n  unread?: boolean;\n  /** Trailing icon before the meta — Material Symbol name (string) or custom element (ReactNode), e.g. `cloud` for a session that lives remotely. */\n  icon?: string | React.ReactNode;\n  /** Marks the thread pinned with a trailing pin glyph, read aloud through the panel's `pinnedLabel`. A marker only: the host groups pinned threads (typically a leading group) and offers pin/unpin through the row menu. */\n  pinned?: boolean;\n}",
-        "refs": [
-          "ThreadPanelThreadAction",
-          "ThreadPanelThreadStatus"
-        ]
+        "kind": "component-props",
+        "component": "ThreadPanel",
+        "see": "get_component(\"ThreadPanel\")"
       },
       "ThreadPanelThreadAction": {
         "kind": "interface",
@@ -3455,12 +3376,9 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         ]
       },
       "AppSidebarItem": {
-        "kind": "interface",
-        "definition": "interface AppSidebarItem {\n  /** Unique key for this item */\n  key: string;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */\n  icon?: string | React.ReactNode;\n  /**\n   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for\n   * rows that name a thing rather than a place — projects, workspaces,\n   * accounts. `true` seeds the character from `label`; a string seeds it\n   * from that value, so a renamed item can keep its character by passing a\n   * stable id. The sidebar spreads the inks across all of its avatar rows,\n   * so neighbours differ in colour as well as shape. The character is\n   * decorative: the label beside it is the name\n   */\n  pixelAvatar?: boolean | string;\n  /** Display label (shown when expanded) */\n  label: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end while expanded, such as \"Dark\" on a row whose sub-items are a setting's choices */\n  value?: string;\n  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav=\"panel\"` */\n  children?: AppSidebarSubItem[];\n  /** A keyboard hint at the row's end while expanded, in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative: bind the action with `useShortcut` */\n  keys?: Shortcut;\n}",
-        "refs": [
-          "AppSidebarSubItem",
-          "Shortcut"
-        ]
+        "kind": "component-props",
+        "component": "AppSidebar",
+        "see": "get_component(\"AppSidebar\")"
       },
       "AppSidebarProps": {
         "kind": "component-props",
@@ -3477,18 +3395,14 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         ]
       },
       "AppSidebarSectionAction": {
-        "kind": "interface",
-        "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. Defaults to `add`. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
-        "description": "A button in a section's heading, such as a project list's add."
+        "kind": "component-props",
+        "component": "AppSidebar",
+        "see": "get_component(\"AppSidebar\")"
       },
       "AppSidebarSectionContext": {
-        "kind": "interface",
-        "definition": "interface AppSidebarSectionContext {\n  /** Whether the rail is expanded (the drawer always is). */\n  expanded: boolean;\n  /** Whether it is drawn in the drawer rather than on the rail. */\n  drawer: boolean;\n  /** Closes the drawer, for content whose rows are destinations. Does nothing on the rail. */\n  closeDrawer: () => void;\n}",
-        "description": "What a section's `content` function is told about where it is drawn."
-      },
-      "AppSidebarSubItem": {
-        "kind": "interface",
-        "definition": "interface AppSidebarSubItem {\n  /** Unique key for this sub-item */\n  key: string;\n  /** Display label */\n  label: string;\n  /** Click handler — also fires on a link sub-item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the sub-item as a real link to this URL instead of a button. Ignored when the sub-item has children, whose row opens them */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */\n  badge?: string | number;\n  /** A second line under the label, shown where the sub-item is listed in the side panel and the phone drawer */\n  description?: string;\n  /** Icon before the label in the side panel and the phone drawer: a Material Symbol name or a custom element, such as a swatch */\n  icon?: string | React.ReactNode;\n  /** In a list of choices (a setting's options), whether this one is chosen: true carries the chosen mark in the side panel and the phone drawer. Picking a choice is an action, so the panel and the drawer stay open */\n  selected?: boolean;\n  /** Group heading this entry sits under when it is listed in the panel (see `subNav`); ignored in the accordion */\n  group?: string;\n  /**\n   * The next level down. With `subNav=\"accordion\"` a sub-item's children are\n   * level 3 and open in the side panel; with `subNav=\"panel\"` they are the\n   * panel's own accordion. Navigation stops at three levels, so deeper\n   * children are not rendered.\n   */\n  children?: AppSidebarSubItem[];\n}"
+        "kind": "component-props",
+        "component": "AppSidebar",
+        "see": "get_component(\"AppSidebar\")"
       },
       "ArtifactPanelProps": {
         "kind": "component-props",
@@ -3686,19 +3600,14 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         ]
       },
       "DrillMenuItem": {
-        "kind": "interface",
-        "definition": "interface DrillMenuItem {\n  /** Row text. */\n  label: string;\n  /**\n   * Where the row links. On a row with `items` it is the level's landing\n   * page instead: the level opens with an overview row linking to it.\n   */\n  href?: string;\n  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */\n  id?: string;\n  /** A second line under the label, in the secondary text style. */\n  description?: string;\n  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */\n  icon?: string | React.ReactNode;\n  /** A pill after the label: a count (a number, or digits with an optional `+`) on the count badge pair, a word such as \"New\" as a quiet pill. */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end, such as \"Dark\", on a row that drills into a list of choices. */\n  value?: string;\n  /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */\n  title?: string;\n  /** Rows on the level this row opens. A row with items drills in instead of navigating. */\n  items?: DrillMenuEntry[];\n  /**\n   * Marks the row as the page being viewed, regardless of the exact match\n   * against `currentHref`, for a section that stays current on its child\n   * routes.\n   */\n  current?: boolean;\n  /** On an `onClick` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */\n  selected?: boolean;\n  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */\n  external?: boolean;\n  /**\n   * Makes the row an action rather than a link, such as a pick or a copy.\n   * The menu stays on its level; a choice list's rows set `selected` too.\n   */\n  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;\n}",
-        "refs": [
-          "DrillMenuEntry"
-        ]
+        "kind": "component-props",
+        "component": "DrillMenu",
+        "see": "get_component(\"DrillMenu\")"
       },
       "DrillMenuSection": {
-        "kind": "interface",
-        "definition": "interface DrillMenuSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: DrillMenuItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n  /**\n   * The section's own content after its rows, for a section that is more\n   * than a list of destinations: a chat's history in AppSidebar's drawer,\n   * say. It scrolls with the level and leaves with it on a drill.\n   */\n  content?: React.ReactNode;\n}",
-        "description": "A group of rows under an optional heading: one level's resources or\nsettings, say, set apart from the rows above it.",
-        "refs": [
-          "DrillMenuItem"
-        ]
+        "kind": "component-props",
+        "component": "DrillMenu",
+        "see": "get_component(\"DrillMenu\")"
       },
       "FeedbackSink": {
         "kind": "type",
@@ -3723,9 +3632,9 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "description": "The three greetings, overridable by a host that speaks differently."
       },
       "MentionItem": {
-        "kind": "type",
-        "definition": "type MentionItem = {\n  /** Stable identity, unique within its source. */\n  id: string;\n  /** The name shown in the menu and written into the text after the trigger character. */\n  label: string;\n  /** A quieter second phrase on the same row: a role, a path, what a skill does. */\n  description?: string;\n  /** Leading mark: a Material Symbol name, or any node (an Avatar). Decorative. */\n  icon?: string | React.ReactNode;\n  /** Extra words the filter matches on besides the label. */\n  keywords?: string[];\n  /** Listed but not choosable. */\n  disabled?: boolean;\n};",
-        "description": "One thing a person can reference: a teammate, a file, a skill."
+        "kind": "component-props",
+        "component": "Mention",
+        "see": "get_component(\"Mention\")"
       },
       "MentionSource": {
         "kind": "type",
@@ -3755,18 +3664,10 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "definition": "interface QuestionCardLabels {\n  /** The last row's label when `other` is set. */\n  other: string;\n  /** The placeholder of the field that row opens. */\n  otherPlaceholder: string;\n  /** The button that sends the answers. */\n  submit: string;\n  /** The button that moves to the next question in a set. */\n  next: string;\n  /** The button that moves back a question in a set. */\n  back: string;\n  /** The button that declines to answer, shown when `onSkip` is passed. */\n  skip: string;\n  /** The line an answered-by-skipping card shows. */\n  skipped: string;\n  /** The line a card shows when the moment to answer passed. */\n  unanswered: string;\n  /** The step count beside a set's heading. */\n  step: (current: number, total: number) => string;\n  /** The line above a one-answer question's options. */\n  chooseOne: string;\n  /** The line above a several-answer question's options, from its `min` and `max`. */\n  chooseMany: (min: number, max: number, total: number) => string;\n  /** Visually hidden text read after each picked option in the answered record. Defaults to \"(chosen)\". */\n  chosen?: string;\n}",
         "description": "Every word the card draws itself, for a host writing in another voice or language."
       },
-      "QuestionCardOption": {
-        "kind": "interface",
-        "definition": "interface QuestionCardOption {\n  /** Stable identifier reported in the answer's `values`. */\n  value: string;\n  /** The answer as the person would say it, e.g. \"Next.js\". One line. */\n  label: string;\n  /** A quiet second line under the label: what choosing it means. */\n  description?: string;\n}",
-        "description": "One answer a question offers."
-      },
       "QuestionCardQuestion": {
-        "kind": "interface",
-        "definition": "interface QuestionCardQuestion {\n  /** Stable identifier reported in the answer's `questionId`. */\n  id: string;\n  /** The question in a few words, e.g. \"Which framework?\". Shown as the step's heading in a set, and the options' accessible name always. */\n  prompt: string;\n  /** `single` takes one option, `multi` any number of them. */\n  mode?: 'single' | 'multi';\n  /** The answers on offer, in order. */\n  options: QuestionCardOption[];\n  /** Offer a last \"Something else\" row that opens a text field, for an answer the options do not hold. */\n  other?: boolean;\n  /** `multi` only: the fewest options that make an answer. Defaults to 1. */\n  min?: number;\n  /** `multi` only: the most options that can be picked. Defaults to all of them. */\n  max?: number;\n}",
-        "description": "One question the card asks.",
-        "refs": [
-          "QuestionCardOption"
-        ]
+        "kind": "component-props",
+        "component": "QuestionCard",
+        "see": "get_component(\"QuestionCard\")"
       },
       "QuestionSummaryItem": {
         "kind": "interface",
@@ -3793,52 +3694,29 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "definition": "type RailSlot = boolean | ((ctx: { overlay: boolean; close: () => void }) => ReactNode);",
         "description": "A rail slot: the widget's own panel, or a render prop for a custom one."
       },
-      "Shortcut": {
-        "kind": "type",
-        "definition": "type Shortcut = string;",
-        "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
-      },
       "Starter": {
         "kind": "interface",
         "definition": "interface Starter {\n  id: string;\n  label: string;\n}",
         "description": "One conversation starter on the welcome screen."
       },
       "ThreadPanelGroup": {
-        "kind": "interface",
-        "definition": "interface ThreadPanelGroup {\n  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */\n  label?: string;\n  /** Stable identity for the group's fold state, the key `collapsedSections` lists. Defaults to `label`; set it when the label is translated or may change. */\n  id?: string;\n  /** The group's threads, in display order. */\n  threads: ThreadPanelThread[];\n}",
-        "refs": [
-          "ThreadPanelThread"
-        ]
+        "kind": "component-props",
+        "component": "ThreadPanel",
+        "see": "get_component(\"ThreadPanel\")"
       },
       "ThreadPanelProfile": {
         "kind": "interface",
         "definition": "interface ThreadPanelProfile {\n  /** The signed-in person's display name; also seeds the Avatar's initials. */\n  name: string;\n  /** The quiet second line under the name, e.g. the person's email, plan or workspace (AppSidebar's profile block carries the email there). */\n  meta?: string;\n  /** Replace the initials Avatar with a custom element, e.g. an `<Avatar src>`; the row seats a 40px mark (Avatar at `md`). */\n  avatar?: React.ReactNode;\n}"
       },
       "ThreadPanelProject": {
-        "kind": "interface",
-        "definition": "interface ThreadPanelProject {\n  /** Stable identifier: `activeProjectId` matches against it and `onProjectSelect` reports it. */\n  id: string;\n  /** The project's name. */\n  label: string;\n  /** Leading icon on the row — Material Symbol name (string) or custom element (ReactNode). Omit it and the row draws the project's generated PixelAvatar, which is the default mark. */\n  icon?: string | React.ReactNode;\n  /** Seed for the generated PixelAvatar a project wears when it has no `icon`. Defaults to `label`; pass a stable id so a renamed project keeps its character. The panel spreads the inks across its projects, so neighbours differ in colour as well as shape. */\n  pixelAvatar?: string;\n  /** Small trailing annotation in the caption face, e.g. how recently the project was touched. */\n  meta?: string;\n  /** Optional href — the row renders as an `<a>` instead of a `<button>`. */\n  href?: string;\n}"
+        "kind": "component-props",
+        "component": "ThreadPanel",
+        "see": "get_component(\"ThreadPanel\")"
       },
       "ThreadPanelProps": {
         "kind": "component-props",
         "component": "ThreadPanel",
         "see": "get_component(\"ThreadPanel\")"
-      },
-      "ThreadPanelThread": {
-        "kind": "interface",
-        "definition": "interface ThreadPanelThread {\n  /** Stable identifier: `activeThreadId` matches against it and `onThreadSelect` reports it. */\n  id: string;\n  /** The thread's one-line title. Overflow fades out under a trailing mask rather than clipping; the full text stays readable in the row's native tooltip. */\n  title: string;\n  /** Optional href — the row renders as an `<a>` for real navigation instead of a `<button>`. */\n  href?: string;\n  /** Small trailing annotation in the caption face, e.g. a relative timestamp. */\n  meta?: string;\n  /** The title is still being generated: the row shows a shimmer bar in the title's place and hides its menu, keeping `title` (e.g. \"New chat\") as the accessible name. */\n  pending?: boolean;\n  /** This thread's own menu actions, overriding the panel-wide `threadActions`. */\n  actions?: ThreadPanelThreadAction[];\n  /** Quiet second line under the title in the caption face — a repo, an environment, a one-line summary. Overflows under the same trailing mask as the title. */\n  description?: string;\n  /** The thread's state, drawn as the dot leading the row: `idle` (nothing new, nothing running), `working` (an agent is running now), `unread` (finished, not yet seen), `waiting` (blocked on the reader) or `error` (stopped on a failure). Once any thread in the panel carries a status every row draws a dot, the rest reading `idle`, so the titles share one left edge. The dot is decorative; every state but `idle` is also read aloud through `statusLabels`. */\n  status?: ThreadPanelThreadStatus;\n  /** Legacy boolean for `status: 'unread'`, ignored when `status` is set. @deprecated Use `status: 'unread'` instead. */\n  unread?: boolean;\n  /** Trailing icon before the meta — Material Symbol name (string) or custom element (ReactNode), e.g. `cloud` for a session that lives remotely. */\n  icon?: string | React.ReactNode;\n  /** Marks the thread pinned with a trailing pin glyph, read aloud through the panel's `pinnedLabel`. A marker only: the host groups pinned threads (typically a leading group) and offers pin/unpin through the row menu. */\n  pinned?: boolean;\n}",
-        "refs": [
-          "ThreadPanelThreadAction",
-          "ThreadPanelThreadStatus"
-        ]
-      },
-      "ThreadPanelThreadAction": {
-        "kind": "interface",
-        "definition": "interface ThreadPanelThreadAction {\n  /** Stable identifier reported through `onThreadAction`. */\n  id: string;\n  /** Menu row text. */\n  label: string;\n  /** Leading icon on the menu row — Material Symbol name (string) or custom element (ReactNode). */\n  icon?: string | React.ReactNode;\n  /** Destructive styling (the error text colour) for delete-like actions. */\n  destructive?: boolean;\n}"
-      },
-      "ThreadPanelThreadStatus": {
-        "kind": "type",
-        "definition": "type ThreadPanelThreadStatus =\n  | 'idle'\n  | 'working'\n  | 'unread'\n  | 'waiting'\n  | 'error';",
-        "description": "What a thread's leading dot reports. Fill says whether the thread wants\nthe reader, colour says what it wants, motion says it is live right now:\n`idle` is a hollow neutral ring, `working` a pulsing neutral dot, and\n`unread`, `waiting` and `error` solid dots in the info, warning and error\nroles."
       },
       "ThreadsLabels": {
         "kind": "interface",
@@ -3869,8 +3747,6 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "AbortSignal": "typescript",
       "AsyncIterable": "typescript",
       "ComponentPropsWithoutRef": "react",
-      "HTMLButtonElement": "typescript",
-      "MouseEvent": "react",
       "Omit": "typescript",
       "Partial": "typescript",
       "Pick": "typescript",

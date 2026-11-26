@@ -447,6 +447,9 @@
 
 .ds-thread-history__section-panel {
   display: grid;
+  /* One column no wider than the panel, so a row's caption and menu stay
+     inside a rail that clips. */
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: 0fr;
   transition: grid-template-rows var(--motion-duration-slow) var(--motion-ease-emphasized);
 }

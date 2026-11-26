@@ -71,38 +71,7 @@ type AppLayoutSidebarProps = Omit<
 
 ### AppSidebarItem
 
-```ts
-interface AppSidebarItem {
-  /** Unique key for this item */
-  key: string;
-  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */
-  icon?: string | React.ReactNode;
-  /**
-   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for
-   * rows that name a thing rather than a place — projects, workspaces,
-   * accounts. `true` seeds the character from `label`; a string seeds it
-   * from that value, so a renamed item can keep its character by passing a
-   * stable id. The sidebar spreads the inks across all of its avatar rows,
-   * so neighbours differ in colour as well as shape. The character is
-   * decorative: the label beside it is the name
-   */
-  pixelAvatar?: boolean | string;
-  /** Display label (shown when expanded) */
-  label: string;
-  /** Click handler — also fires on a link item, so a consumer can route client-side */
-  onClick?: () => void;
-  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */
-  href?: string;
-  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */
-  badge?: string | number;
-  /** The setting's current value at the row's trailing end while expanded, such as "Dark" on a row whose sub-items are a setting's choices */
-  value?: string;
-  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav="panel"` */
-  children?: AppSidebarSubItem[];
-  /** A keyboard hint at the row's end while expanded, in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative: bind the action with `useShortcut` */
-  keys?: Shortcut;
-}
-```
+The props of AppSidebar: `get_component("AppSidebar")`.
 
 ### AppSidebarLayout
 
@@ -157,65 +126,11 @@ interface AppSidebarSection {
 
 ### AppSidebarSectionAction
 
-A button in a section's heading, such as a project list's add.
-
-```ts
-interface AppSidebarSectionAction {
-  /** Its accessible name, and the row's text in the drawer. */
-  label: string;
-  /** A Material Symbol name. Defaults to `add`. */
-  icon?: string;
-  /** What pressing it does. */
-  onClick: () => void;
-}
-```
+The props of AppSidebar: `get_component("AppSidebar")`.
 
 ### AppSidebarSectionContext
 
-What a section's `content` function is told about where it is drawn.
-
-```ts
-interface AppSidebarSectionContext {
-  /** Whether the rail is expanded (the drawer always is). */
-  expanded: boolean;
-  /** Whether it is drawn in the drawer rather than on the rail. */
-  drawer: boolean;
-  /** Closes the drawer, for content whose rows are destinations. Does nothing on the rail. */
-  closeDrawer: () => void;
-}
-```
-
-### AppSidebarSubItem
-
-```ts
-interface AppSidebarSubItem {
-  /** Unique key for this sub-item */
-  key: string;
-  /** Display label */
-  label: string;
-  /** Click handler — also fires on a link sub-item, so a consumer can route client-side */
-  onClick?: () => void;
-  /** Renders the sub-item as a real link to this URL instead of a button. Ignored when the sub-item has children, whose row opens them */
-  href?: string;
-  /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */
-  badge?: string | number;
-  /** A second line under the label, shown where the sub-item is listed in the side panel and the phone drawer */
-  description?: string;
-  /** Icon before the label in the side panel and the phone drawer: a Material Symbol name or a custom element, such as a swatch */
-  icon?: string | React.ReactNode;
-  /** In a list of choices (a setting's options), whether this one is chosen: true carries the chosen mark in the side panel and the phone drawer. Picking a choice is an action, so the panel and the drawer stay open */
-  selected?: boolean;
-  /** Group heading this entry sits under when it is listed in the panel (see `subNav`); ignored in the accordion */
-  group?: string;
-  /**
-   * The next level down. With `subNav="accordion"` a sub-item's children are
-   * level 3 and open in the side panel; with `subNav="panel"` they are the
-   * panel's own accordion. Navigation stops at three levels, so deeper
-   * children are not rendered.
-   */
-  children?: AppSidebarSubItem[];
-}
-```
+The props of AppSidebar: `get_component("AppSidebar")`.
 
 ### LinkComponent
 
@@ -234,14 +149,6 @@ are; a router whose link takes `to` instead needs a one-line adapter:
 
 ```ts
 type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
-```
-
-### Shortcut
-
-A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`.
-
-```ts
-type Shortcut = string;
 ```
 
 Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `Omit` (typescript), `ReactNode` (react).

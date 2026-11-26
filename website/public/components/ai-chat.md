@@ -288,38 +288,7 @@ interface AiButtonSummary {
 
 ### AppSidebarItem
 
-```ts
-interface AppSidebarItem {
-  /** Unique key for this item */
-  key: string;
-  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */
-  icon?: string | React.ReactNode;
-  /**
-   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for
-   * rows that name a thing rather than a place — projects, workspaces,
-   * accounts. `true` seeds the character from `label`; a string seeds it
-   * from that value, so a renamed item can keep its character by passing a
-   * stable id. The sidebar spreads the inks across all of its avatar rows,
-   * so neighbours differ in colour as well as shape. The character is
-   * decorative: the label beside it is the name
-   */
-  pixelAvatar?: boolean | string;
-  /** Display label (shown when expanded) */
-  label: string;
-  /** Click handler — also fires on a link item, so a consumer can route client-side */
-  onClick?: () => void;
-  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */
-  href?: string;
-  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */
-  badge?: string | number;
-  /** The setting's current value at the row's trailing end while expanded, such as "Dark" on a row whose sub-items are a setting's choices */
-  value?: string;
-  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav="panel"` */
-  children?: AppSidebarSubItem[];
-  /** A keyboard hint at the row's end while expanded, in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative: bind the action with `useShortcut` */
-  keys?: Shortcut;
-}
-```
+The props of AppSidebar: `get_component("AppSidebar")`.
 
 ### AppSidebarProps
 
@@ -351,65 +320,11 @@ interface AppSidebarSection {
 
 ### AppSidebarSectionAction
 
-A button in a section's heading, such as a project list's add.
-
-```ts
-interface AppSidebarSectionAction {
-  /** Its accessible name, and the row's text in the drawer. */
-  label: string;
-  /** A Material Symbol name. Defaults to `add`. */
-  icon?: string;
-  /** What pressing it does. */
-  onClick: () => void;
-}
-```
+The props of AppSidebar: `get_component("AppSidebar")`.
 
 ### AppSidebarSectionContext
 
-What a section's `content` function is told about where it is drawn.
-
-```ts
-interface AppSidebarSectionContext {
-  /** Whether the rail is expanded (the drawer always is). */
-  expanded: boolean;
-  /** Whether it is drawn in the drawer rather than on the rail. */
-  drawer: boolean;
-  /** Closes the drawer, for content whose rows are destinations. Does nothing on the rail. */
-  closeDrawer: () => void;
-}
-```
-
-### AppSidebarSubItem
-
-```ts
-interface AppSidebarSubItem {
-  /** Unique key for this sub-item */
-  key: string;
-  /** Display label */
-  label: string;
-  /** Click handler — also fires on a link sub-item, so a consumer can route client-side */
-  onClick?: () => void;
-  /** Renders the sub-item as a real link to this URL instead of a button. Ignored when the sub-item has children, whose row opens them */
-  href?: string;
-  /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */
-  badge?: string | number;
-  /** A second line under the label, shown where the sub-item is listed in the side panel and the phone drawer */
-  description?: string;
-  /** Icon before the label in the side panel and the phone drawer: a Material Symbol name or a custom element, such as a swatch */
-  icon?: string | React.ReactNode;
-  /** In a list of choices (a setting's options), whether this one is chosen: true carries the chosen mark in the side panel and the phone drawer. Picking a choice is an action, so the panel and the drawer stay open */
-  selected?: boolean;
-  /** Group heading this entry sits under when it is listed in the panel (see `subNav`); ignored in the accordion */
-  group?: string;
-  /**
-   * The next level down. With `subNav="accordion"` a sub-item's children are
-   * level 3 and open in the side panel; with `subNav="panel"` they are the
-   * panel's own accordion. Navigation stops at three levels, so deeper
-   * children are not rendered.
-   */
-  children?: AppSidebarSubItem[];
-}
-```
+The props of AppSidebar: `get_component("AppSidebar")`.
 
 ### ArtifactPanelProps
 
@@ -858,77 +773,11 @@ type DrillMenuEntry = DrillMenuItem | DrillMenuSection;
 
 ### DrillMenuItem
 
-```ts
-interface DrillMenuItem {
-  /** Row text. */
-  label: string;
-  /**
-   * Where the row links. On a row with `items` it is the level's landing
-   * page instead: the level opens with an overview row linking to it.
-   */
-  href?: string;
-  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */
-  id?: string;
-  /** A second line under the label, in the secondary text style. */
-  description?: string;
-  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */
-  icon?: string | React.ReactNode;
-  /** A pill after the label: a count (a number, or digits with an optional `+`) on the count badge pair, a word such as "New" as a quiet pill. */
-  badge?: string | number;
-  /** The setting's current value at the row's trailing end, such as "Dark", on a row that drills into a list of choices. */
-  value?: string;
-  /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */
-  title?: string;
-  /** Rows on the level this row opens. A row with items drills in instead of navigating. */
-  items?: DrillMenuEntry[];
-  /**
-   * Marks the row as the page being viewed, regardless of the exact match
-   * against `currentHref`, for a section that stays current on its child
-   * routes.
-   */
-  current?: boolean;
-  /** On an `onClick` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */
-  selected?: boolean;
-  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */
-  external?: boolean;
-  /**
-   * Makes the row an action rather than a link, such as a pick or a copy.
-   * The menu stays on its level; a choice list's rows set `selected` too.
-   */
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-}
-```
+The props of DrillMenu: `get_component("DrillMenu")`.
 
 ### DrillMenuSection
 
-A group of rows under an optional heading: one level's resources or
-settings, say, set apart from the rows above it.
-
-```ts
-interface DrillMenuSection {
-  /** Marks the entry as a section rather than a row. */
-  type: 'section';
-  /** The heading over the rows. Leave it out for a group set apart by space alone. */
-  label?: string;
-  /** The section's rows. */
-  items: DrillMenuItem[];
-  /**
-   * `prominent` draws the rows in the heading-3 style on a taller row, for
-   * a menu that wants its top level louder. The site header's and the app
-   * sidebar's drawers keep the default rows.
-   * @default 'default'
-   */
-  variant?: 'default' | 'prominent';
-  /** Stable identity for the React key. Defaults to the label. */
-  id?: string;
-  /**
-   * The section's own content after its rows, for a section that is more
-   * than a list of destinations: a chat's history in AppSidebar's drawer,
-   * say. It scrolls with the level and leaves with it on a drill.
-   */
-  content?: React.ReactNode;
-}
-```
+The props of DrillMenu: `get_component("DrillMenu")`.
 
 ### FeedbackSink
 
@@ -982,24 +831,7 @@ interface GreetingCopy {
 
 ### MentionItem
 
-One thing a person can reference: a teammate, a file, a skill.
-
-```ts
-type MentionItem = {
-  /** Stable identity, unique within its source. */
-  id: string;
-  /** The name shown in the menu and written into the text after the trigger character. */
-  label: string;
-  /** A quieter second phrase on the same row: a role, a path, what a skill does. */
-  description?: string;
-  /** Leading mark: a Material Symbol name, or any node (an Avatar). Decorative. */
-  icon?: string | React.ReactNode;
-  /** Extra words the filter matches on besides the label. */
-  keywords?: string[];
-  /** Listed but not choosable. */
-  disabled?: boolean;
-};
-```
+The props of Mention: `get_component("Mention")`.
 
 ### MentionSource
 
@@ -1074,43 +906,9 @@ interface QuestionCardLabels {
 }
 ```
 
-### QuestionCardOption
-
-One answer a question offers.
-
-```ts
-interface QuestionCardOption {
-  /** Stable identifier reported in the answer's `values`. */
-  value: string;
-  /** The answer as the person would say it, e.g. "Next.js". One line. */
-  label: string;
-  /** A quiet second line under the label: what choosing it means. */
-  description?: string;
-}
-```
-
 ### QuestionCardQuestion
 
-One question the card asks.
-
-```ts
-interface QuestionCardQuestion {
-  /** Stable identifier reported in the answer's `questionId`. */
-  id: string;
-  /** The question in a few words, e.g. "Which framework?". Shown as the step's heading in a set, and the options' accessible name always. */
-  prompt: string;
-  /** `single` takes one option, `multi` any number of them. */
-  mode?: 'single' | 'multi';
-  /** The answers on offer, in order. */
-  options: QuestionCardOption[];
-  /** Offer a last "Something else" row that opens a text field, for an answer the options do not hold. */
-  other?: boolean;
-  /** `multi` only: the fewest options that make an answer. Defaults to 1. */
-  min?: number;
-  /** `multi` only: the most options that can be picked. Defaults to all of them. */
-  max?: number;
-}
-```
+The props of QuestionCard: `get_component("QuestionCard")`.
 
 ### QuestionSummaryItem
 
@@ -1162,14 +960,6 @@ A rail slot: the widget's own panel, or a render prop for a custom one.
 type RailSlot = boolean | ((ctx: { overlay: boolean; close: () => void }) => ReactNode);
 ```
 
-### Shortcut
-
-A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`.
-
-```ts
-type Shortcut = string;
-```
-
 ### Starter
 
 One conversation starter on the welcome screen.
@@ -1183,16 +973,7 @@ interface Starter {
 
 ### ThreadPanelGroup
 
-```ts
-interface ThreadPanelGroup {
-  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */
-  label?: string;
-  /** Stable identity for the group's fold state, the key `collapsedSections` lists. Defaults to `label`; set it when the label is translated or may change. */
-  id?: string;
-  /** The group's threads, in display order. */
-  threads: ThreadPanelThread[];
-}
-```
+The props of ThreadPanel: `get_component("ThreadPanel")`.
 
 ### ThreadPanelProfile
 
@@ -1209,87 +990,11 @@ interface ThreadPanelProfile {
 
 ### ThreadPanelProject
 
-```ts
-interface ThreadPanelProject {
-  /** Stable identifier: `activeProjectId` matches against it and `onProjectSelect` reports it. */
-  id: string;
-  /** The project's name. */
-  label: string;
-  /** Leading icon on the row — Material Symbol name (string) or custom element (ReactNode). Omit it and the row draws the project's generated PixelAvatar, which is the default mark. */
-  icon?: string | React.ReactNode;
-  /** Seed for the generated PixelAvatar a project wears when it has no `icon`. Defaults to `label`; pass a stable id so a renamed project keeps its character. The panel spreads the inks across its projects, so neighbours differ in colour as well as shape. */
-  pixelAvatar?: string;
-  /** Small trailing annotation in the caption face, e.g. how recently the project was touched. */
-  meta?: string;
-  /** Optional href — the row renders as an `<a>` instead of a `<button>`. */
-  href?: string;
-}
-```
+The props of ThreadPanel: `get_component("ThreadPanel")`.
 
 ### ThreadPanelProps
 
 The props of ThreadPanel: `get_component("ThreadPanel")`.
-
-### ThreadPanelThread
-
-```ts
-interface ThreadPanelThread {
-  /** Stable identifier: `activeThreadId` matches against it and `onThreadSelect` reports it. */
-  id: string;
-  /** The thread's one-line title. Overflow fades out under a trailing mask rather than clipping; the full text stays readable in the row's native tooltip. */
-  title: string;
-  /** Optional href — the row renders as an `<a>` for real navigation instead of a `<button>`. */
-  href?: string;
-  /** Small trailing annotation in the caption face, e.g. a relative timestamp. */
-  meta?: string;
-  /** The title is still being generated: the row shows a shimmer bar in the title's place and hides its menu, keeping `title` (e.g. "New chat") as the accessible name. */
-  pending?: boolean;
-  /** This thread's own menu actions, overriding the panel-wide `threadActions`. */
-  actions?: ThreadPanelThreadAction[];
-  /** Quiet second line under the title in the caption face — a repo, an environment, a one-line summary. Overflows under the same trailing mask as the title. */
-  description?: string;
-  /** The thread's state, drawn as the dot leading the row: `idle` (nothing new, nothing running), `working` (an agent is running now), `unread` (finished, not yet seen), `waiting` (blocked on the reader) or `error` (stopped on a failure). Once any thread in the panel carries a status every row draws a dot, the rest reading `idle`, so the titles share one left edge. The dot is decorative; every state but `idle` is also read aloud through `statusLabels`. */
-  status?: ThreadPanelThreadStatus;
-  /** Legacy boolean for `status: 'unread'`, ignored when `status` is set. @deprecated Use `status: 'unread'` instead. */
-  unread?: boolean;
-  /** Trailing icon before the meta — Material Symbol name (string) or custom element (ReactNode), e.g. `cloud` for a session that lives remotely. */
-  icon?: string | React.ReactNode;
-  /** Marks the thread pinned with a trailing pin glyph, read aloud through the panel's `pinnedLabel`. A marker only: the host groups pinned threads (typically a leading group) and offers pin/unpin through the row menu. */
-  pinned?: boolean;
-}
-```
-
-### ThreadPanelThreadAction
-
-```ts
-interface ThreadPanelThreadAction {
-  /** Stable identifier reported through `onThreadAction`. */
-  id: string;
-  /** Menu row text. */
-  label: string;
-  /** Leading icon on the menu row — Material Symbol name (string) or custom element (ReactNode). */
-  icon?: string | React.ReactNode;
-  /** Destructive styling (the error text colour) for delete-like actions. */
-  destructive?: boolean;
-}
-```
-
-### ThreadPanelThreadStatus
-
-What a thread's leading dot reports. Fill says whether the thread wants
-the reader, colour says what it wants, motion says it is live right now:
-`idle` is a hollow neutral ring, `working` a pulsing neutral dot, and
-`unread`, `waiting` and `error` solid dots in the info, warning and error
-roles.
-
-```ts
-type ThreadPanelThreadStatus =
-  | 'idle'
-  | 'working'
-  | 'unread'
-  | 'waiting'
-  | 'error';
-```
 
 ### ThreadsLabels
 
@@ -1359,4 +1064,4 @@ What a tab's leading dot reports — ThreadPanel's thread statuses, so a session
 type ThreadTabStatus = 'idle' | 'working' | 'unread' | 'waiting' | 'error';
 ```
 
-Types from other packages: `AbortSignal` (typescript), `AsyncIterable` (typescript), `ComponentPropsWithoutRef` (react), `HTMLButtonElement` (typescript), `MouseEvent` (react), `Omit` (typescript), `Partial` (typescript), `Pick` (typescript), `Promise` (typescript), `ReactNode` (react), `Record` (typescript).
+Types from other packages: `AbortSignal` (typescript), `AsyncIterable` (typescript), `ComponentPropsWithoutRef` (react), `Omit` (typescript), `Partial` (typescript), `Pick` (typescript), `Promise` (typescript), `ReactNode` (react), `Record` (typescript).

@@ -53,11 +53,7 @@ Follows the WAI-ARIA menu pattern (https://www.w3.org/WAI/ARIA/apg/patterns/menu
 
 ### AvatarFill
 
-One of the six avatar fills, by token number (`--color-avatar-bg-*`).
-
-```ts
-type AvatarFill = 1 | 2 | 3 | 4 | 5 | 6;
-```
+The props of Avatar: `get_component("Avatar")`.
 
 ### EntitySwitcherItem
 

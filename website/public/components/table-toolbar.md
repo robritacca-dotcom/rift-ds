@@ -100,11 +100,7 @@ interface DataTableSort {
 
 ### DataTableView
 
-One saved setup of a table: its sorts, filters, search, columns, pinning, widths, grouping, density and page size. Selection, the page and open details are the session, never part of a view.
-
-```ts
-type DataTableView = TableView;
-```
+The props of DataTable: `get_component("DataTable")`.
 
 ### Filter
 

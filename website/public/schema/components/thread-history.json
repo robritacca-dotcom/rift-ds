@@ -192,12 +192,9 @@
       ]
     },
     "ThreadPanelThread": {
-      "kind": "interface",
-      "definition": "interface ThreadPanelThread {\n  /** Stable identifier: `activeThreadId` matches against it and `onThreadSelect` reports it. */\n  id: string;\n  /** The thread's one-line title. Overflow fades out under a trailing mask rather than clipping; the full text stays readable in the row's native tooltip. */\n  title: string;\n  /** Optional href — the row renders as an `<a>` for real navigation instead of a `<button>`. */\n  href?: string;\n  /** Small trailing annotation in the caption face, e.g. a relative timestamp. */\n  meta?: string;\n  /** The title is still being generated: the row shows a shimmer bar in the title's place and hides its menu, keeping `title` (e.g. \"New chat\") as the accessible name. */\n  pending?: boolean;\n  /** This thread's own menu actions, overriding the panel-wide `threadActions`. */\n  actions?: ThreadPanelThreadAction[];\n  /** Quiet second line under the title in the caption face — a repo, an environment, a one-line summary. Overflows under the same trailing mask as the title. */\n  description?: string;\n  /** The thread's state, drawn as the dot leading the row: `idle` (nothing new, nothing running), `working` (an agent is running now), `unread` (finished, not yet seen), `waiting` (blocked on the reader) or `error` (stopped on a failure). Once any thread in the panel carries a status every row draws a dot, the rest reading `idle`, so the titles share one left edge. The dot is decorative; every state but `idle` is also read aloud through `statusLabels`. */\n  status?: ThreadPanelThreadStatus;\n  /** Legacy boolean for `status: 'unread'`, ignored when `status` is set. @deprecated Use `status: 'unread'` instead. */\n  unread?: boolean;\n  /** Trailing icon before the meta — Material Symbol name (string) or custom element (ReactNode), e.g. `cloud` for a session that lives remotely. */\n  icon?: string | React.ReactNode;\n  /** Marks the thread pinned with a trailing pin glyph, read aloud through the panel's `pinnedLabel`. A marker only: the host groups pinned threads (typically a leading group) and offers pin/unpin through the row menu. */\n  pinned?: boolean;\n}",
-      "refs": [
-        "ThreadPanelThreadAction",
-        "ThreadPanelThreadStatus"
-      ]
+      "kind": "component-props",
+      "component": "ThreadPanel",
+      "see": "get_component(\"ThreadPanel\")"
     },
     "ThreadPanelThreadAction": {
       "kind": "interface",

@@ -58,77 +58,11 @@ type DrillMenuEntry = DrillMenuItem | DrillMenuSection;
 
 ### DrillMenuItem
 
-```ts
-interface DrillMenuItem {
-  /** Row text. */
-  label: string;
-  /**
-   * Where the row links. On a row with `items` it is the level's landing
-   * page instead: the level opens with an overview row linking to it.
-   */
-  href?: string;
-  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */
-  id?: string;
-  /** A second line under the label, in the secondary text style. */
-  description?: string;
-  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */
-  icon?: string | React.ReactNode;
-  /** A pill after the label: a count (a number, or digits with an optional `+`) on the count badge pair, a word such as "New" as a quiet pill. */
-  badge?: string | number;
-  /** The setting's current value at the row's trailing end, such as "Dark", on a row that drills into a list of choices. */
-  value?: string;
-  /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */
-  title?: string;
-  /** Rows on the level this row opens. A row with items drills in instead of navigating. */
-  items?: DrillMenuEntry[];
-  /**
-   * Marks the row as the page being viewed, regardless of the exact match
-   * against `currentHref`, for a section that stays current on its child
-   * routes.
-   */
-  current?: boolean;
-  /** On an `onClick` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */
-  selected?: boolean;
-  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */
-  external?: boolean;
-  /**
-   * Makes the row an action rather than a link, such as a pick or a copy.
-   * The menu stays on its level; a choice list's rows set `selected` too.
-   */
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-}
-```
+The props of DrillMenu: `get_component("DrillMenu")`.
 
 ### DrillMenuSection
 
-A group of rows under an optional heading: one level's resources or
-settings, say, set apart from the rows above it.
-
-```ts
-interface DrillMenuSection {
-  /** Marks the entry as a section rather than a row. */
-  type: 'section';
-  /** The heading over the rows. Leave it out for a group set apart by space alone. */
-  label?: string;
-  /** The section's rows. */
-  items: DrillMenuItem[];
-  /**
-   * `prominent` draws the rows in the heading-3 style on a taller row, for
-   * a menu that wants its top level louder. The site header's and the app
-   * sidebar's drawers keep the default rows.
-   * @default 'default'
-   */
-  variant?: 'default' | 'prominent';
-  /** Stable identity for the React key. Defaults to the label. */
-  id?: string;
-  /**
-   * The section's own content after its rows, for a section that is more
-   * than a list of destinations: a chat's history in AppSidebar's drawer,
-   * say. It scrolls with the level and leaves with it on a drill.
-   */
-  content?: React.ReactNode;
-}
-```
+The props of DrillMenu: `get_component("DrillMenu")`.
 
 ### LinkComponent
 
@@ -151,44 +85,11 @@ type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
 
 ### MegaMenuItem
 
-One link row in a mega menu: a page and the line that says what is on it.
-
-```ts
-interface MegaMenuItem {
-  /** Where the row links. */
-  href: string;
-  /** The page's name. */
-  label: string;
-  /** One line on what the page holds, clamped to two lines in the panel. */
-  description?: string;
-  /** A Material Symbols name drawn in the row's icon tile. */
-  icon?: string;
-  /** An image path drawn in the icon tile instead of `icon`, for a brand or product mark. */
-  logo?: string;
-}
-```
+The props of MegaMenu: `get_component("MegaMenu")`.
 
 ### MegaMenuShowcase
 
-The featured card beside a mega menu's link grid: one link that is the whole card.
-
-```ts
-interface MegaMenuShowcase {
-  /** Where the card links. */
-  href: string;
-  /** A short kicker above the title, set in the overline face. */
-  overline?: string;
-  /** The card's title, followed by a forward arrow. */
-  label: string;
-  /** One or two lines under the title. */
-  description?: string;
-  /**
-   * A drawing that fills the card behind the copy. Decorative: the title and
-   * description carry the meaning, so mark it `aria-hidden`.
-   */
-  cover?: React.ReactNode;
-}
-```
+The props of MegaMenu: `get_component("MegaMenu")`.
 
 ### SiteHeaderDrawerItem
 
@@ -247,4 +148,4 @@ interface SiteHeaderSection {
 }
 ```
 
-Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `HTMLButtonElement` (typescript), `MouseEvent` (react), `ReactNode` (react).
+Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `ReactNode` (react).

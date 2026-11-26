@@ -414,12 +414,9 @@
       "definition": "interface DataTableSort {\n  /** The column being sorted. */\n  key: string;\n  /** Sort direction. */\n  direction: 'asc' | 'desc';\n}"
     },
     "DataTableView": {
-      "kind": "type",
-      "definition": "type DataTableView = TableView;",
-      "description": "One saved setup of a table: its sorts, filters, search, columns, pinning, widths, grouping, density and page size. Selection, the page and open details are the session, never part of a view.",
-      "refs": [
-        "TableView"
-      ]
+      "kind": "component-props",
+      "component": "DataTable",
+      "see": "get_component(\"DataTable\")"
     },
     "Filter": {
       "kind": "interface",

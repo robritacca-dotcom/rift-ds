@@ -37,7 +37,7 @@
  * never edit the generated files by hand.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, relative, sep } from 'node:path';
 import {
   chatRegistry,
   componentsDir,
@@ -239,10 +239,28 @@ export const assembleComponentApi = memo(() => {
     return null;
   };
 
+  /* A type another component declares in its own folder (AppSidebarSection,
+     DrillMenuItem) is that component's to define: a response that names it
+     points at the owner, as it does for a props interface, so ChatWidget's
+     rail props never copy AppSidebar's whole item shapes. A type of the
+     response's own component, or of a shared folder it belongs to, stays. */
+  const ownerOf = (fileName) => {
+    const rel = relative(componentsDir, fileName);
+    if (rel.startsWith('..')) return null;
+    const folder = rel.split(sep)[0];
+    return componentNames.has(folder) ? folder : null;
+  };
   const withTypes = (exportsList) => {
+    const ownFolders = new Set(exportsList.map(({ file }) => ownerOf(file)).filter(Boolean));
     const { types, externalTypes, propRefs } = resolveComponentTypes(
       exportsList.map(({ file, component, props }) => ({ file, component, props })),
-      pointerFor
+      (typeName, fileName) => {
+        const pointer = pointerFor(typeName);
+        if (pointer) return pointer;
+        const owner = fileName ? ownerOf(fileName) : null;
+        if (!owner || ownFolders.has(owner) || !typeName.startsWith(owner)) return null;
+        return { component: owner, see: `get_component("${owner}")` };
+      }
     );
     const exportsOut = exportsList.map((exported) => ({
       ...omit(exported, ['file']),

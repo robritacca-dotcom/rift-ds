@@ -22,7 +22,10 @@
  * becomes a pointer, `{ kind: 'component-props', component, see }`, the
  * call that returns that component's props, so the map stays the types a
  * prop needs rather than every interface a composed child declares. The
- * caller decides which names are components (pointerFor).
+ * caller decides which names are components (pointerFor, handed the
+ * type's name and, for a type no prop names directly, the file that
+ * declares it), and may point such a type another component declares in
+ * its own folder the same way.
  *
  * Two failures are the generator's own, so a gap never ships quietly:
  *   - a reference the checker cannot resolve at all
@@ -241,7 +244,8 @@ export function resolveComponentTypes(exportsList, pointerFor = () => null) {
     // definition: ChatWidget names a dozen of them (AiButtonOwnProps,
     // ComposerOwnProps …), and their definitions made one response 166KB.
     // The pointer names the component and the call that returns its props.
-    const pointer = pointerFor(name);
+    const direct = [...propRefs.values()].some((refs) => refs.includes(name));
+    const pointer = pointerFor(name, direct ? undefined : declaration.getSourceFile().fileName);
     if (pointer) {
       resolved.set(name, { kind: 'component-props', ...pointer });
       continue;

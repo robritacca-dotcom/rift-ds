@@ -49,10 +49,11 @@
  * the generator half of the validate-registry chain, and
  * validate-generated-files.mjs holds the disk to it.
  */
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { dirname } from 'node:path';
+import { dirname, relative } from 'node:path';
 import { display, fromRoot, read, readJson, walk } from './lib/fs.mjs';
 import { isEntryScript } from './lib/report.mjs';
 
@@ -74,11 +75,28 @@ const sha = (data) => createHash('sha256').update(data).digest('hex');
 /** A tool's version as package.json pins it: exact, so every machine cuts the same bytes. */
 const version = (name) => readJson(fromRoot('package.json')).devDependencies[name];
 
+/**
+ * The files a clean checkout has: tracked, or new and not ignored. A
+ * gitignored folder (a local lab) never feeds the committed cut, or the cut
+ * built on one machine would differ from CI's and fail the drift guard.
+ */
+let checkoutFiles;
+const inCheckout = (file) => {
+  checkoutFiles ??= new Set(
+    execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard'], { cwd: fromRoot(), encoding: 'utf8' })
+      .split('\n')
+      .filter(Boolean),
+  );
+  return checkoutFiles.has(relative(fromRoot(), file));
+};
+
 /** Source the site renders: the library and the site, without stories, tests and generated data. */
 const isSource = (name) =>
   /\.(tsx?|css|json|mdx?)$/.test(name) && !/\.(stories|test)\./.test(name) && !/\.generated\./.test(name);
 const sourceFiles = () =>
-  [fromRoot('src'), fromRoot('website', 'src')].flatMap((dir) => walk(dir, isSource, (name) => name === 'stories'));
+  [fromRoot('src'), fromRoot('website', 'src')]
+    .flatMap((dir) => walk(dir, isSource, (name) => name === 'stories'))
+    .filter(inCheckout);
 /** The skills, whose frontmatter names the icon each card on /skills draws. */
 const skillFiles = () => walk(fromRoot('.claude', 'skills'), (name) => name === 'SKILL.md');
 
@@ -90,7 +108,7 @@ function scanSource() {
     for (const match of text.matchAll(/(['"`])([a-z][a-z0-9_]*)\1/g)) words.add(match[2]);
     for (const match of text.matchAll(/>\s*([a-z][a-z0-9_]*)\s*</g)) words.add(match[1]);
   }
-  for (const file of [...skillFiles(), ...walk(fromRoot('website', 'src'), (name) => name.endsWith('.md'))]) {
+  for (const file of [...skillFiles(), ...walk(fromRoot('website', 'src'), (name) => name.endsWith('.md'))].filter(inCheckout)) {
     for (const match of read(file).matchAll(/^icon:\s*['"]?([a-z][a-z0-9_]*)['"]?\s*$/gm)) words.add(match[1]);
   }
   return words;

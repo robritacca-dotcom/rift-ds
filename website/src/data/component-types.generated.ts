@@ -192,11 +192,20 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
   },
   "app-layout": {
     "types": {
+      "AppLayoutSidebarProps": {
+        "kind": "type",
+        "definition": "type AppLayoutSidebarProps = Omit<\n  AppSidebarProps,\n  | 'sections'\n  | 'profile'\n  | 'activeKey'\n  | 'activeSubKey'\n  | 'activeTertiaryKey'\n  | 'subNav'\n  | 'expanded'\n  | 'defaultExpanded'\n  | 'onExpandedChange'\n  | 'logo'\n  | 'logoText'\n  | 'layout'\n  | 'floating'\n  | 'fixed'\n  | 'responsive'\n  | 'linkComponent'\n>;",
+        "description": "The AppSidebar options AppLayout passes through untouched (`sidebarProps`).",
+        "refs": [
+          "AppSidebarProps"
+        ]
+      },
       "AppSidebarItem": {
         "kind": "interface",
-        "definition": "interface AppSidebarItem {\n  /** Unique key for this item */\n  key: string;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */\n  icon?: string | React.ReactNode;\n  /**\n   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for\n   * rows that name a thing rather than a place — projects, workspaces,\n   * accounts. `true` seeds the character from `label`; a string seeds it\n   * from that value, so a renamed item can keep its character by passing a\n   * stable id. The sidebar spreads the inks across all of its avatar rows,\n   * so neighbours differ in colour as well as shape. The character is\n   * decorative: the label beside it is the name\n   */\n  pixelAvatar?: boolean | string;\n  /** Display label (shown when expanded) */\n  label: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end while expanded, such as \"Dark\" on a row whose sub-items are a setting's choices */\n  value?: string;\n  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav=\"panel\"` */\n  children?: AppSidebarSubItem[];\n}",
+        "definition": "interface AppSidebarItem {\n  /** Unique key for this item */\n  key: string;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */\n  icon?: string | React.ReactNode;\n  /**\n   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for\n   * rows that name a thing rather than a place — projects, workspaces,\n   * accounts. `true` seeds the character from `label`; a string seeds it\n   * from that value, so a renamed item can keep its character by passing a\n   * stable id. The sidebar spreads the inks across all of its avatar rows,\n   * so neighbours differ in colour as well as shape. The character is\n   * decorative: the label beside it is the name\n   */\n  pixelAvatar?: boolean | string;\n  /** Display label (shown when expanded) */\n  label: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end while expanded, such as \"Dark\" on a row whose sub-items are a setting's choices */\n  value?: string;\n  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav=\"panel\"` */\n  children?: AppSidebarSubItem[];\n  /** A keyboard hint at the row's end while expanded, in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative: bind the action with `useShortcut` */\n  keys?: Shortcut;\n}",
         "refs": [
-          "AppSidebarSubItem"
+          "AppSidebarSubItem",
+          "Shortcut"
         ]
       },
       "AppSidebarLayout": {
@@ -206,14 +215,31 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "AppSidebarProfile": {
         "kind": "interface",
-        "definition": "interface AppSidebarProfile {\n  /** User display name */\n  name: string;\n  /** User email */\n  email: string;\n  /** Avatar image URL */\n  avatarUrl?: string;\n}"
+        "definition": "interface AppSidebarProfile {\n  /** User display name */\n  name: string;\n  /** The quiet second line under the name, usually the email. Left empty, the row shows the name alone */\n  email?: string;\n  /** Avatar image URL */\n  avatarUrl?: string;\n  /** A mark of its own in the avatar's place, such as a generated avatar; wins over `avatarUrl` */\n  avatar?: React.ReactNode;\n}"
+      },
+      "AppSidebarProps": {
+        "kind": "component-props",
+        "component": "AppSidebar",
+        "see": "get_component(\"AppSidebar\")"
       },
       "AppSidebarSection": {
         "kind": "interface",
-        "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section; with more than one, give each its heading, so every group the gaps set apart is named */\n  category?: string;\n  /** Nav items in this section */\n  items: AppSidebarItem[];\n}",
+        "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
         "refs": [
-          "AppSidebarItem"
+          "AppSidebarItem",
+          "AppSidebarSectionAction",
+          "AppSidebarSectionContext"
         ]
+      },
+      "AppSidebarSectionAction": {
+        "kind": "interface",
+        "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
+        "description": "A button in a section's heading, such as a project list's add."
+      },
+      "AppSidebarSectionContext": {
+        "kind": "interface",
+        "definition": "interface AppSidebarSectionContext {\n  /** Whether the rail is expanded (the drawer always is). */\n  expanded: boolean;\n  /** Whether it is drawn in the drawer rather than on the rail. */\n  drawer: boolean;\n  /** Closes the drawer, for content whose rows are destinations. Does nothing on the rail. */\n  closeDrawer: () => void;\n}",
+        "description": "What a section's `content` function is told about where it is drawn."
       },
       "AppSidebarSubItem": {
         "kind": "interface",
@@ -231,11 +257,17 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "kind": "type",
         "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
         "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+      },
+      "Shortcut": {
+        "kind": "type",
+        "definition": "type Shortcut = string;",
+        "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
       }
     },
     "externalTypes": {
       "ComponentPropsWithRef": "react",
       "ElementType": "react",
+      "Omit": "typescript",
       "ReactNode": "react"
     }
   },
@@ -243,9 +275,10 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "AppSidebarItem": {
         "kind": "interface",
-        "definition": "interface AppSidebarItem {\n  /** Unique key for this item */\n  key: string;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */\n  icon?: string | React.ReactNode;\n  /**\n   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for\n   * rows that name a thing rather than a place — projects, workspaces,\n   * accounts. `true` seeds the character from `label`; a string seeds it\n   * from that value, so a renamed item can keep its character by passing a\n   * stable id. The sidebar spreads the inks across all of its avatar rows,\n   * so neighbours differ in colour as well as shape. The character is\n   * decorative: the label beside it is the name\n   */\n  pixelAvatar?: boolean | string;\n  /** Display label (shown when expanded) */\n  label: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end while expanded, such as \"Dark\" on a row whose sub-items are a setting's choices */\n  value?: string;\n  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav=\"panel\"` */\n  children?: AppSidebarSubItem[];\n}",
+        "definition": "interface AppSidebarItem {\n  /** Unique key for this item */\n  key: string;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */\n  icon?: string | React.ReactNode;\n  /**\n   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for\n   * rows that name a thing rather than a place — projects, workspaces,\n   * accounts. `true` seeds the character from `label`; a string seeds it\n   * from that value, so a renamed item can keep its character by passing a\n   * stable id. The sidebar spreads the inks across all of its avatar rows,\n   * so neighbours differ in colour as well as shape. The character is\n   * decorative: the label beside it is the name\n   */\n  pixelAvatar?: boolean | string;\n  /** Display label (shown when expanded) */\n  label: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end while expanded, such as \"Dark\" on a row whose sub-items are a setting's choices */\n  value?: string;\n  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav=\"panel\"` */\n  children?: AppSidebarSubItem[];\n  /** A keyboard hint at the row's end while expanded, in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative: bind the action with `useShortcut` */\n  keys?: Shortcut;\n}",
         "refs": [
-          "AppSidebarSubItem"
+          "AppSidebarSubItem",
+          "Shortcut"
         ]
       },
       "AppSidebarLayout": {
@@ -255,14 +288,31 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "AppSidebarProfile": {
         "kind": "interface",
-        "definition": "interface AppSidebarProfile {\n  /** User display name */\n  name: string;\n  /** User email */\n  email: string;\n  /** Avatar image URL */\n  avatarUrl?: string;\n}"
+        "definition": "interface AppSidebarProfile {\n  /** User display name */\n  name: string;\n  /** The quiet second line under the name, usually the email. Left empty, the row shows the name alone */\n  email?: string;\n  /** Avatar image URL */\n  avatarUrl?: string;\n  /** A mark of its own in the avatar's place, such as a generated avatar; wins over `avatarUrl` */\n  avatar?: React.ReactNode;\n}"
+      },
+      "AppSidebarResponsive": {
+        "kind": "type",
+        "definition": "type AppSidebarResponsive = 'viewport' | 'container' | 'rail' | 'drawer';",
+        "description": "How the rail decides between its rail and drawer forms."
       },
       "AppSidebarSection": {
         "kind": "interface",
-        "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section; with more than one, give each its heading, so every group the gaps set apart is named */\n  category?: string;\n  /** Nav items in this section */\n  items: AppSidebarItem[];\n}",
+        "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
         "refs": [
-          "AppSidebarItem"
+          "AppSidebarItem",
+          "AppSidebarSectionAction",
+          "AppSidebarSectionContext"
         ]
+      },
+      "AppSidebarSectionAction": {
+        "kind": "interface",
+        "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
+        "description": "A button in a section's heading, such as a project list's add."
+      },
+      "AppSidebarSectionContext": {
+        "kind": "interface",
+        "definition": "interface AppSidebarSectionContext {\n  /** Whether the rail is expanded (the drawer always is). */\n  expanded: boolean;\n  /** Whether it is drawn in the drawer rather than on the rail. */\n  drawer: boolean;\n  /** Closes the drawer, for content whose rows are destinations. Does nothing on the rail. */\n  closeDrawer: () => void;\n}",
+        "description": "What a section's `content` function is told about where it is drawn."
       },
       "AppSidebarSubItem": {
         "kind": "interface",
@@ -286,7 +336,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "DrillMenuSection": {
         "kind": "interface",
-        "definition": "interface DrillMenuSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: DrillMenuItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n}",
+        "definition": "interface DrillMenuSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: DrillMenuItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n  /**\n   * The section's own content after its rows, for a section that is more\n   * than a list of destinations: a chat's history in AppSidebar's drawer,\n   * say. It scrolls with the level and leaves with it on a drill.\n   */\n  content?: React.ReactNode;\n}",
         "description": "A group of rows under an optional heading: one level's resources or\nsettings, say, set apart from the rows above it.",
         "refs": [
           "DrillMenuItem"
@@ -304,6 +354,16 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "kind": "type",
         "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
         "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+      },
+      "Shortcut": {
+        "kind": "type",
+        "definition": "type Shortcut = string;",
+        "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+      },
+      "ShortcutKeyLabels": {
+        "kind": "type",
+        "definition": "type ShortcutKeyLabels = Partial<Record<string, string>>;",
+        "description": "The legends a shortcut is drawn with, by modifier or key name. Merged over the platform's defaults."
       }
     },
     "externalTypes": {
@@ -311,7 +371,9 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ElementType": "react",
       "HTMLButtonElement": "typescript",
       "MouseEvent": "react",
-      "ReactNode": "react"
+      "Partial": "typescript",
+      "ReactNode": "react",
+      "Record": "typescript"
     }
   },
   "area-chart": {
@@ -1375,7 +1437,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "DrillMenuSection": {
         "kind": "interface",
-        "definition": "interface DrillMenuSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: DrillMenuItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n}",
+        "definition": "interface DrillMenuSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: DrillMenuItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n  /**\n   * The section's own content after its rows, for a section that is more\n   * than a list of destinations: a chat's history in AppSidebar's drawer,\n   * say. It scrolls with the level and leaves with it on a drill.\n   */\n  content?: React.ReactNode;\n}",
         "description": "A group of rows under an optional heading: one level's resources or\nsettings, say, set apart from the rows above it.",
         "refs": [
           "DrillMenuItem"
@@ -2579,7 +2641,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "DrillMenuSection": {
         "kind": "interface",
-        "definition": "interface DrillMenuSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: DrillMenuItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n}",
+        "definition": "interface DrillMenuSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: DrillMenuItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n  /**\n   * The section's own content after its rows, for a section that is more\n   * than a list of destinations: a chat's history in AppSidebar's drawer,\n   * say. It scrolls with the level and leaves with it on a drill.\n   */\n  content?: React.ReactNode;\n}",
         "description": "A group of rows under an optional heading: one level's resources or\nsettings, say, set apart from the rows above it.",
         "refs": [
           "DrillMenuItem"
@@ -3036,6 +3098,54 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     },
     "externalTypes": {}
   },
+  "thread-history": {
+    "types": {
+      "LinkComponent": {
+        "kind": "type",
+        "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+        "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+        "refs": [
+          "LinkComponentProps"
+        ]
+      },
+      "LinkComponentProps": {
+        "kind": "type",
+        "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+        "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+      },
+      "ThreadPanelGroup": {
+        "kind": "interface",
+        "definition": "interface ThreadPanelGroup {\n  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */\n  label?: string;\n  /** The group's threads, in display order. */\n  threads: ThreadPanelThread[];\n}",
+        "refs": [
+          "ThreadPanelThread"
+        ]
+      },
+      "ThreadPanelThread": {
+        "kind": "interface",
+        "definition": "interface ThreadPanelThread {\n  /** Stable identifier: `activeThreadId` matches against it and `onThreadSelect` reports it. */\n  id: string;\n  /** The thread's one-line title. Overflow fades out under a trailing mask rather than clipping; the full text stays readable in the row's native tooltip. */\n  title: string;\n  /** Optional href — the row renders as an `<a>` for real navigation instead of a `<button>`. */\n  href?: string;\n  /** Small trailing annotation in the caption face, e.g. a relative timestamp. */\n  meta?: string;\n  /** The title is still being generated: the row shows a shimmer bar in the title's place and hides its menu, keeping `title` (e.g. \"New chat\") as the accessible name. */\n  pending?: boolean;\n  /** This thread's own menu actions, overriding the panel-wide `threadActions`. */\n  actions?: ThreadPanelThreadAction[];\n  /** Quiet second line under the title in the caption face — a repo, an environment, a one-line summary. Overflows under the same trailing mask as the title. */\n  description?: string;\n  /** The thread's state, drawn as the dot leading the row: `idle` (nothing new, nothing running), `working` (an agent is running now), `unread` (finished, not yet seen), `waiting` (blocked on the reader) or `error` (stopped on a failure). Once any thread in the panel carries a status every row draws a dot, the rest reading `idle`, so the titles share one left edge. The dot is decorative; every state but `idle` is also read aloud through `statusLabels`. */\n  status?: ThreadPanelThreadStatus;\n  /** Legacy boolean for `status: 'unread'`, ignored when `status` is set. @deprecated Use `status: 'unread'` instead. */\n  unread?: boolean;\n  /** Trailing icon before the meta — Material Symbol name (string) or custom element (ReactNode), e.g. `cloud` for a session that lives remotely. */\n  icon?: string | React.ReactNode;\n  /** Marks the thread pinned with a trailing pin glyph, read aloud through the panel's `pinnedLabel`. A marker only: the host groups pinned threads (typically a leading group) and offers pin/unpin through the row menu. */\n  pinned?: boolean;\n}",
+        "refs": [
+          "ThreadPanelThreadAction",
+          "ThreadPanelThreadStatus"
+        ]
+      },
+      "ThreadPanelThreadAction": {
+        "kind": "interface",
+        "definition": "interface ThreadPanelThreadAction {\n  /** Stable identifier reported through `onThreadAction`. */\n  id: string;\n  /** Menu row text. */\n  label: string;\n  /** Leading icon on the menu row — Material Symbol name (string) or custom element (ReactNode). */\n  icon?: string | React.ReactNode;\n  /** Destructive styling (the error text colour) for delete-like actions. */\n  destructive?: boolean;\n}"
+      },
+      "ThreadPanelThreadStatus": {
+        "kind": "type",
+        "definition": "type ThreadPanelThreadStatus =\n  | 'idle'\n  | 'working'\n  | 'unread'\n  | 'waiting'\n  | 'error';",
+        "description": "What a thread's leading dot reports. Fill says whether the thread wants\nthe reader, colour says what it wants, motion says it is live right now:\n`idle` is a hollow neutral ring, `working` a pulsing neutral dot, and\n`unread`, `waiting` and `error` solid dots in the info, warning and error\nroles."
+      }
+    },
+    "externalTypes": {
+      "ComponentPropsWithRef": "react",
+      "ElementType": "react",
+      "Partial": "typescript",
+      "ReactNode": "react",
+      "Record": "typescript"
+    }
+  },
   "thread-panel": {
     "types": {
       "LinkComponent": {
@@ -3344,6 +3454,37 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
           "PromptSuggestion"
         ]
       },
+      "AppSidebarItem": {
+        "kind": "interface",
+        "definition": "interface AppSidebarItem {\n  /** Unique key for this item */\n  key: string;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */\n  icon?: string | React.ReactNode;\n  /**\n   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for\n   * rows that name a thing rather than a place — projects, workspaces,\n   * accounts. `true` seeds the character from `label`; a string seeds it\n   * from that value, so a renamed item can keep its character by passing a\n   * stable id. The sidebar spreads the inks across all of its avatar rows,\n   * so neighbours differ in colour as well as shape. The character is\n   * decorative: the label beside it is the name\n   */\n  pixelAvatar?: boolean | string;\n  /** Display label (shown when expanded) */\n  label: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end while expanded, such as \"Dark\" on a row whose sub-items are a setting's choices */\n  value?: string;\n  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav=\"panel\"` */\n  children?: AppSidebarSubItem[];\n  /** A keyboard hint at the row's end while expanded, in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative: bind the action with `useShortcut` */\n  keys?: Shortcut;\n}",
+        "refs": [
+          "AppSidebarSubItem",
+          "Shortcut"
+        ]
+      },
+      "AppSidebarSection": {
+        "kind": "interface",
+        "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
+        "refs": [
+          "AppSidebarItem",
+          "AppSidebarSectionAction",
+          "AppSidebarSectionContext"
+        ]
+      },
+      "AppSidebarSectionAction": {
+        "kind": "interface",
+        "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
+        "description": "A button in a section's heading, such as a project list's add."
+      },
+      "AppSidebarSectionContext": {
+        "kind": "interface",
+        "definition": "interface AppSidebarSectionContext {\n  /** Whether the rail is expanded (the drawer always is). */\n  expanded: boolean;\n  /** Whether it is drawn in the drawer rather than on the rail. */\n  drawer: boolean;\n  /** Closes the drawer, for content whose rows are destinations. Does nothing on the rail. */\n  closeDrawer: () => void;\n}",
+        "description": "What a section's `content` function is told about where it is drawn."
+      },
+      "AppSidebarSubItem": {
+        "kind": "interface",
+        "definition": "interface AppSidebarSubItem {\n  /** Unique key for this sub-item */\n  key: string;\n  /** Display label */\n  label: string;\n  /** Click handler — also fires on a link sub-item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the sub-item as a real link to this URL instead of a button. Ignored when the sub-item has children, whose row opens them */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */\n  badge?: string | number;\n  /** A second line under the label, shown where the sub-item is listed in the side panel and the phone drawer */\n  description?: string;\n  /** Icon before the label in the side panel and the phone drawer: a Material Symbol name or a custom element, such as a swatch */\n  icon?: string | React.ReactNode;\n  /** In a list of choices (a setting's options), whether this one is chosen: true carries the chosen mark in the side panel and the phone drawer. Picking a choice is an action, so the panel and the drawer stay open */\n  selected?: boolean;\n  /** Group heading this entry sits under when it is listed in the panel (see `subNav`); ignored in the accordion */\n  group?: string;\n  /**\n   * The next level down. With `subNav=\"accordion\"` a sub-item's children are\n   * level 3 and open in the side panel; with `subNav=\"panel\"` they are the\n   * panel's own accordion. Navigation stops at three levels, so deeper\n   * children are not rendered.\n   */\n  children?: AppSidebarSubItem[];\n}"
+      },
       "ArtifactPanelProps": {
         "kind": "component-props",
         "component": "ArtifactPanel",
@@ -3530,6 +3671,30 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "component": "Composer",
         "see": "get_component(\"Composer\")"
       },
+      "DrillMenuEntry": {
+        "kind": "type",
+        "definition": "type DrillMenuEntry = DrillMenuItem | DrillMenuSection;",
+        "description": "An entry on a level: a row, or a section of rows.",
+        "refs": [
+          "DrillMenuItem",
+          "DrillMenuSection"
+        ]
+      },
+      "DrillMenuItem": {
+        "kind": "interface",
+        "definition": "interface DrillMenuItem {\n  /** Row text. */\n  label: string;\n  /**\n   * Where the row links. On a row with `items` it is the level's landing\n   * page instead: the level opens with an overview row linking to it.\n   */\n  href?: string;\n  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */\n  id?: string;\n  /** A second line under the label, in the secondary text style. */\n  description?: string;\n  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */\n  icon?: string | React.ReactNode;\n  /** A pill after the label: a count (a number, or digits with an optional `+`) on the count badge pair, a word such as \"New\" as a quiet pill. */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end, such as \"Dark\", on a row that drills into a list of choices. */\n  value?: string;\n  /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */\n  title?: string;\n  /** Rows on the level this row opens. A row with items drills in instead of navigating. */\n  items?: DrillMenuEntry[];\n  /**\n   * Marks the row as the page being viewed, regardless of the exact match\n   * against `currentHref`, for a section that stays current on its child\n   * routes.\n   */\n  current?: boolean;\n  /** On an `onClick` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */\n  selected?: boolean;\n  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */\n  external?: boolean;\n  /**\n   * Makes the row an action rather than a link, such as a pick or a copy.\n   * The menu stays on its level; a choice list's rows set `selected` too.\n   */\n  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;\n}",
+        "refs": [
+          "DrillMenuEntry"
+        ]
+      },
+      "DrillMenuSection": {
+        "kind": "interface",
+        "definition": "interface DrillMenuSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: DrillMenuItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n  /**\n   * The section's own content after its rows, for a section that is more\n   * than a list of destinations: a chat's history in AppSidebar's drawer,\n   * say. It scrolls with the level and leaves with it on a drill.\n   */\n  content?: React.ReactNode;\n}",
+        "description": "A group of rows under an optional heading: one level's resources or\nsettings, say, set apart from the rows above it.",
+        "refs": [
+          "DrillMenuItem"
+        ]
+      },
       "FeedbackSink": {
         "kind": "type",
         "definition": "type FeedbackSink = (exchangeId: string, verdict: ChatFeedbackVerdict) => Promise<void>;",
@@ -3623,6 +3788,11 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "definition": "type RailSlot = boolean | ((ctx: { overlay: boolean; close: () => void }) => ReactNode);",
         "description": "A rail slot: the widget's own panel, or a render prop for a custom one."
       },
+      "Shortcut": {
+        "kind": "type",
+        "definition": "type Shortcut = string;",
+        "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+      },
       "Starter": {
         "kind": "interface",
         "definition": "interface Starter {\n  id: string;\n  label: string;\n}",
@@ -3694,6 +3864,8 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "AbortSignal": "typescript",
       "AsyncIterable": "typescript",
       "ComponentPropsWithoutRef": "react",
+      "HTMLButtonElement": "typescript",
+      "MouseEvent": "react",
       "Omit": "typescript",
       "Partial": "typescript",
       "Pick": "typescript",

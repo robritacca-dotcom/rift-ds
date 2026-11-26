@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 - Import: `import { AiButton } from 'rift-ds';`
 - Deep import: `import { AiButton } from 'rift-ds/components/AiButton/AiButton';`
 - Rendering: client component (declares 'use client')
-- Size: 10.0 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 10.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/ai-button
 - Schema: https://rift-ds.com/schema/components/ai-button.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

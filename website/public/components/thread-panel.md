@@ -8,9 +8,14 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 - Import: `import { ThreadPanel } from 'rift-ds';`
 - Deep import: `import { ThreadPanel } from 'rift-ds/components/ThreadPanel/ThreadPanel';`
 - Rendering: server-renderable (no 'use client')
-- Size: 13.7 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 14.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/thread-panel
 - Schema: https://rift-ds.com/schema/components/thread-panel.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
+
+## Alternatives
+
+- Use [Thread history](https://rift-ds.com/components/thread-history.md) instead when the history sits inside another rail, such as a section of an app sidebar.
+- Use [App sidebar](https://rift-ds.com/components/app-sidebar.md) instead when the rail also carries app sections, a side panel beside it and the phone drawer, as the templates’ rails do.
 
 ## ThreadPanel props
 
@@ -41,6 +46,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 | onControlSelect | `((id: string) => void)` | no |  | Fires with the clicked control's id. Rows with an `href` navigate as well. |
 | projects | `ThreadPanelProject[]` | no |  | Project rows between the standing controls and the history, under their own group heading. The section renders only when non-empty; collapsed, the rows fold to icon circles like the controls. |
 | projectsLabel | `string` | no | `'Projects'` | The projects section's group heading text. |
+| collapsibleSections | `boolean` | no | `false` | Let the reader fold each titled section (the projects and every labelled history group) under its heading: the heading becomes a toggle with a chevron, and the rows glide shut beneath it. The collapsed rail shows no headings, so it folds nothing. |
+| collapsedSections | `string[]` | no | `[]` | The folded sections, by heading text (`projectsLabel` for the projects, a group's `label` for a group). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`. |
+| onCollapsedSectionsChange | `((collapsedSections: string[]) => void)` | no |  | Fires with the full new list of folded sections when a heading is pressed. |
 | activeProjectId | `string` | no |  | Id of the open project. Its row renders filled and carries `aria-current`. |
 | onProjectSelect | `((id: string) => void)` | no |  | Fires with the clicked project's id. Rows with an `href` navigate as well. |
 | onProjectCreate | `(() => void)` | no |  | Fires when the header's trailing new-project button is pressed. The button renders only when this is given. |
@@ -54,6 +62,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 | expandLabel | `string` | no | `'Expand the panel'` | Accessible name for the expand affordance while collapsed. |
 | profile | `ThreadPanelProfile` | no |  | The signed-in person, rendered as the footer's Avatar row. |
 | footerSlot | `ReactNode` | no |  | Rendered in the footer above the profile row — a theme toggle, a storage meter. Fades out while collapsed, AppSidebar's contract. |
+| footerAction | `ReactNode` | no |  | Rendered below the profile row as the panel's last word, such as a full-width Button back to an index. AppSidebar's contract: it fills the panel's width, fades out with the labels while collapsed and is inert then. |
 | collapsedFooterSlot | `ReactNode` | no |  | Rendered above the profile row while the panel is collapsed, in `footerSlot`'s place: the same controls at their smallest, such as a SegmentedControl's or ThemeToggle's `cycle` circle, stacked and centred on the rail's axis. AppSidebar's contract: the two forms share one cell and crossfade with the panel, and whichever is hidden is inert. |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |

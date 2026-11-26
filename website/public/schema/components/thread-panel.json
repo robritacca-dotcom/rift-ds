@@ -218,6 +218,29 @@
           "default": "Projects"
         },
         {
+          "name": "collapsibleSections",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Let the reader fold each titled section (the projects and every\nlabelled history group) under its heading: the heading becomes a toggle\nwith a chevron, and the rows glide shut beneath it. The collapsed rail\nshows no headings, so it folds nothing.",
+          "default": false
+        },
+        {
+          "name": "collapsedSections",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The folded sections, by heading text (`projectsLabel` for the projects, a group's `label` for a group). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`.",
+          "defaultExpression": "[]"
+        },
+        {
+          "name": "onCollapsedSectionsChange",
+          "type": "((collapsedSections: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the full new list of folded sections when a heading is pressed."
+        },
+        {
           "name": "activeProjectId",
           "type": "string",
           "typeKind": "primitive",
@@ -315,6 +338,13 @@
           "typeKind": "reference",
           "required": false,
           "description": "Rendered in the footer above the profile row — a theme toggle, a storage meter. Fades out while collapsed, AppSidebar's contract."
+        },
+        {
+          "name": "footerAction",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Rendered below the profile row as the panel's last word, such as a full-width Button back to an index. AppSidebar's contract: it fills the panel's width, fades out with the labels while collapsed and is inert then."
         },
         {
           "name": "collapsedFooterSlot",
@@ -417,6 +447,18 @@
     "note": "The rail’s toggle is an ordinary button, and its threads are a list of buttons."
   },
   "size": {
-    "gzip": 13672
-  }
+    "gzip": 14208
+  },
+  "alternatives": [
+    {
+      "name": "ThreadHistory",
+      "when": "the history sits inside another rail, such as a section of an app sidebar",
+      "schemaUrl": "https://rift-ds.com/schema/components/thread-history.json"
+    },
+    {
+      "name": "AppSidebar",
+      "when": "the rail also carries app sections, a side panel beside it and the phone drawer, as the templates’ rails do",
+      "schemaUrl": "https://rift-ds.com/schema/components/app-sidebar.json"
+    }
+  ]
 }

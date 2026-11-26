@@ -1072,6 +1072,12 @@
       "description": "The colour-mode control: System, Light and Dark over a stored setting, with the script that applies it before first paint."
     },
     {
+      "name": "thread-history",
+      "type": "registry:ui",
+      "title": "Thread history",
+      "description": "A chat’s grouped thread rows with status dots, row menus and inline rename, for a history rail or an app sidebar section."
+    },
+    {
       "name": "thread-panel",
       "type": "registry:ui",
       "title": "Thread panel",

@@ -1435,6 +1435,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
             ]
           },
           {
+            "name": "sidebarProps",
+            "type": "AppLayoutSidebarProps",
+            "required": false,
+            "description": "The rest of the AppSidebar rail's options, passed through as they are,\nso an app on AppLayout has the same rail as the templates and a chat:\nfolding sections (`collapsibleSections`), a footer action, the top and\nfooter slots, the profile's more button, the drawer's entries and\nlabels. The props AppLayout sets itself (the sections, the profile, the\nactive keys, `subNav`, the logo, `layout`, the expanded state, the link\ncomponent and the rail's seat) are its own.",
+            "typeRefs": [
+              "AppLayoutSidebarProps"
+            ]
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -1467,6 +1476,31 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "typeRefs": [
               "AppSidebarSection"
             ]
+          },
+          {
+            "name": "collapsibleSections",
+            "type": "boolean",
+            "required": false,
+            "description": "Let the reader fold each titled section under its heading: the heading\nbecomes a toggle with a chevron, and the section's rows glide shut\nbeneath it. Every section starts open. A section is known by its\n`category`, the id the fold state lists. The collapsed rail and the\nphone drawer show every row whatever is folded, since neither shows\nthe headings.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "collapsedSections",
+            "type": "string[]",
+            "required": false,
+            "description": "Controlled list of folded sections, by `category`. Needs `collapsibleSections`."
+          },
+          {
+            "name": "defaultCollapsedSections",
+            "type": "string[]",
+            "required": false,
+            "description": "Sections folded at first (uncontrolled), by `category`. Needs `collapsibleSections`."
+          },
+          {
+            "name": "onCollapsedSectionsChange",
+            "type": "((collapsedSections: string[]) => void)",
+            "required": false,
+            "description": "Fires with the full new list of folded sections whenever a heading is pressed, in both controlled and uncontrolled modes."
           },
           {
             "name": "profile",
@@ -1543,6 +1577,64 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "((expanded: boolean) => void)",
             "required": false,
             "description": "Callback when expand/collapse changes"
+          },
+          {
+            "name": "collapsible",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the reader can collapse the rail. `false` keeps it expanded: no\ntoggle, and a click on the rail opens nothing.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "responsive",
+            "type": "AppSidebarResponsive",
+            "required": false,
+            "description": "How the rail decides between its rail and its drawer form. `viewport`\n(the default) follows the window: the rail folds on entering the tablet\nband and turns into the drawer at the mobile breakpoint. `container`\ndoes the same by the width of the rail's parent, for a rail inside a\nframed host. `rail` and `drawer` leave the decision to the host, which\nmeasures its own room (a chat does, at its own widths). Every value but\n`viewport` needs `fixed={false}`: the drawer then covers the parent, not\nthe page, and holds no page scroll lock.",
+            "values": [
+              "container",
+              "drawer",
+              "rail",
+              "viewport"
+            ],
+            "defaultValue": "'viewport'",
+            "typeRefs": [
+              "AppSidebarResponsive"
+            ]
+          },
+          {
+            "name": "drawerOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Controlled open state of the drawer form"
+          },
+          {
+            "name": "defaultDrawerOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the drawer form starts open (uncontrolled)",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onDrawerOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Called when the drawer opens or closes, including every close of its own: the scrim, the close button, Escape, a destination row, and growing back into the rail form"
+          },
+          {
+            "name": "foldForPanel",
+            "type": "boolean",
+            "required": false,
+            "description": "Fold the rail to its icon form when the side panel opens and its parent\nhas too little room for the expanded rail, the panel and a readable\ncolumn beside them. For a rail in a narrow host, such as a chat.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "keyLabels",
+            "type": "Partial<Record<string, string>>",
+            "required": false,
+            "description": "Replaces any legend an item's `keys` hint is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard",
+            "typeRefs": [
+              "ShortcutKeyLabels"
+            ]
           },
           {
             "name": "onProfileMore",
@@ -20254,6 +20346,156 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "ThreadHistory",
+    "label": "Thread history",
+    "slug": "thread-history",
+    "category": "ai",
+    "description": "A chat’s grouped thread rows with status dots, row menus and inline rename, for a history rail or an app sidebar section.",
+    "client": false,
+    "importPath": "rift-ds/components/ThreadHistory/ThreadHistory",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ThreadHistory",
+        "props": [
+          {
+            "name": "groups",
+            "type": "ThreadPanelGroup[]",
+            "required": true,
+            "description": "The history, in display order. A flat list is one group with no label. Each thread takes ThreadPanel's thread shape.",
+            "typeRefs": [
+              "ThreadPanelGroup"
+            ]
+          },
+          {
+            "name": "activeThreadId",
+            "type": "string",
+            "required": false,
+            "description": "Id of the thread on stage. Its row renders filled and carries `aria-current`."
+          },
+          {
+            "name": "onThreadSelect",
+            "type": "((id: string) => void)",
+            "required": false,
+            "description": "Fires with the clicked thread's id. Rows with an `href` navigate as well."
+          },
+          {
+            "name": "threadActions",
+            "type": "ThreadPanelThreadAction[]",
+            "required": false,
+            "description": "Shared menu actions for every thread row, behind a hover-revealed trailing trigger (always shown on a touch screen); a thread's own `actions` overrides the set. The menu renders only when `onThreadAction` is also given, and never on a `pending` row.",
+            "typeRefs": [
+              "ThreadPanelThreadAction"
+            ]
+          },
+          {
+            "name": "onThreadAction",
+            "type": "((threadId: string, actionId: string) => void)",
+            "required": false,
+            "description": "Fires with the thread's id and the chosen action's id."
+          },
+          {
+            "name": "statusLabels",
+            "type": "Partial<Record<ThreadPanelThreadStatus, string>>",
+            "required": false,
+            "description": "Spoken text for each thread status, read after the row's title; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed). `idle` is silent unless given a label here.",
+            "typeRefs": [
+              "ThreadPanelThreadStatus"
+            ]
+          },
+          {
+            "name": "pinnedLabel",
+            "type": "string",
+            "required": false,
+            "description": "Spoken text for a `pinned` thread, read after the title and any status; the pin glyph itself is decorative.",
+            "defaultValue": "'Pinned'"
+          },
+          {
+            "name": "threadMenuLabel",
+            "type": "string | ((title: string) => string)",
+            "required": false,
+            "description": "Accessible name for a row's menu trigger. A string is followed by a colon\nand the thread's title (\"Thread options: Q3 plan\"); a function is given\nthe title and returns the whole name, so a translation can put the title\nwhere its grammar needs it.",
+            "defaultValue": "'Thread options'"
+          },
+          {
+            "name": "renamingThreadId",
+            "type": "string",
+            "required": false,
+            "description": "Id of the thread being renamed: its row swaps to an inline text field, prefilled with the title and selected. The host owns the state."
+          },
+          {
+            "name": "onThreadRename",
+            "type": "((threadId: string, title: string) => void)",
+            "required": false,
+            "description": "Fires with the thread's id and the trimmed new title when a rename commits (Enter, or focus leaving the field). An empty or unchanged value fires `onRenameCancel` instead."
+          },
+          {
+            "name": "onRenameCancel",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Fires when a rename ends without a change: Escape, an empty value, or an unchanged title."
+          },
+          {
+            "name": "renameLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the inline rename field.",
+            "defaultValue": "'Rename thread'"
+          },
+          {
+            "name": "moreLabel",
+            "type": "string",
+            "required": false,
+            "description": "Text for the quiet trailing row that reveals older threads, e.g. \"Show 20 more\". Renders only when given."
+          },
+          {
+            "name": "onShowMore",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Fires when the more row is clicked."
+          },
+          {
+            "name": "collapsibleSections",
+            "type": "boolean",
+            "required": false,
+            "description": "Let the reader fold each labelled group under its heading: the heading\nbecomes a toggle with a chevron, and the rows glide shut beneath it.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "collapsedSections",
+            "type": "string[]",
+            "required": false,
+            "description": "The folded groups, by label. Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`.",
+            "defaultValue": "[]"
+          },
+          {
+            "name": "onCollapsedSectionsChange",
+            "type": "((collapsedSections: string[]) => void)",
+            "required": false,
+            "description": "Fires with the full new list of folded groups when a heading is pressed."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "ThreadPanel",
     "label": "Thread panel",
     "slug": "thread-panel",
@@ -20443,6 +20685,26 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'Projects'"
           },
           {
+            "name": "collapsibleSections",
+            "type": "boolean",
+            "required": false,
+            "description": "Let the reader fold each titled section (the projects and every\nlabelled history group) under its heading: the heading becomes a toggle\nwith a chevron, and the rows glide shut beneath it. The collapsed rail\nshows no headings, so it folds nothing.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "collapsedSections",
+            "type": "string[]",
+            "required": false,
+            "description": "The folded sections, by heading text (`projectsLabel` for the projects, a group's `label` for a group). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`.",
+            "defaultValue": "[]"
+          },
+          {
+            "name": "onCollapsedSectionsChange",
+            "type": "((collapsedSections: string[]) => void)",
+            "required": false,
+            "description": "Fires with the full new list of folded sections when a heading is pressed."
+          },
+          {
             "name": "activeProjectId",
             "type": "string",
             "required": false,
@@ -20527,6 +20789,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "Rendered in the footer above the profile row — a theme toggle, a storage meter. Fades out while collapsed, AppSidebar's contract."
+          },
+          {
+            "name": "footerAction",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Rendered below the profile row as the panel's last word, such as a full-width Button back to an index. AppSidebar's contract: it fills the panel's width, fades out with the labels while collapsed and is inert then."
           },
           {
             "name": "collapsedFooterSlot",
@@ -22699,7 +22967,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "threads",
             "type": "RailSlot",
             "required": false,
-            "description": "A session-history rail. `true` seats the built-in ChatThreads over the\nprovider's thread lifecycle; a render prop seats your own. Wide hosts\nseat it as an inline left rail, narrow ones summon it from a header\nhamburger as a slide-over sheet behind a scrim.",
+            "description": "A session-history rail. `true` seats the built-in ChatThreads, an\nAppSidebar over the provider's thread lifecycle, so it takes the app\nrail's shell, sizes, side panel and drawer: inline beside the\nconversation on a wide host, and on a narrow one the app rail's drawer,\nopened from the header's menu button. A render prop seats your own,\ninline on a wide host and as a slide-over sheet on a narrow one.",
             "typeRefs": [
               "RailSlot"
             ]
@@ -23425,7 +23693,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "overlay",
             "type": "boolean",
             "required": true,
-            "description": "The widget seated the rail as a sheet over the conversation rather than beside it."
+            "description": "The widget seated the rail as a sheet over the conversation rather than beside it. A rail outside the widget's own seat (a custom `threads` slot) draws itself expanded there."
           },
           {
             "name": "close",
@@ -23437,19 +23705,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "logo",
             "type": "ReactNode",
             "required": false,
-            "description": "The brand row's mark, in both seats."
+            "description": "The brand row's mark. Defaults to a generated pixel avatar seeded by `logoText`."
           },
           {
             "name": "logoText",
             "type": "string",
             "required": false,
-            "description": "The brand row's text. Shown only on the sheet, where the chat header is hidden behind it; the inline rail leaves it out."
+            "description": "The brand row's text, beside the mark while the rail is expanded."
           },
           {
             "name": "profile",
             "type": "ThreadPanelProfile",
             "required": false,
-            "description": "The signed-in person, shown on the inline rail.",
+            "description": "The signed-in person, shown at the rail's foot.",
             "typeRefs": [
               "ThreadPanelProfile"
             ]
@@ -23458,40 +23726,93 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "footerSlot",
             "type": "ReactNode",
             "required": false,
-            "description": "Rendered in the rail's footer in both seats (above the profile row on the inline rail; the sheet has none): a theme toggle, a link out. Fades out while the inline rail is collapsed."
+            "description": "Rendered in the rail's footer above the profile row: a theme toggle, a link out. Fades out while the rail is collapsed."
+          },
+          {
+            "name": "collapsibleSections",
+            "type": "boolean",
+            "required": false,
+            "description": "Let the reader fold the projects, each labelled history group and the host's `sections` under their headings. Every section starts open.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "defaultCollapsedSections",
+            "type": "string[]",
+            "required": false,
+            "description": "Sections folded at first, by heading text, when `collapsibleSections` is on."
+          },
+          {
+            "name": "footerAction",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Rendered below the profile row, such as a full-width Button back to an index. It fades out while the rail is collapsed."
           },
           {
             "name": "collapsedFooterSlot",
             "type": "ReactNode",
             "required": false,
-            "description": "Rendered in the inline rail's footer while it is collapsed, in `footerSlot`'s place: the same controls at their smallest, stacked on the rail's axis, crossfading with the full form. The sheet never collapses, so it never shows."
+            "description": "Rendered in the rail's footer while it is collapsed, in `footerSlot`'s place: the same controls at their smallest, stacked on the rail's axis, crossfading with the full form."
+          },
+          {
+            "name": "sections",
+            "type": "AppSidebarSection[]",
+            "required": false,
+            "description": "The host's own sections after the history, in AppSidebar's shape: a\nsection of setting rows (Appearance) whose choices open in the side\npanel beside the rail and drill in on the drawer, as the app rail's do.",
+            "typeRefs": [
+              "AppSidebarSection"
+            ]
+          },
+          {
+            "name": "drawerTopEntries",
+            "type": "DrillMenuEntry[]",
+            "required": false,
+            "description": "Rows above the sections in the drawer, in DrillMenu's shape, such as a workspace switcher that drills into its choices.",
+            "typeRefs": [
+              "DrillMenuEntry"
+            ]
+          },
+          {
+            "name": "drawerBottomEntries",
+            "type": "DrillMenuEntry[]",
+            "required": false,
+            "description": "Rows after the sections in the drawer, in DrillMenu's shape.",
+            "typeRefs": [
+              "DrillMenuEntry"
+            ]
           },
           {
             "name": "collapsible",
             "type": "boolean",
             "required": false,
-            "description": "Whether the inline rail can collapse to its icon strip.",
+            "description": "Whether the rail can collapse to its icon strip.",
             "defaultValue": "true"
           },
           {
             "name": "defaultExpanded",
             "type": "boolean",
             "required": false,
-            "description": "Whether the inline rail starts expanded. Defaults to `false`: it starts\ncollapsed to its icon strip. The sheet, and a rail that is not\n`collapsible`, always show expanded.",
+            "description": "Whether the rail starts expanded. Defaults to `false`: it starts\ncollapsed to its icon strip. The drawer, and a rail that is not\n`collapsible`, always show expanded.",
             "defaultValue": "false"
           },
           {
             "name": "historyLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible heading over the history.",
+            "description": "Accessible name of the history inside the rail.",
             "defaultValue": "'Chat history'"
+          },
+          {
+            "name": "railLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the rail's navigation landmark.",
+            "defaultValue": "'Chats'"
           },
           {
             "name": "threadPanelLabels",
             "type": "Pick<ThreadPanelProps, \"statusLabels\" | \"collapseLabel\" | \"expandLabel\" | \"pinnedLabel\" | \"threadMenuLabel\" | \"renameLabel\" | \"projectsLabel\" | \"newProjectLabel\">",
             "required": false,
-            "description": "The words the ThreadPanel writes, merged over its English defaults: the\nspoken pin and status text (\"Pinned\", \"Working\"…), each row's menu\ntrigger (\"Thread options\"), the rename field (\"Rename thread\"), the\nprojects header and its add button (\"Projects\", \"New project\"), and the\ncollapse toggle (\"Collapse the panel\", \"Expand the panel\"). The history's\nown name is `historyLabel`.",
+            "description": "The words the rail writes, merged over their English defaults: the\nspoken pin and status text (\"Pinned\", \"Working\"…), each row's menu\ntrigger (\"Thread options\"), the rename field (\"Rename thread\"), the\nprojects heading and its add button (\"Projects\", \"New project\"), and the\ncollapse toggle (\"Collapse the panel\", \"Expand the panel\"). The history's\nown name is `historyLabel`.",
             "typeRefs": [
               "ThreadPanelProps"
             ]

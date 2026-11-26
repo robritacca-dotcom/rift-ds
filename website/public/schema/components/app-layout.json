@@ -149,6 +149,16 @@
           ]
         },
         {
+          "name": "sidebarProps",
+          "type": "AppLayoutSidebarProps",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The rest of the AppSidebar rail's options, passed through as they are,\nso an app on AppLayout has the same rail as the templates and a chat:\nfolding sections (`collapsibleSections`), a footer action, the top and\nfooter slots, the profile's more button, the drawer's entries and\nlabels. The props AppLayout sets itself (the sections, the profile, the\nactive keys, `subNav`, the logo, `layout`, the expanded state, the link\ncomponent and the rail's seat) are its own.",
+          "typeRefs": [
+            "AppLayoutSidebarProps"
+          ]
+        },
+        {
           "name": "className",
           "type": "string",
           "typeKind": "primitive",
@@ -160,11 +170,20 @@
     }
   ],
   "types": {
+    "AppLayoutSidebarProps": {
+      "kind": "type",
+      "definition": "type AppLayoutSidebarProps = Omit<\n  AppSidebarProps,\n  | 'sections'\n  | 'profile'\n  | 'activeKey'\n  | 'activeSubKey'\n  | 'activeTertiaryKey'\n  | 'subNav'\n  | 'expanded'\n  | 'defaultExpanded'\n  | 'onExpandedChange'\n  | 'logo'\n  | 'logoText'\n  | 'layout'\n  | 'floating'\n  | 'fixed'\n  | 'responsive'\n  | 'linkComponent'\n>;",
+      "description": "The AppSidebar options AppLayout passes through untouched (`sidebarProps`).",
+      "refs": [
+        "AppSidebarProps"
+      ]
+    },
     "AppSidebarItem": {
       "kind": "interface",
-      "definition": "interface AppSidebarItem {\n  /** Unique key for this item */\n  key: string;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */\n  icon?: string | React.ReactNode;\n  /**\n   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for\n   * rows that name a thing rather than a place — projects, workspaces,\n   * accounts. `true` seeds the character from `label`; a string seeds it\n   * from that value, so a renamed item can keep its character by passing a\n   * stable id. The sidebar spreads the inks across all of its avatar rows,\n   * so neighbours differ in colour as well as shape. The character is\n   * decorative: the label beside it is the name\n   */\n  pixelAvatar?: boolean | string;\n  /** Display label (shown when expanded) */\n  label: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end while expanded, such as \"Dark\" on a row whose sub-items are a setting's choices */\n  value?: string;\n  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav=\"panel\"` */\n  children?: AppSidebarSubItem[];\n}",
+      "definition": "interface AppSidebarItem {\n  /** Unique key for this item */\n  key: string;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */\n  icon?: string | React.ReactNode;\n  /**\n   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for\n   * rows that name a thing rather than a place — projects, workspaces,\n   * accounts. `true` seeds the character from `label`; a string seeds it\n   * from that value, so a renamed item can keep its character by passing a\n   * stable id. The sidebar spreads the inks across all of its avatar rows,\n   * so neighbours differ in colour as well as shape. The character is\n   * decorative: the label beside it is the name\n   */\n  pixelAvatar?: boolean | string;\n  /** Display label (shown when expanded) */\n  label: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end while expanded, such as \"Dark\" on a row whose sub-items are a setting's choices */\n  value?: string;\n  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav=\"panel\"` */\n  children?: AppSidebarSubItem[];\n  /** A keyboard hint at the row's end while expanded, in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative: bind the action with `useShortcut` */\n  keys?: Shortcut;\n}",
       "refs": [
-        "AppSidebarSubItem"
+        "AppSidebarSubItem",
+        "Shortcut"
       ]
     },
     "AppSidebarLayout": {
@@ -174,14 +193,31 @@
     },
     "AppSidebarProfile": {
       "kind": "interface",
-      "definition": "interface AppSidebarProfile {\n  /** User display name */\n  name: string;\n  /** User email */\n  email: string;\n  /** Avatar image URL */\n  avatarUrl?: string;\n}"
+      "definition": "interface AppSidebarProfile {\n  /** User display name */\n  name: string;\n  /** The quiet second line under the name, usually the email. Left empty, the row shows the name alone */\n  email?: string;\n  /** Avatar image URL */\n  avatarUrl?: string;\n  /** A mark of its own in the avatar's place, such as a generated avatar; wins over `avatarUrl` */\n  avatar?: React.ReactNode;\n}"
+    },
+    "AppSidebarProps": {
+      "kind": "component-props",
+      "component": "AppSidebar",
+      "see": "get_component(\"AppSidebar\")"
     },
     "AppSidebarSection": {
       "kind": "interface",
-      "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section; with more than one, give each its heading, so every group the gaps set apart is named */\n  category?: string;\n  /** Nav items in this section */\n  items: AppSidebarItem[];\n}",
+      "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
       "refs": [
-        "AppSidebarItem"
+        "AppSidebarItem",
+        "AppSidebarSectionAction",
+        "AppSidebarSectionContext"
       ]
+    },
+    "AppSidebarSectionAction": {
+      "kind": "interface",
+      "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
+      "description": "A button in a section's heading, such as a project list's add."
+    },
+    "AppSidebarSectionContext": {
+      "kind": "interface",
+      "definition": "interface AppSidebarSectionContext {\n  /** Whether the rail is expanded (the drawer always is). */\n  expanded: boolean;\n  /** Whether it is drawn in the drawer rather than on the rail. */\n  drawer: boolean;\n  /** Closes the drawer, for content whose rows are destinations. Does nothing on the rail. */\n  closeDrawer: () => void;\n}",
+      "description": "What a section's `content` function is told about where it is drawn."
     },
     "AppSidebarSubItem": {
       "kind": "interface",
@@ -199,11 +235,17 @@
       "kind": "type",
       "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
       "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "Shortcut": {
+      "kind": "type",
+      "definition": "type Shortcut = string;",
+      "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
     }
   },
   "externalTypes": {
     "ComponentPropsWithRef": "react",
     "ElementType": "react",
+    "Omit": "typescript",
     "ReactNode": "react"
   },
   "keys": {
@@ -211,7 +253,7 @@
     "note": "The rail is AppSidebar, which carries the layout’s keys. The layout adds none of its own."
   },
   "size": {
-    "gzip": 14546
+    "gzip": 16814
   },
   "alternatives": [
     {

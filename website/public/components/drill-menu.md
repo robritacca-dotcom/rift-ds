@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 - Import: `import { DrillMenu } from 'rift-ds';`
 - Deep import: `import { DrillMenu } from 'rift-ds/components/DrillMenu/DrillMenu';`
 - Rendering: client component (declares 'use client')
-- Size: 6.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/drill-menu
 - Schema: https://rift-ds.com/schema/components/drill-menu.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -113,6 +113,12 @@ interface DrillMenuSection {
   variant?: 'default' | 'prominent';
   /** Stable identity for the React key. Defaults to the label. */
   id?: string;
+  /**
+   * The section's own content after its rows, for a section that is more
+   * than a list of destinations: a chat's history in AppSidebar's drawer,
+   * say. It scrolls with the level and leaves with it on a drill.
+   */
+  content?: React.ReactNode;
 }
 ```
 

@@ -27,6 +27,35 @@
           ]
         },
         {
+          "name": "collapsibleSections",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Let the reader fold each titled section under its heading: the heading\nbecomes a toggle with a chevron, and the section's rows glide shut\nbeneath it. Every section starts open. A section is known by its\n`category`, the id the fold state lists. The collapsed rail and the\nphone drawer show every row whatever is folded, since neither shows\nthe headings.",
+          "default": false
+        },
+        {
+          "name": "collapsedSections",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Controlled list of folded sections, by `category`. Needs `collapsibleSections`."
+        },
+        {
+          "name": "defaultCollapsedSections",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Sections folded at first (uncontrolled), by `category`. Needs `collapsibleSections`."
+        },
+        {
+          "name": "onCollapsedSectionsChange",
+          "type": "((collapsedSections: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the full new list of folded sections whenever a heading is pressed, in both controlled and uncontrolled modes."
+        },
+        {
           "name": "profile",
           "type": "AppSidebarProfile",
           "typeKind": "reference",
@@ -112,6 +141,71 @@
           "typeKind": "function",
           "required": false,
           "description": "Callback when expand/collapse changes"
+        },
+        {
+          "name": "collapsible",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the reader can collapse the rail. `false` keeps it expanded: no\ntoggle, and a click on the rail opens nothing.",
+          "default": true
+        },
+        {
+          "name": "responsive",
+          "type": "AppSidebarResponsive",
+          "typeKind": "enum",
+          "values": [
+            "container",
+            "drawer",
+            "rail",
+            "viewport"
+          ],
+          "required": false,
+          "description": "How the rail decides between its rail and its drawer form. `viewport`\n(the default) follows the window: the rail folds on entering the tablet\nband and turns into the drawer at the mobile breakpoint. `container`\ndoes the same by the width of the rail's parent, for a rail inside a\nframed host. `rail` and `drawer` leave the decision to the host, which\nmeasures its own room (a chat does, at its own widths). Every value but\n`viewport` needs `fixed={false}`: the drawer then covers the parent, not\nthe page, and holds no page scroll lock.",
+          "default": "viewport",
+          "typeRefs": [
+            "AppSidebarResponsive"
+          ]
+        },
+        {
+          "name": "drawerOpen",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Controlled open state of the drawer form"
+        },
+        {
+          "name": "defaultDrawerOpen",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the drawer form starts open (uncontrolled)",
+          "default": false
+        },
+        {
+          "name": "onDrawerOpenChange",
+          "type": "((open: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called when the drawer opens or closes, including every close of its own: the scrim, the close button, Escape, a destination row, and growing back into the rail form"
+        },
+        {
+          "name": "foldForPanel",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Fold the rail to its icon form when the side panel opens and its parent\nhas too little room for the expanded rail, the panel and a readable\ncolumn beside them. For a rail in a narrow host, such as a chat.",
+          "default": false
+        },
+        {
+          "name": "keyLabels",
+          "type": "Partial<Record<string, string>>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Replaces any legend an item's `keys` hint is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard",
+          "typeRefs": [
+            "ShortcutKeyLabels"
+          ]
         },
         {
           "name": "onProfileMore",
@@ -320,9 +414,10 @@
   "types": {
     "AppSidebarItem": {
       "kind": "interface",
-      "definition": "interface AppSidebarItem {\n  /** Unique key for this item */\n  key: string;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */\n  icon?: string | React.ReactNode;\n  /**\n   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for\n   * rows that name a thing rather than a place — projects, workspaces,\n   * accounts. `true` seeds the character from `label`; a string seeds it\n   * from that value, so a renamed item can keep its character by passing a\n   * stable id. The sidebar spreads the inks across all of its avatar rows,\n   * so neighbours differ in colour as well as shape. The character is\n   * decorative: the label beside it is the name\n   */\n  pixelAvatar?: boolean | string;\n  /** Display label (shown when expanded) */\n  label: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end while expanded, such as \"Dark\" on a row whose sub-items are a setting's choices */\n  value?: string;\n  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav=\"panel\"` */\n  children?: AppSidebarSubItem[];\n}",
+      "definition": "interface AppSidebarItem {\n  /** Unique key for this item */\n  key: string;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */\n  icon?: string | React.ReactNode;\n  /**\n   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for\n   * rows that name a thing rather than a place — projects, workspaces,\n   * accounts. `true` seeds the character from `label`; a string seeds it\n   * from that value, so a renamed item can keep its character by passing a\n   * stable id. The sidebar spreads the inks across all of its avatar rows,\n   * so neighbours differ in colour as well as shape. The character is\n   * decorative: the label beside it is the name\n   */\n  pixelAvatar?: boolean | string;\n  /** Display label (shown when expanded) */\n  label: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end while expanded, such as \"Dark\" on a row whose sub-items are a setting's choices */\n  value?: string;\n  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav=\"panel\"` */\n  children?: AppSidebarSubItem[];\n  /** A keyboard hint at the row's end while expanded, in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative: bind the action with `useShortcut` */\n  keys?: Shortcut;\n}",
       "refs": [
-        "AppSidebarSubItem"
+        "AppSidebarSubItem",
+        "Shortcut"
       ]
     },
     "AppSidebarLayout": {
@@ -332,14 +427,31 @@
     },
     "AppSidebarProfile": {
       "kind": "interface",
-      "definition": "interface AppSidebarProfile {\n  /** User display name */\n  name: string;\n  /** User email */\n  email: string;\n  /** Avatar image URL */\n  avatarUrl?: string;\n}"
+      "definition": "interface AppSidebarProfile {\n  /** User display name */\n  name: string;\n  /** The quiet second line under the name, usually the email. Left empty, the row shows the name alone */\n  email?: string;\n  /** Avatar image URL */\n  avatarUrl?: string;\n  /** A mark of its own in the avatar's place, such as a generated avatar; wins over `avatarUrl` */\n  avatar?: React.ReactNode;\n}"
+    },
+    "AppSidebarResponsive": {
+      "kind": "type",
+      "definition": "type AppSidebarResponsive = 'viewport' | 'container' | 'rail' | 'drawer';",
+      "description": "How the rail decides between its rail and drawer forms."
     },
     "AppSidebarSection": {
       "kind": "interface",
-      "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section; with more than one, give each its heading, so every group the gaps set apart is named */\n  category?: string;\n  /** Nav items in this section */\n  items: AppSidebarItem[];\n}",
+      "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
       "refs": [
-        "AppSidebarItem"
+        "AppSidebarItem",
+        "AppSidebarSectionAction",
+        "AppSidebarSectionContext"
       ]
+    },
+    "AppSidebarSectionAction": {
+      "kind": "interface",
+      "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
+      "description": "A button in a section's heading, such as a project list's add."
+    },
+    "AppSidebarSectionContext": {
+      "kind": "interface",
+      "definition": "interface AppSidebarSectionContext {\n  /** Whether the rail is expanded (the drawer always is). */\n  expanded: boolean;\n  /** Whether it is drawn in the drawer rather than on the rail. */\n  drawer: boolean;\n  /** Closes the drawer, for content whose rows are destinations. Does nothing on the rail. */\n  closeDrawer: () => void;\n}",
+      "description": "What a section's `content` function is told about where it is drawn."
     },
     "AppSidebarSubItem": {
       "kind": "interface",
@@ -363,7 +475,7 @@
     },
     "DrillMenuSection": {
       "kind": "interface",
-      "definition": "interface DrillMenuSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: DrillMenuItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n}",
+      "definition": "interface DrillMenuSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: DrillMenuItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n  /**\n   * The section's own content after its rows, for a section that is more\n   * than a list of destinations: a chat's history in AppSidebar's drawer,\n   * say. It scrolls with the level and leaves with it on a drill.\n   */\n  content?: React.ReactNode;\n}",
       "description": "A group of rows under an optional heading: one level's resources or\nsettings, say, set apart from the rows above it.",
       "refs": [
         "DrillMenuItem"
@@ -381,6 +493,16 @@
       "kind": "type",
       "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
       "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "Shortcut": {
+      "kind": "type",
+      "definition": "type Shortcut = string;",
+      "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+    },
+    "ShortcutKeyLabels": {
+      "kind": "type",
+      "definition": "type ShortcutKeyLabels = Partial<Record<string, string>>;",
+      "description": "The legends a shortcut is drawn with, by modifier or key name. Merged over the platform's defaults."
     }
   },
   "externalTypes": {
@@ -388,13 +510,22 @@
     "ElementType": "react",
     "HTMLButtonElement": "typescript",
     "MouseEvent": "react",
-    "ReactNode": "react"
+    "Partial": "typescript",
+    "ReactNode": "react",
+    "Record": "typescript"
   },
   "keys": {
     "by": "component",
-    "note": "Below the mobile breakpoint the rail is a modal drawer: opening moves focus inside, Tab stays inside, and Escape closes it."
+    "note": "In its drawer form (below the mobile breakpoint, or when its host asks) the rail is a modal drawer: opening moves focus inside, Tab stays inside, and Escape closes it."
   },
   "size": {
-    "gzip": 14184
-  }
+    "gzip": 16446
+  },
+  "alternatives": [
+    {
+      "name": "ThreadPanel",
+      "when": "a standalone chat history rail is enough, one that renders on the server",
+      "schemaUrl": "https://rift-ds.com/schema/components/thread-panel.json"
+    }
+  ]
 }

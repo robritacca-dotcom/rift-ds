@@ -74,7 +74,7 @@ export const THEME_TILES: Record<"light" | "dark", RichDropdownOption[]> = {
       "label": "Forest",
       "value": "forest",
       "color": "#23573F",
-      "swatchRadius": "999px",
+      "swatchRadius": "4px",
       "headingFont": "'Montserrat', sans-serif",
       "bodyFont": "'DM Sans', sans-serif",
       "description": "Montserrat over DM Sans"
@@ -193,7 +193,7 @@ export const THEME_TILES: Record<"light" | "dark", RichDropdownOption[]> = {
       "label": "Forest",
       "value": "forest",
       "color": "#23573F",
-      "swatchRadius": "999px",
+      "swatchRadius": "4px",
       "headingFont": "'Montserrat', sans-serif",
       "bodyFont": "'DM Sans', sans-serif",
       "description": "Montserrat over DM Sans"

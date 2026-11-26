@@ -94,7 +94,7 @@ A set of two-state buttons that can be toggled on or off, supporting text and ic
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/toggle-group.md
 
-## AI (36)
+## AI (37)
 
 Chat, agent, and model surfaces for building AI products, from the composer to the reasoning trace and the diff an agent proposes.
 
@@ -346,6 +346,14 @@ Progressive reveal for text arriving in chunks, with a blinking cursor while mor
 - Import: `import { StreamingText } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/streaming-text.md
+
+### Thread history
+
+A chat’s grouped thread rows with status dots, row menus and inline rename, for a history rail or an app sidebar section.
+
+- Import: `import { ThreadHistory } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/thread-history.md
 
 ### Thread panel
 

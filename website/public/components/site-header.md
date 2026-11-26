@@ -121,6 +121,12 @@ interface DrillMenuSection {
   variant?: 'default' | 'prominent';
   /** Stable identity for the React key. Defaults to the label. */
   id?: string;
+  /**
+   * The section's own content after its rows, for a section that is more
+   * than a list of destinations: a chat's history in AppSidebar's drawer,
+   * say. It scrolls with the level and leaves with it on a drill.
+   */
+  content?: React.ReactNode;
 }
 ```
 

@@ -183,6 +183,7 @@ export * from './components/ThemePicker/ThemePicker';
 export * from './components/ThemeToggle/ThemeToggle';
 export * from './components/ThemeToggle/colorMode';
 export * from './components/ThemeToggle/useColorMode';
+export * from './components/ThreadHistory/ThreadHistory';
 export * from './components/ThreadPanel/ThreadPanel';
 export * from './components/ThreadTabs/ThreadTabs';
 export * from './components/Timeline/Timeline';

@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.38.0",
   "package": "rift-ds",
-  "count": 196,
+  "count": 197,
   "components": [
     {
       "name": "Accordion",
@@ -1773,6 +1773,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/theme-toggle.json",
       "docsUrl": "https://rift-ds.com/components/theme-toggle",
       "markdownUrl": "https://rift-ds.com/components/theme-toggle.md"
+    },
+    {
+      "name": "ThreadHistory",
+      "label": "Thread history",
+      "slug": "thread-history",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/thread-history.json",
+      "docsUrl": "https://rift-ds.com/components/thread-history",
+      "markdownUrl": "https://rift-ds.com/components/thread-history.md"
     },
     {
       "name": "ThreadPanel",

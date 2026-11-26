@@ -260,7 +260,7 @@
           "type": "RailSlot",
           "typeKind": "reference",
           "required": false,
-          "description": "A session-history rail. `true` seats the built-in ChatThreads over the\nprovider's thread lifecycle; a render prop seats your own. Wide hosts\nseat it as an inline left rail, narrow ones summon it from a header\nhamburger as a slide-over sheet behind a scrim.",
+          "description": "A session-history rail. `true` seats the built-in ChatThreads, an\nAppSidebar over the provider's thread lifecycle, so it takes the app\nrail's shell, sizes, side panel and drawer: inline beside the\nconversation on a wide host, and on a narrow one the app rail's drawer,\nopened from the header's menu button. A render prop seats your own,\ninline on a wide host and as a slide-over sheet on a narrow one.",
           "typeRefs": [
             "RailSlot"
           ]
@@ -1075,7 +1075,7 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": true,
-          "description": "The widget seated the rail as a sheet over the conversation rather than beside it."
+          "description": "The widget seated the rail as a sheet over the conversation rather than beside it. A rail outside the widget's own seat (a custom `threads` slot) draws itself expanded there."
         },
         {
           "name": "close",
@@ -1089,21 +1089,21 @@
           "type": "ReactNode",
           "typeKind": "reference",
           "required": false,
-          "description": "The brand row's mark, in both seats."
+          "description": "The brand row's mark. Defaults to a generated pixel avatar seeded by `logoText`."
         },
         {
           "name": "logoText",
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "The brand row's text. Shown only on the sheet, where the chat header is hidden behind it; the inline rail leaves it out."
+          "description": "The brand row's text, beside the mark while the rail is expanded."
         },
         {
           "name": "profile",
           "type": "ThreadPanelProfile",
           "typeKind": "reference",
           "required": false,
-          "description": "The signed-in person, shown on the inline rail.",
+          "description": "The signed-in person, shown at the rail's foot.",
           "typeRefs": [
             "ThreadPanelProfile"
           ]
@@ -1113,21 +1113,73 @@
           "type": "ReactNode",
           "typeKind": "reference",
           "required": false,
-          "description": "Rendered in the rail's footer in both seats (above the profile row on the inline rail; the sheet has none): a theme toggle, a link out. Fades out while the inline rail is collapsed."
+          "description": "Rendered in the rail's footer above the profile row: a theme toggle, a link out. Fades out while the rail is collapsed."
+        },
+        {
+          "name": "collapsibleSections",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Let the reader fold the projects, each labelled history group and the host's `sections` under their headings. Every section starts open.",
+          "default": false
+        },
+        {
+          "name": "defaultCollapsedSections",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Sections folded at first, by heading text, when `collapsibleSections` is on."
+        },
+        {
+          "name": "footerAction",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Rendered below the profile row, such as a full-width Button back to an index. It fades out while the rail is collapsed."
         },
         {
           "name": "collapsedFooterSlot",
           "type": "ReactNode",
           "typeKind": "reference",
           "required": false,
-          "description": "Rendered in the inline rail's footer while it is collapsed, in `footerSlot`'s place: the same controls at their smallest, stacked on the rail's axis, crossfading with the full form. The sheet never collapses, so it never shows."
+          "description": "Rendered in the rail's footer while it is collapsed, in `footerSlot`'s place: the same controls at their smallest, stacked on the rail's axis, crossfading with the full form."
+        },
+        {
+          "name": "sections",
+          "type": "AppSidebarSection[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The host's own sections after the history, in AppSidebar's shape: a\nsection of setting rows (Appearance) whose choices open in the side\npanel beside the rail and drill in on the drawer, as the app rail's do.",
+          "typeRefs": [
+            "AppSidebarSection"
+          ]
+        },
+        {
+          "name": "drawerTopEntries",
+          "type": "DrillMenuEntry[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Rows above the sections in the drawer, in DrillMenu's shape, such as a workspace switcher that drills into its choices.",
+          "typeRefs": [
+            "DrillMenuEntry"
+          ]
+        },
+        {
+          "name": "drawerBottomEntries",
+          "type": "DrillMenuEntry[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Rows after the sections in the drawer, in DrillMenu's shape.",
+          "typeRefs": [
+            "DrillMenuEntry"
+          ]
         },
         {
           "name": "collapsible",
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Whether the inline rail can collapse to its icon strip.",
+          "description": "Whether the rail can collapse to its icon strip.",
           "default": true
         },
         {
@@ -1135,7 +1187,7 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Whether the inline rail starts expanded. Defaults to `false`: it starts\ncollapsed to its icon strip. The sheet, and a rail that is not\n`collapsible`, always show expanded.",
+          "description": "Whether the rail starts expanded. Defaults to `false`: it starts\ncollapsed to its icon strip. The drawer, and a rail that is not\n`collapsible`, always show expanded.",
           "default": false
         },
         {
@@ -1143,15 +1195,23 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Accessible heading over the history.",
+          "description": "Accessible name of the history inside the rail.",
           "default": "Chat history"
+        },
+        {
+          "name": "railLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the rail's navigation landmark.",
+          "default": "Chats"
         },
         {
           "name": "threadPanelLabels",
           "type": "Pick<ThreadPanelProps, \"statusLabels\" | \"collapseLabel\" | \"expandLabel\" | \"pinnedLabel\" | \"threadMenuLabel\" | \"renameLabel\" | \"projectsLabel\" | \"newProjectLabel\">",
           "typeKind": "reference",
           "required": false,
-          "description": "The words the ThreadPanel writes, merged over its English defaults: the\nspoken pin and status text (\"Pinned\", \"Working\"…), each row's menu\ntrigger (\"Thread options\"), the rename field (\"Rename thread\"), the\nprojects header and its add button (\"Projects\", \"New project\"), and the\ncollapse toggle (\"Collapse the panel\", \"Expand the panel\"). The history's\nown name is `historyLabel`.",
+          "description": "The words the rail writes, merged over their English defaults: the\nspoken pin and status text (\"Pinned\", \"Working\"…), each row's menu\ntrigger (\"Thread options\"), the rename field (\"Rename thread\"), the\nprojects heading and its add button (\"Projects\", \"New project\"), and the\ncollapse toggle (\"Collapse the panel\", \"Expand the panel\"). The history's\nown name is `historyLabel`.",
           "typeRefs": [
             "ThreadPanelProps"
           ]
@@ -1407,6 +1467,37 @@
         "PromptSuggestion"
       ]
     },
+    "AppSidebarItem": {
+      "kind": "interface",
+      "definition": "interface AppSidebarItem {\n  /** Unique key for this item */\n  key: string;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */\n  icon?: string | React.ReactNode;\n  /**\n   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for\n   * rows that name a thing rather than a place — projects, workspaces,\n   * accounts. `true` seeds the character from `label`; a string seeds it\n   * from that value, so a renamed item can keep its character by passing a\n   * stable id. The sidebar spreads the inks across all of its avatar rows,\n   * so neighbours differ in colour as well as shape. The character is\n   * decorative: the label beside it is the name\n   */\n  pixelAvatar?: boolean | string;\n  /** Display label (shown when expanded) */\n  label: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end while expanded, such as \"Dark\" on a row whose sub-items are a setting's choices */\n  value?: string;\n  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav=\"panel\"` */\n  children?: AppSidebarSubItem[];\n  /** A keyboard hint at the row's end while expanded, in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative: bind the action with `useShortcut` */\n  keys?: Shortcut;\n}",
+      "refs": [
+        "AppSidebarSubItem",
+        "Shortcut"
+      ]
+    },
+    "AppSidebarSection": {
+      "kind": "interface",
+      "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
+      "refs": [
+        "AppSidebarItem",
+        "AppSidebarSectionAction",
+        "AppSidebarSectionContext"
+      ]
+    },
+    "AppSidebarSectionAction": {
+      "kind": "interface",
+      "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
+      "description": "A button in a section's heading, such as a project list's add."
+    },
+    "AppSidebarSectionContext": {
+      "kind": "interface",
+      "definition": "interface AppSidebarSectionContext {\n  /** Whether the rail is expanded (the drawer always is). */\n  expanded: boolean;\n  /** Whether it is drawn in the drawer rather than on the rail. */\n  drawer: boolean;\n  /** Closes the drawer, for content whose rows are destinations. Does nothing on the rail. */\n  closeDrawer: () => void;\n}",
+      "description": "What a section's `content` function is told about where it is drawn."
+    },
+    "AppSidebarSubItem": {
+      "kind": "interface",
+      "definition": "interface AppSidebarSubItem {\n  /** Unique key for this sub-item */\n  key: string;\n  /** Display label */\n  label: string;\n  /** Click handler — also fires on a link sub-item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the sub-item as a real link to this URL instead of a button. Ignored when the sub-item has children, whose row opens them */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */\n  badge?: string | number;\n  /** A second line under the label, shown where the sub-item is listed in the side panel and the phone drawer */\n  description?: string;\n  /** Icon before the label in the side panel and the phone drawer: a Material Symbol name or a custom element, such as a swatch */\n  icon?: string | React.ReactNode;\n  /** In a list of choices (a setting's options), whether this one is chosen: true carries the chosen mark in the side panel and the phone drawer. Picking a choice is an action, so the panel and the drawer stay open */\n  selected?: boolean;\n  /** Group heading this entry sits under when it is listed in the panel (see `subNav`); ignored in the accordion */\n  group?: string;\n  /**\n   * The next level down. With `subNav=\"accordion\"` a sub-item's children are\n   * level 3 and open in the side panel; with `subNav=\"panel\"` they are the\n   * panel's own accordion. Navigation stops at three levels, so deeper\n   * children are not rendered.\n   */\n  children?: AppSidebarSubItem[];\n}"
+    },
     "ArtifactPanelProps": {
       "kind": "component-props",
       "component": "ArtifactPanel",
@@ -1593,6 +1684,30 @@
       "component": "Composer",
       "see": "get_component(\"Composer\")"
     },
+    "DrillMenuEntry": {
+      "kind": "type",
+      "definition": "type DrillMenuEntry = DrillMenuItem | DrillMenuSection;",
+      "description": "An entry on a level: a row, or a section of rows.",
+      "refs": [
+        "DrillMenuItem",
+        "DrillMenuSection"
+      ]
+    },
+    "DrillMenuItem": {
+      "kind": "interface",
+      "definition": "interface DrillMenuItem {\n  /** Row text. */\n  label: string;\n  /**\n   * Where the row links. On a row with `items` it is the level's landing\n   * page instead: the level opens with an overview row linking to it.\n   */\n  href?: string;\n  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */\n  id?: string;\n  /** A second line under the label, in the secondary text style. */\n  description?: string;\n  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */\n  icon?: string | React.ReactNode;\n  /** A pill after the label: a count (a number, or digits with an optional `+`) on the count badge pair, a word such as \"New\" as a quiet pill. */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end, such as \"Dark\", on a row that drills into a list of choices. */\n  value?: string;\n  /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */\n  title?: string;\n  /** Rows on the level this row opens. A row with items drills in instead of navigating. */\n  items?: DrillMenuEntry[];\n  /**\n   * Marks the row as the page being viewed, regardless of the exact match\n   * against `currentHref`, for a section that stays current on its child\n   * routes.\n   */\n  current?: boolean;\n  /** On an `onClick` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */\n  selected?: boolean;\n  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */\n  external?: boolean;\n  /**\n   * Makes the row an action rather than a link, such as a pick or a copy.\n   * The menu stays on its level; a choice list's rows set `selected` too.\n   */\n  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;\n}",
+      "refs": [
+        "DrillMenuEntry"
+      ]
+    },
+    "DrillMenuSection": {
+      "kind": "interface",
+      "definition": "interface DrillMenuSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: DrillMenuItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n  /**\n   * The section's own content after its rows, for a section that is more\n   * than a list of destinations: a chat's history in AppSidebar's drawer,\n   * say. It scrolls with the level and leaves with it on a drill.\n   */\n  content?: React.ReactNode;\n}",
+      "description": "A group of rows under an optional heading: one level's resources or\nsettings, say, set apart from the rows above it.",
+      "refs": [
+        "DrillMenuItem"
+      ]
+    },
     "FeedbackSink": {
       "kind": "type",
       "definition": "type FeedbackSink = (exchangeId: string, verdict: ChatFeedbackVerdict) => Promise<void>;",
@@ -1686,6 +1801,11 @@
       "definition": "type RailSlot = boolean | ((ctx: { overlay: boolean; close: () => void }) => ReactNode);",
       "description": "A rail slot: the widget's own panel, or a render prop for a custom one."
     },
+    "Shortcut": {
+      "kind": "type",
+      "definition": "type Shortcut = string;",
+      "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+    },
     "Starter": {
       "kind": "interface",
       "definition": "interface Starter {\n  id: string;\n  label: string;\n}",
@@ -1757,6 +1877,8 @@
     "AbortSignal": "typescript",
     "AsyncIterable": "typescript",
     "ComponentPropsWithoutRef": "react",
+    "HTMLButtonElement": "typescript",
+    "MouseEvent": "react",
     "Omit": "typescript",
     "Partial": "typescript",
     "Pick": "typescript",

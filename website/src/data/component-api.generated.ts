@@ -1481,20 +1481,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "collapsibleSections",
             "type": "boolean",
             "required": false,
-            "description": "Let the reader fold each titled section under its heading: the heading\nbecomes a toggle with a chevron, and the section's rows glide shut\nbeneath it. Every section starts open. A section is known by its\n`category`, the id the fold state lists. The collapsed rail and the\nphone drawer show every row whatever is folded, since neither shows\nthe headings.",
+            "description": "Let the reader fold each titled section under its heading: the heading\nbecomes a toggle with a chevron, and the section's rows glide shut\nbeneath it. Every section starts open. A section is known by its\n`id`, or its `category` when it has none, the key the fold state lists. The collapsed rail and the\nphone drawer show every row whatever is folded, since neither shows\nthe headings.",
             "defaultValue": "false"
           },
           {
             "name": "collapsedSections",
             "type": "string[]",
             "required": false,
-            "description": "Controlled list of folded sections, by `category`. Needs `collapsibleSections`."
+            "description": "Controlled list of folded sections, by each section's `id` (its `category` when it has none). Needs `collapsibleSections`."
           },
           {
             "name": "defaultCollapsedSections",
             "type": "string[]",
             "required": false,
-            "description": "Sections folded at first (uncontrolled), by `category`. Needs `collapsibleSections`."
+            "description": "Sections folded at first (uncontrolled), by `id` (else `category`). Needs `collapsibleSections`."
           },
           {
             "name": "onCollapsedSectionsChange",
@@ -1624,7 +1624,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "foldForPanel",
             "type": "boolean",
             "required": false,
-            "description": "Fold the rail to its icon form when the side panel opens and its parent\nhas too little room for the expanded rail, the panel and a readable\ncolumn beside them. For a rail in a narrow host, such as a chat.",
+            "description": "Fold the rail to its icon form when the side panel opens and its parent\nhas too little room for the expanded rail, the panel and a readable\ncolumn beside them: under 1000px (the 280px rail, the 240px panel and a\n480px column). For a rail in a narrow host, such as a chat.",
             "defaultValue": "false"
           },
           {
@@ -20465,7 +20465,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "collapsedSections",
             "type": "string[]",
             "required": false,
-            "description": "The folded groups, by label. Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`.",
+            "description": "The folded groups, by each group's `id` (its `label` when it has none). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`.",
             "defaultValue": "[]"
           },
           {
@@ -20695,7 +20695,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "collapsedSections",
             "type": "string[]",
             "required": false,
-            "description": "The folded sections, by heading text (`projectsLabel` for the projects, a group's `label` for a group). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`.",
+            "description": "The folded sections: `projects` for the projects, and each group by its `id` (its `label` when it has none). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`.",
             "defaultValue": "[]"
           },
           {
@@ -22967,7 +22967,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "threads",
             "type": "RailSlot",
             "required": false,
-            "description": "A session-history rail. `true` seats the built-in ChatThreads, an\nAppSidebar over the provider's thread lifecycle, so it takes the app\nrail's shell, sizes, side panel and drawer: inline beside the\nconversation on a wide host, and on a narrow one the app rail's drawer,\nopened from the header's menu button. A render prop seats your own,\ninline on a wide host and as a slide-over sheet on a narrow one.",
+            "description": "A session-history rail. `true` seats the built-in ChatThreads, an\nAppSidebar: inline when wide, its drawer from the header when narrow.\nA render prop seats your own, inline or as a slide-over sheet.",
             "typeRefs": [
               "RailSlot"
             ]
@@ -23693,13 +23693,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "overlay",
             "type": "boolean",
             "required": true,
-            "description": "The widget seated the rail as a sheet over the conversation rather than beside it. A rail outside the widget's own seat (a custom `threads` slot) draws itself expanded there."
+            "description": "Set when a custom `threads` slot seats this rail in the widget's slide-over sheet, where it draws itself expanded; the built-in rail takes its form from the widget."
           },
           {
             "name": "close",
             "type": "() => void",
             "required": true,
-            "description": "Closes the sheet; a no-op on the inline rail."
+            "description": "Closes that sheet; a no-op elsewhere."
           },
           {
             "name": "logo",
@@ -23732,14 +23732,26 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "collapsibleSections",
             "type": "boolean",
             "required": false,
-            "description": "Let the reader fold the projects, each labelled history group and the host's `sections` under their headings. Every section starts open.",
+            "description": "Let the reader fold the projects, each labelled history group and the\nhost's `sections` under their headings. Every section starts open.",
             "defaultValue": "false"
+          },
+          {
+            "name": "collapsedSections",
+            "type": "string[]",
+            "required": false,
+            "description": "Controlled list of folded sections: `projects`, then each group or section by `id` (else its heading)."
           },
           {
             "name": "defaultCollapsedSections",
             "type": "string[]",
             "required": false,
-            "description": "Sections folded at first, by heading text, when `collapsibleSections` is on."
+            "description": "Sections folded at first (uncontrolled), keyed as `collapsedSections` is."
+          },
+          {
+            "name": "onCollapsedSectionsChange",
+            "type": "((collapsedSections: string[]) => void)",
+            "required": false,
+            "description": "Fires with the new list of folded sections."
           },
           {
             "name": "footerAction",
@@ -23812,9 +23824,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "threadPanelLabels",
             "type": "Pick<ThreadPanelProps, \"statusLabels\" | \"collapseLabel\" | \"expandLabel\" | \"pinnedLabel\" | \"threadMenuLabel\" | \"renameLabel\" | \"projectsLabel\" | \"newProjectLabel\">",
             "required": false,
-            "description": "The words the rail writes, merged over their English defaults: the\nspoken pin and status text (\"Pinned\", \"Working\"…), each row's menu\ntrigger (\"Thread options\"), the rename field (\"Rename thread\"), the\nprojects heading and its add button (\"Projects\", \"New project\"), and the\ncollapse toggle (\"Collapse the panel\", \"Expand the panel\"). The history's\nown name is `historyLabel`.",
+            "description": "The words the rail writes, merged over their English defaults: the\nspoken pin and status text (\"Pinned\", \"Working\"…), each row's menu\ntrigger (\"Thread options\"), the rename field (\"Rename thread\"), the\nprojects heading and its add button (\"Projects\", \"New project\"), and the\ncollapse toggle (\"Collapse the panel\", \"Expand the panel\", which reach\nthe rail; `railLabels` wins over them). The history's own name is\n`historyLabel`.",
             "typeRefs": [
               "ThreadPanelProps"
+            ]
+          },
+          {
+            "name": "railLabels",
+            "type": "Pick<AppSidebarProps, \"collapseLabel\" | \"closeLabel\" | \"expandLabel\" | \"profileMoreLabel\" | \"menuLabel\" | \"drawerBackLabel\" | \"drawerOverviewLabel\">",
+            "required": false,
+            "description": "The words the rail's shell writes, merged over AppSidebar's English\ndefaults: the collapse toggle, the drawer's close button (\"Close\nnavigation\"), its menu and back rows (\"Menu\", \"Back to …\", \"… overview\")\nand the profile's more button (\"Profile options\").",
+            "typeRefs": [
+              "AppSidebarProps"
             ]
           },
           {

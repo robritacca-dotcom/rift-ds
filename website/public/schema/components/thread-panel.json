@@ -230,7 +230,7 @@
           "type": "string[]",
           "typeKind": "array",
           "required": false,
-          "description": "The folded sections, by heading text (`projectsLabel` for the projects, a group's `label` for a group). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`.",
+          "description": "The folded sections: `projects` for the projects, and each group by its `id` (its `label` when it has none). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`.",
           "defaultExpression": "[]"
         },
         {
@@ -404,7 +404,7 @@
     },
     "ThreadPanelGroup": {
       "kind": "interface",
-      "definition": "interface ThreadPanelGroup {\n  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */\n  label?: string;\n  /** The group's threads, in display order. */\n  threads: ThreadPanelThread[];\n}",
+      "definition": "interface ThreadPanelGroup {\n  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */\n  label?: string;\n  /** Stable identity for the group's fold state, the key `collapsedSections` lists. Defaults to `label`; set it when the label is translated or may change. */\n  id?: string;\n  /** The group's threads, in display order. */\n  threads: ThreadPanelThread[];\n}",
       "refs": [
         "ThreadPanelThread"
       ]

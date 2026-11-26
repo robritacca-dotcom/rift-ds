@@ -31,7 +31,7 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Let the reader fold each titled section under its heading: the heading\nbecomes a toggle with a chevron, and the section's rows glide shut\nbeneath it. Every section starts open. A section is known by its\n`category`, the id the fold state lists. The collapsed rail and the\nphone drawer show every row whatever is folded, since neither shows\nthe headings.",
+          "description": "Let the reader fold each titled section under its heading: the heading\nbecomes a toggle with a chevron, and the section's rows glide shut\nbeneath it. Every section starts open. A section is known by its\n`id`, or its `category` when it has none, the key the fold state lists. The collapsed rail and the\nphone drawer show every row whatever is folded, since neither shows\nthe headings.",
           "default": false
         },
         {
@@ -39,14 +39,14 @@
           "type": "string[]",
           "typeKind": "array",
           "required": false,
-          "description": "Controlled list of folded sections, by `category`. Needs `collapsibleSections`."
+          "description": "Controlled list of folded sections, by each section's `id` (its `category` when it has none). Needs `collapsibleSections`."
         },
         {
           "name": "defaultCollapsedSections",
           "type": "string[]",
           "typeKind": "array",
           "required": false,
-          "description": "Sections folded at first (uncontrolled), by `category`. Needs `collapsibleSections`."
+          "description": "Sections folded at first (uncontrolled), by `id` (else `category`). Needs `collapsibleSections`."
         },
         {
           "name": "onCollapsedSectionsChange",
@@ -194,7 +194,7 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Fold the rail to its icon form when the side panel opens and its parent\nhas too little room for the expanded rail, the panel and a readable\ncolumn beside them. For a rail in a narrow host, such as a chat.",
+          "description": "Fold the rail to its icon form when the side panel opens and its parent\nhas too little room for the expanded rail, the panel and a readable\ncolumn beside them: under 1000px (the 280px rail, the 240px panel and a\n480px column). For a rail in a narrow host, such as a chat.",
           "default": false
         },
         {
@@ -436,7 +436,7 @@
     },
     "AppSidebarSection": {
       "kind": "interface",
-      "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
+      "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /** Stable identity for the section's fold state, the key `collapsedSections` lists. Defaults to `category`; set it when the heading is translated or may change, or two headings share their text */\n  id?: string;\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
       "refs": [
         "AppSidebarItem",
         "AppSidebarSectionAction",
@@ -445,7 +445,7 @@
     },
     "AppSidebarSectionAction": {
       "kind": "interface",
-      "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
+      "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. Defaults to `add`. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
       "description": "A button in a section's heading, such as a project list's add."
     },
     "AppSidebarSectionContext": {

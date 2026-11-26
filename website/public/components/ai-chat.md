@@ -49,7 +49,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 | maxAttachments | `number` | no | `10` | Most files the visitor may queue on one message. |
 | maxAttachmentBytes | `number` | no | `50 * 1024 * 1024` | Largest file the visitor may queue, in bytes. |
 | mentions | `MentionSource[]` | no |  | What the visitor can reference while typing: one source per trigger character, drawn as tags in the composer and in the sent bubble. |
-| threads | `RailSlot` | no |  | A session-history rail. `true` seats the built-in ChatThreads, an AppSidebar over the provider's thread lifecycle, so it takes the app rail's shell, sizes, side panel and drawer: inline beside the conversation on a wide host, and on a narrow one the app rail's drawer, opened from the header's menu button. A render prop seats your own, inline on a wide host and as a slide-over sheet on a narrow one. |
+| threads | `RailSlot` | no |  | A session-history rail. `true` seats the built-in ChatThreads, an AppSidebar: inline when wide, its drawer from the header when narrow. A render prop seats your own, inline or as a slide-over sheet. |
 | threadsProps | `Omit<ChatThreadsProps, "close" \| "overlay">` | no |  | Props for the built-in threads rail when `threads` is `true`. |
 | tabs | `boolean \| ReactNode` | no |  | An open-sessions tab strip as its own row under the header. `true` seats the built-in ChatTabs; a node seats your own. |
 | tabsProps | `ChatTabsProps` | no |  | Props for the built-in tab strip when `tabs` is `true`: its name, its close buttons' names and its spoken statuses. |
@@ -153,14 +153,16 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| overlay | `boolean` | yes |  | The widget seated the rail as a sheet over the conversation rather than beside it. A rail outside the widget's own seat (a custom `threads` slot) draws itself expanded there. |
-| close | `() => void` | yes |  | Closes the sheet; a no-op on the inline rail. |
+| overlay | `boolean` | yes |  | Set when a custom `threads` slot seats this rail in the widget's slide-over sheet, where it draws itself expanded; the built-in rail takes its form from the widget. |
+| close | `() => void` | yes |  | Closes that sheet; a no-op elsewhere. |
 | logo | `ReactNode` | no |  | The brand row's mark. Defaults to a generated pixel avatar seeded by `logoText`. |
 | logoText | `string` | no |  | The brand row's text, beside the mark while the rail is expanded. |
 | profile | `ThreadPanelProfile` | no |  | The signed-in person, shown at the rail's foot. |
 | footerSlot | `ReactNode` | no |  | Rendered in the rail's footer above the profile row: a theme toggle, a link out. Fades out while the rail is collapsed. |
 | collapsibleSections | `boolean` | no | `false` | Let the reader fold the projects, each labelled history group and the host's `sections` under their headings. Every section starts open. |
-| defaultCollapsedSections | `string[]` | no |  | Sections folded at first, by heading text, when `collapsibleSections` is on. |
+| collapsedSections | `string[]` | no |  | Controlled list of folded sections: `projects`, then each group or section by `id` (else its heading). |
+| defaultCollapsedSections | `string[]` | no |  | Sections folded at first (uncontrolled), keyed as `collapsedSections` is. |
+| onCollapsedSectionsChange | `((collapsedSections: string[]) => void)` | no |  | Fires with the new list of folded sections. |
 | footerAction | `ReactNode` | no |  | Rendered below the profile row, such as a full-width Button back to an index. It fades out while the rail is collapsed. |
 | collapsedFooterSlot | `ReactNode` | no |  | Rendered in the rail's footer while it is collapsed, in `footerSlot`'s place: the same controls at their smallest, stacked on the rail's axis, crossfading with the full form. |
 | sections | `AppSidebarSection[]` | no |  | The host's own sections after the history, in AppSidebar's shape: a section of setting rows (Appearance) whose choices open in the side panel beside the rail and drill in on the drawer, as the app rail's do. |
@@ -170,7 +172,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 | defaultExpanded | `boolean` | no | `false` | Whether the rail starts expanded. Defaults to `false`: it starts collapsed to its icon strip. The drawer, and a rail that is not `collapsible`, always show expanded. |
 | historyLabel | `string` | no | `'Chat history'` | Accessible name of the history inside the rail. |
 | railLabel | `string` | no | `'Chats'` | Accessible name of the rail's navigation landmark. |
-| threadPanelLabels | `Pick<ThreadPanelProps, "statusLabels" \| "collapseLabel" \| "expandLabel" \| "pinnedLabel" \| "threadMenuLabel" \| "renameLabel" \| "projectsLabel" \| "newProjectLabel">` | no |  | The words the rail writes, merged over their English defaults: the spoken pin and status text ("Pinned", "Working"…), each row's menu trigger ("Thread options"), the rename field ("Rename thread"), the projects heading and its add button ("Projects", "New project"), and the collapse toggle ("Collapse the panel", "Expand the panel"). The history's own name is `historyLabel`. |
+| threadPanelLabels | `Pick<ThreadPanelProps, "statusLabels" \| "collapseLabel" \| "expandLabel" \| "pinnedLabel" \| "threadMenuLabel" \| "renameLabel" \| "projectsLabel" \| "newProjectLabel">` | no |  | The words the rail writes, merged over their English defaults: the spoken pin and status text ("Pinned", "Working"…), each row's menu trigger ("Thread options"), the rename field ("Rename thread"), the projects heading and its add button ("Projects", "New project"), and the collapse toggle ("Collapse the panel", "Expand the panel", which reach the rail; `railLabels` wins over them). The history's own name is `historyLabel`. |
+| railLabels | `Pick<AppSidebarProps, "collapseLabel" \| "closeLabel" \| "expandLabel" \| "profileMoreLabel" \| "menuLabel" \| "drawerBackLabel" \| "drawerOverviewLabel">` | no |  | The words the rail's shell writes, merged over AppSidebar's English defaults: the collapse toggle, the drawer's close button ("Close navigation"), its menu and back rows ("Menu", "Back to …", "… overview") and the profile's more button ("Profile options"). |
 | actionLabels | `Partial<Record<"pin" \| "unpin" \| "rename" \| "delete", string>>` | no |  | The rows of each thread's menu, by action; a key left out keeps its English. Defaults to "Pin", "Unpin", "Rename" and "Delete". |
 
 ## ChatTabs props
@@ -318,6 +321,10 @@ interface AppSidebarItem {
 }
 ```
 
+### AppSidebarProps
+
+The props of AppSidebar: `get_component("AppSidebar")`.
+
 ### AppSidebarSection
 
 ```ts
@@ -326,6 +333,8 @@ interface AppSidebarSection {
   category?: string;
   /** Nav items in this section. Pass an empty list for a section that is all `content` */
   items: AppSidebarItem[];
+  /** Stable identity for the section's fold state, the key `collapsedSections` lists. Defaults to `category`; set it when the heading is translated or may change, or two headings share their text */
+  id?: string;
   /**
    * The section's own content after its rows, for a rail whose content is
    * more than destinations (a chat's history). On the expanded rail it sits
@@ -348,7 +357,7 @@ A button in a section's heading, such as a project list's add.
 interface AppSidebarSectionAction {
   /** Its accessible name, and the row's text in the drawer. */
   label: string;
-  /** A Material Symbol name. */
+  /** A Material Symbol name. Defaults to `add`. */
   icon?: string;
   /** What pressing it does. */
   onClick: () => void;
@@ -1178,6 +1187,8 @@ interface Starter {
 interface ThreadPanelGroup {
   /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */
   label?: string;
+  /** Stable identity for the group's fold state, the key `collapsedSections` lists. Defaults to `label`; set it when the label is translated or may change. */
+  id?: string;
   /** The group's threads, in display order. */
   threads: ThreadPanelThread[];
 }

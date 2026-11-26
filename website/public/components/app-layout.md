@@ -139,6 +139,8 @@ interface AppSidebarSection {
   category?: string;
   /** Nav items in this section. Pass an empty list for a section that is all `content` */
   items: AppSidebarItem[];
+  /** Stable identity for the section's fold state, the key `collapsedSections` lists. Defaults to `category`; set it when the heading is translated or may change, or two headings share their text */
+  id?: string;
   /**
    * The section's own content after its rows, for a rail whose content is
    * more than destinations (a chat's history). On the expanded rail it sits
@@ -161,7 +163,7 @@ A button in a section's heading, such as a project list's add.
 interface AppSidebarSectionAction {
   /** Its accessible name, and the row's text in the drawer. */
   label: string;
-  /** A Material Symbol name. */
+  /** A Material Symbol name. Defaults to `add`. */
   icon?: string;
   /** What pressing it does. */
   onClick: () => void;

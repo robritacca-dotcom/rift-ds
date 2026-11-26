@@ -260,7 +260,7 @@
           "type": "RailSlot",
           "typeKind": "reference",
           "required": false,
-          "description": "A session-history rail. `true` seats the built-in ChatThreads, an\nAppSidebar over the provider's thread lifecycle, so it takes the app\nrail's shell, sizes, side panel and drawer: inline beside the\nconversation on a wide host, and on a narrow one the app rail's drawer,\nopened from the header's menu button. A render prop seats your own,\ninline on a wide host and as a slide-over sheet on a narrow one.",
+          "description": "A session-history rail. `true` seats the built-in ChatThreads, an\nAppSidebar: inline when wide, its drawer from the header when narrow.\nA render prop seats your own, inline or as a slide-over sheet.",
           "typeRefs": [
             "RailSlot"
           ]
@@ -1075,14 +1075,14 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": true,
-          "description": "The widget seated the rail as a sheet over the conversation rather than beside it. A rail outside the widget's own seat (a custom `threads` slot) draws itself expanded there."
+          "description": "Set when a custom `threads` slot seats this rail in the widget's slide-over sheet, where it draws itself expanded; the built-in rail takes its form from the widget."
         },
         {
           "name": "close",
           "type": "() => void",
           "typeKind": "function",
           "required": true,
-          "description": "Closes the sheet; a no-op on the inline rail."
+          "description": "Closes that sheet; a no-op elsewhere."
         },
         {
           "name": "logo",
@@ -1120,15 +1120,29 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Let the reader fold the projects, each labelled history group and the host's `sections` under their headings. Every section starts open.",
+          "description": "Let the reader fold the projects, each labelled history group and the\nhost's `sections` under their headings. Every section starts open.",
           "default": false
+        },
+        {
+          "name": "collapsedSections",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Controlled list of folded sections: `projects`, then each group or section by `id` (else its heading)."
         },
         {
           "name": "defaultCollapsedSections",
           "type": "string[]",
           "typeKind": "array",
           "required": false,
-          "description": "Sections folded at first, by heading text, when `collapsibleSections` is on."
+          "description": "Sections folded at first (uncontrolled), keyed as `collapsedSections` is."
+        },
+        {
+          "name": "onCollapsedSectionsChange",
+          "type": "((collapsedSections: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the new list of folded sections."
         },
         {
           "name": "footerAction",
@@ -1211,9 +1225,19 @@
           "type": "Pick<ThreadPanelProps, \"statusLabels\" | \"collapseLabel\" | \"expandLabel\" | \"pinnedLabel\" | \"threadMenuLabel\" | \"renameLabel\" | \"projectsLabel\" | \"newProjectLabel\">",
           "typeKind": "reference",
           "required": false,
-          "description": "The words the rail writes, merged over their English defaults: the\nspoken pin and status text (\"Pinned\", \"Working\"…), each row's menu\ntrigger (\"Thread options\"), the rename field (\"Rename thread\"), the\nprojects heading and its add button (\"Projects\", \"New project\"), and the\ncollapse toggle (\"Collapse the panel\", \"Expand the panel\"). The history's\nown name is `historyLabel`.",
+          "description": "The words the rail writes, merged over their English defaults: the\nspoken pin and status text (\"Pinned\", \"Working\"…), each row's menu\ntrigger (\"Thread options\"), the rename field (\"Rename thread\"), the\nprojects heading and its add button (\"Projects\", \"New project\"), and the\ncollapse toggle (\"Collapse the panel\", \"Expand the panel\", which reach\nthe rail; `railLabels` wins over them). The history's own name is\n`historyLabel`.",
           "typeRefs": [
             "ThreadPanelProps"
+          ]
+        },
+        {
+          "name": "railLabels",
+          "type": "Pick<AppSidebarProps, \"collapseLabel\" | \"closeLabel\" | \"expandLabel\" | \"profileMoreLabel\" | \"menuLabel\" | \"drawerBackLabel\" | \"drawerOverviewLabel\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The words the rail's shell writes, merged over AppSidebar's English\ndefaults: the collapse toggle, the drawer's close button (\"Close\nnavigation\"), its menu and back rows (\"Menu\", \"Back to …\", \"… overview\")\nand the profile's more button (\"Profile options\").",
+          "typeRefs": [
+            "AppSidebarProps"
           ]
         },
         {
@@ -1475,9 +1499,14 @@
         "Shortcut"
       ]
     },
+    "AppSidebarProps": {
+      "kind": "component-props",
+      "component": "AppSidebar",
+      "see": "get_component(\"AppSidebar\")"
+    },
     "AppSidebarSection": {
       "kind": "interface",
-      "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
+      "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /** Stable identity for the section's fold state, the key `collapsedSections` lists. Defaults to `category`; set it when the heading is translated or may change, or two headings share their text */\n  id?: string;\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
       "refs": [
         "AppSidebarItem",
         "AppSidebarSectionAction",
@@ -1486,7 +1515,7 @@
     },
     "AppSidebarSectionAction": {
       "kind": "interface",
-      "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
+      "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. Defaults to `add`. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
       "description": "A button in a section's heading, such as a project list's add."
     },
     "AppSidebarSectionContext": {
@@ -1813,7 +1842,7 @@
     },
     "ThreadPanelGroup": {
       "kind": "interface",
-      "definition": "interface ThreadPanelGroup {\n  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */\n  label?: string;\n  /** The group's threads, in display order. */\n  threads: ThreadPanelThread[];\n}",
+      "definition": "interface ThreadPanelGroup {\n  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */\n  label?: string;\n  /** Stable identity for the group's fold state, the key `collapsedSections` lists. Defaults to `label`; set it when the label is translated or may change. */\n  id?: string;\n  /** The group's threads, in display order. */\n  threads: ThreadPanelThread[];\n}",
       "refs": [
         "ThreadPanelThread"
       ]

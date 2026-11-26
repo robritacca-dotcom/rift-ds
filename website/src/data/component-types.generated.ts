@@ -224,7 +224,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "AppSidebarSection": {
         "kind": "interface",
-        "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
+        "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /** Stable identity for the section's fold state, the key `collapsedSections` lists. Defaults to `category`; set it when the heading is translated or may change, or two headings share their text */\n  id?: string;\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
         "refs": [
           "AppSidebarItem",
           "AppSidebarSectionAction",
@@ -233,7 +233,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "AppSidebarSectionAction": {
         "kind": "interface",
-        "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
+        "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. Defaults to `add`. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
         "description": "A button in a section's heading, such as a project list's add."
       },
       "AppSidebarSectionContext": {
@@ -297,7 +297,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "AppSidebarSection": {
         "kind": "interface",
-        "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
+        "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /** Stable identity for the section's fold state, the key `collapsedSections` lists. Defaults to `category`; set it when the heading is translated or may change, or two headings share their text */\n  id?: string;\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
         "refs": [
           "AppSidebarItem",
           "AppSidebarSectionAction",
@@ -306,7 +306,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "AppSidebarSectionAction": {
         "kind": "interface",
-        "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
+        "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. Defaults to `add`. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
         "description": "A button in a section's heading, such as a project list's add."
       },
       "AppSidebarSectionContext": {
@@ -3115,7 +3115,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "ThreadPanelGroup": {
         "kind": "interface",
-        "definition": "interface ThreadPanelGroup {\n  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */\n  label?: string;\n  /** The group's threads, in display order. */\n  threads: ThreadPanelThread[];\n}",
+        "definition": "interface ThreadPanelGroup {\n  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */\n  label?: string;\n  /** Stable identity for the group's fold state, the key `collapsedSections` lists. Defaults to `label`; set it when the label is translated or may change. */\n  id?: string;\n  /** The group's threads, in display order. */\n  threads: ThreadPanelThread[];\n}",
         "refs": [
           "ThreadPanelThread"
         ]
@@ -3177,7 +3177,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "ThreadPanelGroup": {
         "kind": "interface",
-        "definition": "interface ThreadPanelGroup {\n  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */\n  label?: string;\n  /** The group's threads, in display order. */\n  threads: ThreadPanelThread[];\n}",
+        "definition": "interface ThreadPanelGroup {\n  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */\n  label?: string;\n  /** Stable identity for the group's fold state, the key `collapsedSections` lists. Defaults to `label`; set it when the label is translated or may change. */\n  id?: string;\n  /** The group's threads, in display order. */\n  threads: ThreadPanelThread[];\n}",
         "refs": [
           "ThreadPanelThread"
         ]
@@ -3462,9 +3462,14 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
           "Shortcut"
         ]
       },
+      "AppSidebarProps": {
+        "kind": "component-props",
+        "component": "AppSidebar",
+        "see": "get_component(\"AppSidebar\")"
+      },
       "AppSidebarSection": {
         "kind": "interface",
-        "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
+        "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section and for the first; with more than one, give the rest their heading, so every group the gaps set apart is named. A section with `content` may name its own groups instead */\n  category?: string;\n  /** Nav items in this section. Pass an empty list for a section that is all `content` */\n  items: AppSidebarItem[];\n  /** Stable identity for the section's fold state, the key `collapsedSections` lists. Defaults to `category`; set it when the heading is translated or may change, or two headings share their text */\n  id?: string;\n  /**\n   * The section's own content after its rows, for a rail whose content is\n   * more than destinations (a chat's history). On the expanded rail it sits\n   * under the section's fold, at the rail's expanded width; the collapsed\n   * rail, which has no room for it, folds it away; in the drawer it follows\n   * the section's rows on the first level. A function is told where it is\n   * drawn, so its rows can close the drawer.\n   */\n  content?: React.ReactNode | ((context: AppSidebarSectionContext) => React.ReactNode);\n  /** A button in the section's heading on the expanded rail, and a row after the section's rows in the drawer, such as a project list's add */\n  action?: AppSidebarSectionAction;\n}",
         "refs": [
           "AppSidebarItem",
           "AppSidebarSectionAction",
@@ -3473,7 +3478,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "AppSidebarSectionAction": {
         "kind": "interface",
-        "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
+        "definition": "interface AppSidebarSectionAction {\n  /** Its accessible name, and the row's text in the drawer. */\n  label: string;\n  /** A Material Symbol name. Defaults to `add`. */\n  icon?: string;\n  /** What pressing it does. */\n  onClick: () => void;\n}",
         "description": "A button in a section's heading, such as a project list's add."
       },
       "AppSidebarSectionContext": {
@@ -3800,7 +3805,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "ThreadPanelGroup": {
         "kind": "interface",
-        "definition": "interface ThreadPanelGroup {\n  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */\n  label?: string;\n  /** The group's threads, in display order. */\n  threads: ThreadPanelThread[];\n}",
+        "definition": "interface ThreadPanelGroup {\n  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */\n  label?: string;\n  /** Stable identity for the group's fold state, the key `collapsedSections` lists. Defaults to `label`; set it when the label is translated or may change. */\n  id?: string;\n  /** The group's threads, in display order. */\n  threads: ThreadPanelThread[];\n}",
         "refs": [
           "ThreadPanelThread"
         ]

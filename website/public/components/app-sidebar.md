@@ -21,9 +21,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | sections | `AppSidebarSection[]` | yes |  | Navigation sections |
-| collapsibleSections | `boolean` | no | `false` | Let the reader fold each titled section under its heading: the heading becomes a toggle with a chevron, and the section's rows glide shut beneath it. Every section starts open. A section is known by its `category`, the id the fold state lists. The collapsed rail and the phone drawer show every row whatever is folded, since neither shows the headings. |
-| collapsedSections | `string[]` | no |  | Controlled list of folded sections, by `category`. Needs `collapsibleSections`. |
-| defaultCollapsedSections | `string[]` | no |  | Sections folded at first (uncontrolled), by `category`. Needs `collapsibleSections`. |
+| collapsibleSections | `boolean` | no | `false` | Let the reader fold each titled section under its heading: the heading becomes a toggle with a chevron, and the section's rows glide shut beneath it. Every section starts open. A section is known by its `id`, or its `category` when it has none, the key the fold state lists. The collapsed rail and the phone drawer show every row whatever is folded, since neither shows the headings. |
+| collapsedSections | `string[]` | no |  | Controlled list of folded sections, by each section's `id` (its `category` when it has none). Needs `collapsibleSections`. |
+| defaultCollapsedSections | `string[]` | no |  | Sections folded at first (uncontrolled), by `id` (else `category`). Needs `collapsibleSections`. |
 | onCollapsedSectionsChange | `((collapsedSections: string[]) => void)` | no |  | Fires with the full new list of folded sections whenever a heading is pressed, in both controlled and uncontrolled modes. |
 | profile | `AppSidebarProfile` | no |  | Profile data for the bottom section |
 | activeKey | `string` | no |  | Key of the currently active item. When one of its children is the current page (`activeSubKey` or `activeTertiaryKey`), that child carries `aria-current` instead, and this row drops its fill while the child shows below it. |
@@ -41,7 +41,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 | drawerOpen | `boolean` | no |  | Controlled open state of the drawer form |
 | defaultDrawerOpen | `boolean` | no | `false` | Whether the drawer form starts open (uncontrolled) |
 | onDrawerOpenChange | `((open: boolean) => void)` | no |  | Called when the drawer opens or closes, including every close of its own: the scrim, the close button, Escape, a destination row, and growing back into the rail form |
-| foldForPanel | `boolean` | no | `false` | Fold the rail to its icon form when the side panel opens and its parent has too little room for the expanded rail, the panel and a readable column beside them. For a rail in a narrow host, such as a chat. |
+| foldForPanel | `boolean` | no | `false` | Fold the rail to its icon form when the side panel opens and its parent has too little room for the expanded rail, the panel and a readable column beside them: under 1000px (the 280px rail, the 240px panel and a 480px column). For a rail in a narrow host, such as a chat. |
 | keyLabels | `Partial<Record<string, string>>` | no |  | Replaces any legend an item's `keys` hint is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard |
 | onProfileMore | `(() => void)` | no |  | Callback when profile more button clicked |
 | layout | `AppSidebarLayout` | no | `'inset'` | How the rail meets the page, one of the three app shell modes. `flush` runs it edge to edge on the shell colour behind a hairline divider, nothing raised. `floating` floats it off the viewport edges as a glass card: inset with rounded corners, the translucent glass fill over a backdrop blur, and the floating shadow (the inset defaults to 20px and is overridable via the --ds-sidebar-float-inset custom property). `inset` runs it flush on the app shell colour, beside a raised content surface inset from the edges, as AppLayout's `inset` layout draws it. Inside a host that marks itself a shell (AppLayout, a chat or template page), the rail reads that host's mode from the shell recipe. Defaults to `inset` (or `floating` while the deprecated `floating` is set). |
@@ -148,6 +148,8 @@ interface AppSidebarSection {
   category?: string;
   /** Nav items in this section. Pass an empty list for a section that is all `content` */
   items: AppSidebarItem[];
+  /** Stable identity for the section's fold state, the key `collapsedSections` lists. Defaults to `category`; set it when the heading is translated or may change, or two headings share their text */
+  id?: string;
   /**
    * The section's own content after its rows, for a rail whose content is
    * more than destinations (a chat's history). On the expanded rail it sits
@@ -170,7 +172,7 @@ A button in a section's heading, such as a project list's add.
 interface AppSidebarSectionAction {
   /** Its accessible name, and the row's text in the drawer. */
   label: string;
-  /** A Material Symbol name. */
+  /** A Material Symbol name. Defaults to `add`. */
   icon?: string;
   /** What pressing it does. */
   onClick: () => void;

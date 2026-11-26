@@ -47,7 +47,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 | projects | `ThreadPanelProject[]` | no |  | Project rows between the standing controls and the history, under their own group heading. The section renders only when non-empty; collapsed, the rows fold to icon circles like the controls. |
 | projectsLabel | `string` | no | `'Projects'` | The projects section's group heading text. |
 | collapsibleSections | `boolean` | no | `false` | Let the reader fold each titled section (the projects and every labelled history group) under its heading: the heading becomes a toggle with a chevron, and the rows glide shut beneath it. The collapsed rail shows no headings, so it folds nothing. |
-| collapsedSections | `string[]` | no | `[]` | The folded sections, by heading text (`projectsLabel` for the projects, a group's `label` for a group). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`. |
+| collapsedSections | `string[]` | no | `[]` | The folded sections: `projects` for the projects, and each group by its `id` (its `label` when it has none). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`. |
 | onCollapsedSectionsChange | `((collapsedSections: string[]) => void)` | no |  | Fires with the full new list of folded sections when a heading is pressed. |
 | activeProjectId | `string` | no |  | Id of the open project. Its row renders filled and carries `aria-current`. |
 | onProjectSelect | `((id: string) => void)` | no |  | Fires with the clicked project's id. Rows with an `href` navigate as well. |
@@ -129,6 +129,8 @@ interface ThreadPanelControl {
 interface ThreadPanelGroup {
   /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */
   label?: string;
+  /** Stable identity for the group's fold state, the key `collapsedSections` lists. Defaults to `label`; set it when the label is translated or may change. */
+  id?: string;
   /** The group's threads, in display order. */
   threads: ThreadPanelThread[];
 }

@@ -35,7 +35,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 | moreLabel | `string` | no |  | Text for the quiet trailing row that reveals older threads, e.g. "Show 20 more". Renders only when given. |
 | onShowMore | `(() => void)` | no |  | Fires when the more row is clicked. |
 | collapsibleSections | `boolean` | no | `false` | Let the reader fold each labelled group under its heading: the heading becomes a toggle with a chevron, and the rows glide shut beneath it. |
-| collapsedSections | `string[]` | no | `[]` | The folded groups, by label. Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`. |
+| collapsedSections | `string[]` | no | `[]` | The folded groups, by each group's `id` (its `label` when it has none). Controlled: pair it with `onCollapsedSectionsChange`. Needs `collapsibleSections`. |
 | onCollapsedSectionsChange | `((collapsedSections: string[]) => void)` | no |  | Fires with the full new list of folded groups when a heading is pressed. |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |
@@ -71,6 +71,8 @@ type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
 interface ThreadPanelGroup {
   /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */
   label?: string;
+  /** Stable identity for the group's fold state, the key `collapsedSections` lists. Defaults to `label`; set it when the label is translated or may change. */
+  id?: string;
   /** The group's threads, in display order. */
   threads: ThreadPanelThread[];
 }

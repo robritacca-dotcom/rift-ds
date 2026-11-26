@@ -562,9 +562,10 @@
 
 
 /* ============================================
-   HEADING — the `heading` prop
+   TITLE — the `title` prop
    A quiet line over the suggestions, in the tertiary ink a step under
-   them so the set leads. It sits outside the list, in a group with it.
+   them so the set leads. It sits outside the list, in a group with it,
+   and the group is the root.
    ============================================ */
 
 .ds-prompt-suggestions-group {
@@ -574,7 +575,7 @@
   min-width: 0;
 }
 
-.ds-prompt-suggestions__heading {
+.ds-prompt-suggestions-group__title {
   padding-inline-start: var(--padding-100);
   font-family: var(--font-paragraph-sm-emphasis-family);
   font-size: var(--font-paragraph-sm-emphasis-size);

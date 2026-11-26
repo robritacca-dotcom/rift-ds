@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect } from 'storybook/test';
+import { expect, fn, userEvent, waitFor } from 'storybook/test';
 import { PromptSuggestions } from './PromptSuggestions';
 import { Textarea } from '../Textarea/Textarea';
 
@@ -13,7 +13,7 @@ const meta = {
   argTypes: {
     layout: {
       control: 'inline-radio',
-      options: ['scroll', 'wrap', 'stack', 'tiles', 'cards'],
+      options: ['scroll', 'wrap', 'stack', 'tiles', 'cards', 'list'],
     },
     size: {
       control: 'inline-radio',
@@ -219,21 +219,29 @@ export const Cards: Story = {
   },
 };
 
-/** Blocks hold their place while generating, the same as the chips. */
-/** List: one panel of example rows, each a dot, a label and its description; `numbered` adds keycaps and lets 1 to 9 pick a row outside a text field, and `heading` names the set. */
+/** List: one panel of example rows, each a dot, a label and its description; `numbered` adds keycaps and lets 1 to 9 pick a row outside a text field, and `title` names the set. Pressing a digit picks its row. */
 export const List: Story = {
   args: {
     layout: 'list',
     numbered: true,
-    heading: 'Start from an example',
+    title: 'Start from an example',
+    onValueChange: fn(),
     suggestions: [
       { id: 'quarter', label: 'Sum up the quarter', description: 'Revenue against plan' },
       { id: 'invoices', label: 'Chase what is owed', description: 'Overdue invoices and who to nudge' },
       { id: 'hiring', label: 'Plan the next hire', description: 'Budget, role and timing' },
     ],
   },
+  play: async ({ args, canvas }) => {
+    await expect(canvas.getByRole('list', { name: 'Start from an example' })).toBeInTheDocument();
+    const second = canvas.getByRole('button', { name: /Chase what is owed/ });
+    await expect(second).toHaveAttribute('aria-keyshortcuts', '2');
+    await userEvent.keyboard('2');
+    await waitFor(() => expect(args.onValueChange).toHaveBeenCalledWith('invoices'));
+  },
 };
 
+/** Blocks hold their place while generating, the same as the chips. */
 export const CardsPending: Story = {
   args: {
     layout: 'cards',

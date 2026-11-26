@@ -186,13 +186,13 @@ export default function PromptSuggestionsPage() {
           A short set of examples in one panel, each row a coloured dot,
           the label and its description on one line. Numbered, each row
           ends in its digit as a keycap, and pressing that digit anywhere
-          outside a text field picks the row. A heading over the list
+          outside a text field picks the row. A title over the list
           names it.
         </p>
         <PromptSuggestions
           layout="list"
           numbered
-          heading="Start from an example"
+          title="Start from an example"
           suggestions={[
             { id: "page", label: "Build a settings page", description: "Form, sections and a save bar" },
             { id: "theme", label: "Make a theme", description: "From a colour or a DESIGN.md" },

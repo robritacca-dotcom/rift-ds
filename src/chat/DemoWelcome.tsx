@@ -60,7 +60,7 @@ export function DemoExamples({ onAsk }: { onAsk: (prompt: string) => void }) {
     <PromptSuggestions
       layout="list"
       numbered
-      heading="Start from an example"
+      title="Start from an example"
       suggestions={EXAMPLES}
       onValueChange={onAsk}
     />

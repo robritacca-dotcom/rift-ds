@@ -179,7 +179,7 @@
 }
 
 /* Over a scene the greeting takes the strongest inks the theme has: the
-   ask line the primary text, and the pleasantry and a suggestion set's heading the secondary, in place of
+   ask line the primary text, and the pleasantry and a suggestion set's title the secondary, in place of
    the display tier's tone and the tertiary ink. A theme's display tone
    (Signal's is toned toward its tint) is a choice for a plain page; over a
    moving scene the words need every step of contrast, so the tone gives
@@ -189,7 +189,7 @@
 }
 
 .shaded :global(.ds-chat-widget__hello),
-.shaded :global(.ds-prompt-suggestions__heading) {
+.shaded :global(.ds-prompt-suggestions-group__title) {
   color: var(--color-text-secondary);
 }
 

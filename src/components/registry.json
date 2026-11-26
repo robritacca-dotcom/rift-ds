@@ -1380,7 +1380,8 @@
       "description": "Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles, cards or a numbered list.",
       "category": "ai",
       "client": true,
-      "partPatterns": [{ "pattern": "button", "part": "suggestions" }]
+      "partPatterns": [{ "pattern": "button", "part": "suggestions" }],
+      "keys": { "by": "component", "note": "A numbered list also answers the digits 1 to 9 from anywhere on the page outside a text field, each picking the row it numbers." }
     },
     {
       "name": "Prose",

@@ -51,17 +51,21 @@ type PromptSuggestionsOwnProps = {
    * Number the `list` rows 1 to 9, each with its digit as a keycap at the
    * row's end, and let that digit pick the row from anywhere on the page
    * outside a text field. Other layouts ignore it, and rows past the ninth
-   * carry no number.
+   * carry no number. Two numbered lists on one page share the digits, and
+   * the one mounted last answers them.
    */
   numbered?: boolean;
   /**
    * A short line over the suggestions, such as "Start from an example". It
-   * names the list for assistive technology in place of `aria-label`, and
-   * the list and the heading are wrapped in a group so the heading sits
-   * outside the list. The ref, `className` and every other prop stay on the
-   * list itself.
+   * names the list for assistive technology in place of `aria-label`. Set,
+   * the title and the list are wrapped in a group, which becomes the root:
+   * the ref, `className` and every other prop land on the group, so spacing
+   * and placement apply to the whole set. Shadows the native `title`
+   * attribute, which this element does not use as a tooltip.
    */
-  heading?: string;
+  title?: string;
+  /** The digits' description in a keyboard-shortcuts help list, for a numbered list. Defaults to "Pick a suggestion". */
+  shortcutLabel?: string;
   /**
    * Legacy alias for `layout="wrap"`; ignored when `layout` is set.
    * @deprecated Use `layout` instead, which also covers `stack`.
@@ -128,7 +132,8 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
       onValueChange,
       layout,
       numbered = false,
-      heading,
+      title,
+      shortcutLabel = 'Pick a suggestion',
       wrap = false,
       pending = false,
       pendingCount = 3,
@@ -143,7 +148,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
     ref,
   ) => {
     const baseClass = 'ds-prompt-suggestions';
-    const headingId = React.useId();
+    const titleId = React.useId();
 
     /* The tap acknowledgment: the chosen chip gives one small spring pulse
        while its siblings dim, and `onValueChange` fires one beat later —
@@ -199,7 +204,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
         const picked = numberedSuggestions[Number(event.key) - 1];
         if (picked) choose(picked.id);
       },
-      { enabled: numberedSuggestions.length > 0, description: 'Pick a suggestion' },
+      { enabled: numberedSuggestions.length > 0, description: shortcutLabel },
     );
     const renderIcon = (icon: PromptSuggestion['icon']) =>
       typeof icon === 'string' ? (
@@ -212,6 +217,9 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
         </span>
       );
 
+    /* With a title the group is the root and takes the ref, the class and
+       the rest; without one the list is. */
+    const titled = Boolean(title);
     const classes = [
       baseClass,
       `${baseClass}--${size}`,
@@ -219,20 +227,20 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
       chosenId ? `${baseClass}--choosing` : '',
       kept ? `${baseClass}--kept` : '',
       entrance ? '' : `${baseClass}--still`,
-      className,
+      titled ? '' : className,
     ]
       .filter(Boolean)
       .join(' ');
 
     const list = (
       <div
-        {...rest}
-        ref={ref}
+        {...(titled ? {} : rest)}
+        ref={titled ? undefined : ref}
         className={classes}
         role="list"
-        /* A heading names the list; without one, the label does. */
-        aria-label={heading ? undefined : rest['aria-label'] ?? ariaLabel}
-        aria-labelledby={heading ? headingId : rest['aria-labelledby']}
+        /* A title names the list; without one, the label does. */
+        aria-label={titled ? undefined : rest['aria-label'] ?? ariaLabel}
+        aria-labelledby={titled ? titleId : rest['aria-labelledby']}
         /* aria-busy is load-bearing while pending: the placeholders are
            aria-hidden, and a busy list is exempt from the required-children
            rule that an otherwise empty role="list" would fail. */
@@ -277,6 +285,9 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
                   <button
                     type="button"
                     className={`${baseClass}__${block}`}
+                    /* The digit that picks the row, named on the control it
+                       activates; the keycap drawing it is decoration. */
+                    aria-keyshortcuts={numberedRows && index < DIGITS.length ? DIGITS[index] : undefined}
                     /* A kept row is a record, not a set of targets. */
                     disabled={kept}
                     onClick={() => choose(suggestion.id)}
@@ -302,7 +313,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
                       <span className="ds-visually-hidden"> {chosenLabel}</span>
                     )}
                     {numberedRows && index < DIGITS.length && (
-                      <Kbd className={`${baseClass}__key`} size="compact" keys={DIGITS[index]} />
+                      <Kbd className={`${baseClass}__key`} size="compact" keys={DIGITS[index]} aria-hidden="true" />
                     )}
                   </button>
                 ) : (
@@ -324,11 +335,11 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
       </div>
     );
 
-    if (!heading) return list;
+    if (!titled) return list;
     return (
-      <div className={`${baseClass}-group`}>
-        <div id={headingId} className={`${baseClass}__heading`}>
-          {heading}
+      <div {...rest} ref={ref} className={[`${baseClass}-group`, className].filter(Boolean).join(' ')}>
+        <div id={titleId} className={`${baseClass}-group__title`}>
+          {title}
         </div>
         {list}
       </div>

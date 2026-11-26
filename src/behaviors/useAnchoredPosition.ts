@@ -2,21 +2,26 @@
 
 import { useLayoutEffect, useRef } from 'react';
 import { isRtl } from './direction';
+import { useTopLayer } from './useTopLayer';
+import './top-layer.css';
 
 /**
  * Anchored positioning: the one way every popup in the library places itself
  * against the control that opened it (menus, listboxes, pickers, popovers,
  * hover cards, tooltips).
  *
- * The panel stays where it is in the DOM, so it keeps the trigger's stacking
- * context (a tooltip excepted, which paints in the top layer through
- * src/behaviors/useTopLayer) and any theme scoped above it, but is
- * `position: fixed`, placed
- * from the anchor's rectangle. A fixed panel is not clipped by an ancestor's
- * `overflow`, which is what lets a menu inside a table's scroll wrapper, a
- * rail or a card show whole. Portals would escape the same way but would
- * leave the theme scope; floating-ui would solve it at the cost of a
- * dependency. This is the approach Tooltip proved first.
+ * The panel stays where it is in the DOM, so it keeps any theme scoped above
+ * it, but is `position: fixed`, placed from the anchor's rectangle, and while
+ * open it paints in the browser's top layer (src/behaviors/useTopLayer). A
+ * fixed panel alone escapes an ancestor's `overflow`, but not its mask or
+ * stacking context: a rail's scroll fade masked a switcher's menu to the
+ * rail's width. In the top layer nothing on the page can clip or cover it,
+ * which is what lets a menu inside a table's scroll wrapper, a faded rail or
+ * a card show whole. src/behaviors/top-layer.css undoes the browser's
+ * popover defaults beneath each component's own panel rule. Portals would
+ * escape the same way but would leave the theme scope; floating-ui would
+ * solve it at the cost of a dependency. This is the approach Tooltip proved
+ * first.
  *
  * On every placement it:
  * - puts the panel on the preferred side, flipping to the opposite side when
@@ -174,6 +179,10 @@ export function useAnchoredPosition({
   onPlace,
   target,
 }: AnchoredPositionOptions): void {
+  // Into the top layer first, so the placement below reads the viewport as
+  // the panel's containing block (fixedContainingBlock).
+  useTopLayer({ open, panelRef, target });
+
   // The callback is read through a ref so a new function each render does not
   // restart the listeners.
   const onPlaceRef = useRef(onPlace);

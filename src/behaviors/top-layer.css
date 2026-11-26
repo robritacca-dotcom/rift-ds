@@ -1,0 +1,28 @@
+/* ============================================
+   TOP LAYER
+   An anchored panel (src/behaviors/useAnchoredPosition)
+   paints in the browser's top layer while open, as a
+   manual popover (src/behaviors/useTopLayer), so no
+   ancestor's clip, mask or stacking context can hide
+   it: a rail's scroll fade masked a switcher's menu to
+   the rail's width. The browser gives a popover its own
+   defaults (a border, a padding, Canvas colours, a
+   scrolling box); these put back what an unlifted panel
+   had, at no specificity (:where), so every component's
+   own rule for its panel still wins. useAnchoredPosition
+   imports this sheet, so every panel it places has it.
+   ============================================ */
+
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
+:where([popover][data-side]) {
+  overflow: visible;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+
+} /* @layer rift.components */

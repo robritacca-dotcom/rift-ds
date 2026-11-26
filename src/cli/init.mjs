@@ -309,6 +309,9 @@ function initApp({ app, dryRun }) {
   }
   console.log(`\nIf the layout imports a globals.css from create-next-app, drop that import (or empty the file):`);
   console.log(`its body colours and font would cover the library's.`);
+  console.log(`\nPick a shipped theme before the first screen: the base theme is a neutral starting point, not a look.`);
+  console.log(`Import ${PACKAGE_NAME}/tokens/presets/<id>.css after tokens.css and set data-brand="<id>" on <html>.`);
+  console.log(`Compare them at ${SITE_ORIGIN}/playground.`);
   console.log(`\nThen add a first page: npx ${PACKAGE_NAME} init block dashboard (no name lists them).`);
   console.log(`Setup and theming: ${SITE_ORIGIN}/docs/get-started`);
 }

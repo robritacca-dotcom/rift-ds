@@ -18,6 +18,15 @@ npx rift-ds init block dashboard
 
 The init commands only add files and never overwrite one, so they are safe to run again.
 
+## Before the first screen
+
+A screen that only follows the rules reads as a component demo. These four choices make it read as a product, and they come before the first page:
+
+1. **Pick a shipped theme.** The base theme is a neutral starting point, not a look. Choose the shipped theme that fits the product from Blueprint, Bubblegum, Ember, Forest, Getaway, Marquee, Signal, Smoke, Terminal, Velvet, Volt and Zest; its id is its name in lower case. Import its stylesheet once, `rift-ds/tokens/presets/<id>.css` after `tokens.css`, and set `data-brand="<id>"` on `<html>`. Compare them in the playground at https://rift-ds.com/playground.
+2. **Start from a shell.** Every app screen sits inside the `AppShell` the app shell block writes, or a shell of your own on `AppSidebar` or `AppLayout`. The top bar carries search, the account and the app-wide actions; the page column carries only that page. Never stack the app's controls at the top of the content.
+3. **Build a few screens, fully.** The first cut is three to five screens, each worked through: real states, real tables, totals that add up from the records beneath them. Leave the rest of the product out of the nav until it is built. A page that is a title and two numbers reads as unfinished, and a whole sitemap of them reads as a wireframe.
+4. **Lay out the page in CSS of your own.** `Stack` and `Grid` handle simple flow. A product screen needs more: a side rail, columns of different widths, a bar docked to the bottom, a sticky header. Write those in a CSS module beside the page, with a token for every value. The rule against restyling covers the library's components, never your page's layout.
+
 ## Install anywhere else
 
 ```bash

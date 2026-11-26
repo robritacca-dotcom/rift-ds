@@ -162,6 +162,34 @@ function presetLabels() {
   return Object.fromEntries(Object.entries(themes).map(([id, theme]) => [id, theme.label]));
 }
 
+/** The shipped themes a consumer picks from, by shown name: every preset
+    whose shown name has a stylesheet of its own (the base theme has none). */
+function shippedThemes() {
+  const files = new Set(presetIds());
+  return Object.values(presetLabels())
+    .filter((label) => files.has(label.toLowerCase()))
+    .sort();
+}
+
+/**
+ * The four choices that make a first build look like a product rather
+ * than a component demo, shared by the agent starter and the library
+ * skill so the two never say it differently. Learnt from consumer apps
+ * built in one shot from the starter: the ones that came out well picked
+ * a theme, started from a shell, kept to a handful of screens and wrote
+ * their own layout CSS; the one that did none of these came out flat.
+ */
+function designChoices(origin) {
+  const themes = shippedThemes();
+  const themeList = `${themes.slice(0, -1).join(', ')} and ${themes.at(-1)}`;
+  return `A screen that only follows the rules reads as a component demo. These four choices make it read as a product, and they come before the first page:
+
+1. **Pick a shipped theme.** The base theme is a neutral starting point, not a look. Choose the shipped theme that fits the product from ${themeList}; its id is its name in lower case. Import its stylesheet once, \`${PACKAGE_NAME}/tokens/presets/<id>.css\` after \`tokens.css\`, and set \`data-brand="<id>"\` on \`<html>\`. Compare them in the playground at ${origin}/playground.
+2. **Start from a shell.** Every app screen sits inside the \`AppShell\` the app shell block writes, or a shell of your own on ${component('AppSidebar')} or ${component('AppLayout')}. The top bar carries search, the account and the app-wide actions; the page column carries only that page. Never stack the app's controls at the top of the content.
+3. **Build a few screens, fully.** The first cut is three to five screens, each worked through: real states, real tables, totals that add up from the records beneath them. Leave the rest of the product out of the nav until it is built. A page that is a title and two numbers reads as unfinished, and a whole sitemap of them reads as a wireframe.
+4. **Lay out the page in CSS of your own.** ${component('Stack')} and ${component('Grid')} handle simple flow. A product screen needs more: a side rail, columns of different widths, a bar docked to the bottom, a sticky header. Write those in a CSS module beside the page, with a token for every value. The rule against restyling covers the library's components, never your page's layout.`;
+}
+
 /** Inline code in markdown. */
 const c = (text) => `\`${text}\``;
 
@@ -298,6 +326,10 @@ import { Input } from '${PACKAGE_NAME}/components/Input/Input';
 In a Next.js app router project, \`npx ${PACKAGE_NAME} init app\` scaffolds the root wrapper (\`LinkProvider\` with Next's \`Link\`), the colour-mode script and the base theme's font, and prints the root layout to use; then \`npx ${PACKAGE_NAME} init block dashboard\` adds a first page. Start a new screen from a block (\`npx ${PACKAGE_NAME} init block\` lists them) rather than from a blank file.
 
 The package is ESM-only, resolved via exports subpaths: use a bundler that handles CSS and font imports from node_modules (Vite, Next.js, webpack) and set TypeScript's \`moduleResolution\` to \`"bundler"\` (or \`"nodenext"\`). Components are provider-free with one exception: wrap the tree in \`ToastProvider\` if (and only if) the toast queue is used via \`useToast\`. One more is optional: in a routed app, \`LinkProvider\` from \`${PACKAGE_NAME}/behaviors/LinkProvider\` hands every client-rendered component your router's link, so its links navigate without a reload (in Next.js, mount it from a \`'use client'\` file, since the root layout is a Server Component); a component rendered on the server takes \`linkComponent\` on the instance instead. Another is optional too: \`LocaleProvider\` from \`${PACKAGE_NAME}/behaviors/LocaleProvider\` sets the locale every client-rendered component writes numbers, dates and calendars in (without it, \`en-US\`, never the browser's), and a component rendered on the server takes \`locale\` on the instance instead. The locale formats; it never translates, because every word a component writes is a prop of its own. Key bindings go through \`useShortcut\` from \`${PACKAGE_NAME}/behaviors/shortcuts\`, the listener the components use, never a document keydown listener. For a right-to-left language set \`dir="rtl"\` on \`<html>\` and every component mirrors itself; use \`start\`/\`end\` rather than \`left\`/\`right\` where a prop offers both.
+
+## Before the first screen
+
+${designChoices(origin)}
 
 ## Dark mode
 
@@ -787,6 +819,10 @@ npx ${BIN_NAME} init block ${firstBlock.name}
 3. Start every new screen from a block, or inside the \`AppShell\` the app shell and dashboard blocks write to \`components/blocks/\`, never from a blank file, then fill it with library components.
 
 The init commands only add files and never overwrite one, so they are safe to run again.
+
+## Before the first screen
+
+${designChoices(origin)}
 
 ## Install anywhere else
 

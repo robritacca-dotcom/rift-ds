@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.39.0",
+      "date": "2026-11-26",
+      "title": "One rail everywhere, and ThreadHistory",
+      "body": [
+        "The chat’s history rail is now an AppSidebar, so it has an app rail’s shell, sizes, side panel and phone drawer, and only its content is its own. A narrow chat opens the history as a drawer from the header’s menu button. CSS written against `ds-thread-panel__*` inside ChatWidget moves to `ds-app-sidebar__*` and `ds-thread-history__*`.",
+        "ThreadHistory is new: a chat history’s rows as a server-renderable component. AppSidebar sections take `content` and an `action`, can fold under their headings with `collapsibleSections`, and the rail can be sized by its host with `responsive`. AppLayout takes `sidebarProps`.",
+        "PromptSuggestions gains a numbered `list` layout and a `title`, Composer takes `glass`, and five themes colour the sent chat bubble from their action colour."
+      ]
+    },
+    {
       "version": "1.38.0",
       "date": "2026-11-25",
       "title": "A phone menu built for thumbs, and clearer navigation names",

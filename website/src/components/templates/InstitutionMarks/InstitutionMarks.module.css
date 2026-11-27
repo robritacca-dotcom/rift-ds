@@ -1,0 +1,11 @@
+/* A bank's mark: a round tile at the avatar's size, its hairline the
+   table's own so a white tile still reads on a white row. */
+.mark {
+  display: inline-flex;
+  flex: none;
+  width: var(--control-height-default);
+  height: var(--control-height-default);
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  box-shadow: inset 0 0 0 var(--border-025) var(--color-table-border);
+}

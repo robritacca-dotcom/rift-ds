@@ -779,6 +779,9 @@ export const pageScreens: Record<string, PageScreen> = {
   "/templates": {
     "section": "Site pages"
   },
+  "/templates/accounts-by-month": {
+    "about": "the accounts by month template rendered full viewport — its prose is a fictional household's balances; its name and summary reach the corpus through the site map's Templates list, drawn from templatesSidebarLinks"
+  },
   "/templates/analytics": {
     "about": "the analytics template rendered full viewport — its prose is fictional demo data; its name and summary reach the corpus through the site map's Templates list, drawn from templatesSidebarLinks"
   },

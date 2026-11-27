@@ -1191,6 +1191,8 @@ const EXCLUDED_ROUTES = new Map([
     'the relay console template rendered full viewport — its prose is fictional network telemetry; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/team-calendar',
     'the team calendar template rendered full viewport — its prose is fictional schedule data; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
+  ['/templates/accounts-by-month',
+    'the accounts by month template rendered full viewport — its prose is a fictional household\'s balances; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/profit-and-loss',
     'the profit and loss template rendered full viewport — its prose is a fictional company\'s figures; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/roadmap-planner',

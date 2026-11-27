@@ -508,6 +508,11 @@ export const templatesSidebarLinks: NavLink[] = [
     description: "A month view with the sprint's to-dos on a rail beside it",
   },
   {
+    href: "/templates/accounts-by-month",
+    label: "Accounts by month",
+    description: "A household's accounts at each month end, against the month before",
+  },
+  {
     href: "/templates/profit-and-loss",
     label: "Profit and loss",
     description: "A quarterly statement down to the bottom line, against the last",

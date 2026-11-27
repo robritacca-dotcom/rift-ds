@@ -1,7 +1,7 @@
 {
   "$comment": "The icons in the website's cut of the icon font, and the fingerprints of what it was cut from. Written by scripts/generate-site-icons.mjs; never edited by hand.",
-  "from": "f3554b7f090141dff36e552d9a76b0037b31e78dfb83a080272868a21562e7b0",
-  "font": "7af66dff38c44ca94880430fca7e93d54fe2bce6e1c55d88e48b3176ea00cf9e",
+  "from": "f5b240f84021fc5ddc4e3e6825c65ed2cff63765feb310e93b9ba6a9b988226e",
+  "font": "f9c247c0802eb3770c2c10c9672602560ceb0ca07788d33401b395cbcd59969b",
   "icons": [
     "ac_unit",
     "access_time",
@@ -227,6 +227,7 @@
     "done",
     "done_all",
     "donut_large",
+    "donut_small",
     "doorbell",
     "download",
     "download_for_offline",
@@ -271,6 +272,7 @@
     "eyebrow",
     "face",
     "fact_check",
+    "family_restroom",
     "fast_forward",
     "fast_rewind",
     "fastfood",

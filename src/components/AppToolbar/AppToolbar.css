@@ -52,7 +52,8 @@
 .ds-app-toolbar__search {
   display: flex;
   flex: 0 1 320px;
-  min-inline-size: 240px;
+  /* The prompt and its keycaps in full, so the field never cuts its words. */
+  min-inline-size: 280px;
 }
 
 .ds-app-toolbar__search > * {
@@ -99,7 +100,7 @@
 }
 
 /* First the AI button and the primary action fold to their icons. */
-@container ds-app-toolbar (max-width: 720px) {
+@container ds-app-toolbar (max-width: 800px) {
   .ds-app-toolbar__wide {
     display: none;
   }
@@ -110,7 +111,7 @@
 }
 
 /* Then the search folds to its icon. */
-@container ds-app-toolbar (max-width: 560px) {
+@container ds-app-toolbar (max-width: 600px) {
   .ds-app-toolbar__search {
     display: none;
   }

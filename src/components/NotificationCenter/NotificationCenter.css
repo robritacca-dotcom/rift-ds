@@ -152,9 +152,9 @@
 .ds-notification-item__title {
   flex: 1 1 auto;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  /* Wraps rather than ellipsizes: a notification's title is its meaning,
+     and a narrow panel or a phone would otherwise cut its last words. */
+  overflow-wrap: anywhere;
   /* A read row: the paragraph face in the secondary text colour. Unread
      takes the palette's emphasised label in the primary colour, so a row
      reads as new by weight, colour and the dot, and opening it only
@@ -204,11 +204,8 @@
 }
 
 .ds-notification-item__text {
-  /* The palette's row description, held to two lines. */
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
+  /* The palette's row description, wrapping in full: a notification's
+     copy carries its facts (an amount, a name), so none of it is cut. */
   color: var(--color-text-tertiary);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);

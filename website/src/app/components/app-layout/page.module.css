@@ -108,3 +108,11 @@
   }
   .dsContent { max-width: 100%; min-width: 0; }
 }
+
+/* On a phone AppLayout hands its scrolling to the page, so a demo taller
+   than its frame scrolls inside the frame instead of being clipped. */
+@media (max-width: 768px) {
+  .layoutDemo {
+    overflow-y: auto;
+  }
+}

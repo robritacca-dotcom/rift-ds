@@ -46,13 +46,13 @@ export const WithPrimaryAction: Story = {
   },
 };
 
-/** Under 720px the AI button and the primary action fold to their icons. */
+/** Under 800px the AI button and the primary action fold to their icons. */
 export const Medium: Story = {
   args: { primaryAction: { label: 'Move money', icon: 'swap_horiz' } },
   decorators: [(Story) => <div style={{ inlineSize: 640 }}><Story /></div>],
 };
 
-/** Under 560px the search folds to its icon too. */
+/** Under 600px the search folds to its icon too. */
 export const Narrow: Story = {
   decorators: [(Story) => <div style={{ inlineSize: 480 }}><Story /></div>],
   play: async ({ canvas }) => {

@@ -29,6 +29,7 @@ import { SiteChatMount } from "@/components/SiteChat/SiteChatMount";
 import { SitePaletteMount } from "@/components/SitePalette/SitePaletteMount";
 import { SiteFrameMount } from "@/components/SiteFrame/SiteFrameMount";
 import { ClientNav } from "@/components/ClientNav/ClientNav";
+import { NavScrollReset } from "@/components/ClientNav/NavScrollReset";
 import { NavProgress } from "@/components/NavProgress/NavProgress";
 import BlurBackground from "@/components/BlurBackground/BlurBackground";
 import { DocumentThemeGuard } from "@/components/DocumentThemeGuard/DocumentThemeGuard";
@@ -277,6 +278,7 @@ export default async function RootLayout({
           {/* Internal plain-anchor clicks become client-side navigations, so
               the providers above (and an open chat) survive card links. */}
           <ClientNav />
+          <NavScrollReset />
           {/* The site frame (header, sidebar, rail and footer), mounted once
               here around every page with the site's chrome, so it never
               remounts on navigation; each page renders only its article.

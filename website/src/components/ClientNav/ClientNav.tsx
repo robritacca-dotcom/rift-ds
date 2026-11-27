@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { keepScrollOnNextNavigation } from "./NavScrollReset";
 
 /**
  * Routes every internal plain-anchor click through the App Router.
@@ -19,12 +20,17 @@ import { useRouter } from "next/navigation";
  * origin, no target, no download, not /api, and not file-ish paths (the
  * /blueprints download links point at real .md files). Next's own <Link>
  * clicks arrive here with defaultPrevented already set and pass through.
+ *
+ * A new page starts at its top (NavScrollReset); a link marked
+ * `data-keep-scroll` is the exception, noted here for any link, Next's own
+ * included, before the click goes on.
  */
 export function ClientNav() {
   const router = useRouter();
 
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
+      if ((event.target as Element | null)?.closest?.("a[data-keep-scroll]")) keepScrollOnNextNavigation();
       if (event.defaultPrevented) return;
       if (event.button !== 0) return;
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -43,7 +49,7 @@ export function ClientNav() {
       if (/\.[a-z0-9]{2,5}$/i.test(url.pathname)) return;
 
       event.preventDefault();
-      router.push(url.pathname + url.search + url.hash);
+      router.push(url.pathname + url.search + url.hash, { scroll: !anchor.hasAttribute("data-keep-scroll") });
     };
 
     document.addEventListener("click", onClick);

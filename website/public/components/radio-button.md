@@ -44,7 +44,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.39.0. The same dat
 | value | `string` | no |  | Currently selected value, controlled. Leave undefined to let the group keep its own selection, seeded from `defaultValue`. |
 | defaultValue | `string` | no |  | Selected value on first render when uncontrolled (`value` undefined). |
 | name | `string` | no |  | Form field name. When set, the checked option's `value` submits with an enclosing form through one hidden input, as a native radio set does; a disabled option submits nothing. Grouping itself stays React state (`value`/`onValueChange`). |
-| options | `{ label: string; value: string; disabled?: boolean \| undefined; }[]` | yes |  | Radio options |
+| options | `{ label: string; value: string; disabled?: boolean \| undefined; description?: string \| undefined; }[]` | yes |  | Radio options. A `description` is a line under the option's label, drawn as its helper text. |
 | direction | `"horizontal" \| "vertical"` | no | `'vertical'` | Layout direction |
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly selected value |
 | className | `string` | no | `''` | Additional CSS classes |

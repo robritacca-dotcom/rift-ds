@@ -1,7 +1,7 @@
 {
   "$comment": "The icons in the website's cut of the icon font, and the fingerprints of what it was cut from. Written by scripts/generate-site-icons.mjs; never edited by hand.",
-  "from": "94fd82e963530381b347ba3d08b807cd20309be59408484effc5e01978537004",
-  "font": "71e94265815c5484e293a353457612d908fb1f27f5d7360495f925ca2282223e",
+  "from": "f3554b7f090141dff36e552d9a76b0037b31e78dfb83a080272868a21562e7b0",
+  "font": "7af66dff38c44ca94880430fca7e93d54fe2bce6e1c55d88e48b3176ea00cf9e",
   "icons": [
     "ac_unit",
     "access_time",
@@ -163,6 +163,7 @@
     "create",
     "create_new_folder",
     "credit_card",
+    "credit_card_off",
     "crisis_alert",
     "crop",
     "crop_free",
@@ -188,6 +189,7 @@
     "delete",
     "delete_forever",
     "delete_outline",
+    "delete_sweep",
     "density_large",
     "density_medium",
     "density_small",
@@ -651,6 +653,7 @@
     "shapes",
     "share",
     "shield",
+    "shield_person",
     "shift",
     "shop",
     "shopping_bag",

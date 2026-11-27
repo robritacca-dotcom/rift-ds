@@ -153,5 +153,12 @@
   },
   "size": {
     "gzip": 796
-  }
+  },
+  "alternatives": [
+    {
+      "name": "PaymentCard",
+      "when": "the tile is a payment card, drawn as its face with the brand, the last four digits and the holder",
+      "schemaUrl": "https://rift-ds.com/schema/components/payment-card.json"
+    }
+  ]
 }

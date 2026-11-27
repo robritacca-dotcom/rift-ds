@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.39.0. The same dat
 - Live docs: https://rift-ds.com/components/card
 - Schema: https://rift-ds.com/schema/components/card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Payment card](https://rift-ds.com/components/payment-card.md) instead when the tile is a payment card, drawn as its face with the brand, the last four digits and the holder.
+
 ## Card props
 
 | Prop | Type | Required | Default | Description |

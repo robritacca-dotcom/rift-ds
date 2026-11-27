@@ -1,0 +1,178 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.39.0",
+  "kind": "component",
+  "name": "PaymentCard",
+  "label": "Payment card",
+  "slug": "payment-card",
+  "category": "data-display",
+  "description": "The face of a payment card at a card’s aspect ratio, with the brand, last four digits, holder, expiry and a frozen state.",
+  "client": false,
+  "importPath": "rift-ds/components/PaymentCard/PaymentCard",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/payment-card",
+  "markdownUrl": "https://rift-ds.com/components/payment-card.md",
+  "exports": [
+    {
+      "component": "PaymentCard",
+      "props": [
+        {
+          "name": "brand",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The issuer's wordmark or logo, at the top start of the face. Text, or a\nnode such as an `<img>` with its own alt text. When it is text it also\nopens the card's accessible name."
+        },
+        {
+          "name": "holderName",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The name printed on the card, at the bottom start."
+        },
+        {
+          "name": "last4",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The last four digits of the card number, drawn as `•• 5555`."
+        },
+        {
+          "name": "expiry",
+          "type": "PaymentCardExpiry",
+          "typeKind": "reference",
+          "required": false,
+          "description": "When the card expires, written in `locale` as a two-digit month and year.",
+          "typeRefs": [
+            "PaymentCardExpiry"
+          ]
+        },
+        {
+          "name": "network",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The card network's mark at the bottom end, such as a logo `<img>` with its alt text."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "A tier or kind printed at the top end, such as \"Plus\" or \"Virtual\"."
+        },
+        {
+          "name": "tone",
+          "type": "\"default\" | \"neutral\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "neutral"
+          ],
+          "required": false,
+          "description": "The face's colour: `default` is the solid inverse face a card reads as\nin a wallet, `neutral` a quieter face on the container ramp.",
+          "default": "default"
+        },
+        {
+          "name": "frozen",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws the card frozen: the face dimmed under a lock and the frozen label.",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "The face's width step; the height follows from the card's aspect ratio.",
+          "default": "default"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the expiry is written in, such as `ar-EG`. Defaults to\n`en-US`. This component can render from a Server Component, so it takes\nthe prop alone and reads no LocaleProvider.",
+          "default": "en-US"
+        },
+        {
+          "name": "endingInLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Read before the last four digits, out of sight. Default \"ending in\".",
+          "default": "ending in"
+        },
+        {
+          "name": "expiresLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Read before the expiry, out of sight. Default \"Expires\".",
+          "default": "Expires"
+        },
+        {
+          "name": "frozenLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shown over a frozen face. Default \"Frozen\".",
+          "default": "Frozen"
+        },
+        {
+          "name": "cardLabel",
+          "type": "((parts: PaymentCardLabelParts) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The card's accessible name, written from its parts. Default: the brand\nwhen it is text, then \"card ending in 5555, Jordan Reyes\".",
+          "defaultExpression": "({ brand, holderName, last4 }: PaymentCardLabelParts) =>\n  `${brand ? `${brand} card` : 'Card'} ending in ${last4}, ${holderName}`",
+          "typeRefs": [
+            "PaymentCardLabelParts"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the face",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "PaymentCardExpiry": {
+      "kind": "type",
+      "definition": "type PaymentCardExpiry = { month: number; year: number };",
+      "description": "A card's expiry: the month (1 to 12) and the full year."
+    },
+    "PaymentCardLabelParts": {
+      "kind": "type",
+      "definition": "type PaymentCardLabelParts = {\n  /** The brand, when `brand` is text; otherwise undefined. */\n  brand?: string;\n  /** The holder's name. */\n  holderName: string;\n  /** The last four digits. */\n  last4: string;\n  /** The tier, when `label` is given. */\n  label?: string;\n};",
+      "description": "What the default accessible name is written from."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 935
+  },
+  "alternatives": [
+    {
+      "name": "Card",
+      "when": "the tile previews any other content, or links to a page",
+      "schemaUrl": "https://rift-ds.com/schema/components/card.json"
+    }
+  ]
+}

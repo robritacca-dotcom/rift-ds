@@ -1389,6 +1389,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Page content — centred in the main area"
           },
           {
+            "name": "toolbar",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A bar at the top of the content column, held there while the page\nscrolls: a search trigger, a few icon buttons, the account's avatar.\nIt runs the width the content runs (`width`), on the content's own\nsurface, in every `layout`. Lay its items out yourself, for example\nwith a Toolbar or a flex row; the slot only seats and pins them."
+          },
+          {
             "name": "layout",
             "type": "AppSidebarLayout",
             "required": false,
@@ -1812,6 +1818,144 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "The text of the overview row a drilled level opens with when its row has\na page of its own, given that row's label, for a site in another\nlanguage. The drill menu's own default.",
             "defaultValue": "(label) => `${label} overview`"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "AppToolbar",
+    "label": "App toolbar",
+    "slug": "app-toolbar",
+    "category": "layout",
+    "description": "The bar along the top of an app’s page: the search, borderless icon controls, the AI button and a primary action, folding in steps as it narrows.",
+    "client": false,
+    "importPath": "rift-ds/components/AppToolbar/AppToolbar",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "AppToolbar",
+        "props": [
+          {
+            "name": "onSearch",
+            "type": "MouseEventHandler<HTMLButtonElement>",
+            "required": false,
+            "description": "Opens the app's search, usually a CommandPalette. When given, the bar\nstarts with a search field, never narrower than a usable field, folded\nto its icon when the bar is narrow."
+          },
+          {
+            "name": "searchLabel",
+            "type": "string",
+            "required": false,
+            "description": "The search field's prompt and accessible name. Default \"Search or ask anything\".",
+            "defaultValue": "'Search or ask anything'"
+          },
+          {
+            "name": "searchKeys",
+            "type": "string",
+            "required": false,
+            "description": "The shortcut the search field shows, in the shortcut grammar. The\npalette owns the key itself; this only draws it.",
+            "defaultValue": "'mod+k'",
+            "typeRefs": [
+              "Shortcut"
+            ]
+          },
+          {
+            "name": "actions",
+            "type": "AppToolbarAction[]",
+            "required": false,
+            "description": "The icon controls at the end, borderless: notifications, a calendar,\nhelp, settings. On a narrow bar every one after the first moves into a\nMore menu, except those that open a panel or are links.",
+            "defaultValue": "[]",
+            "typeRefs": [
+              "AppToolbarAction"
+            ]
+          },
+          {
+            "name": "onChat",
+            "type": "MouseEventHandler<HTMLButtonElement>",
+            "required": false,
+            "description": "Opens the app's AI chat. When given, an AiButton follows the icon\ncontrols, folded to its icon when the bar is narrow."
+          },
+          {
+            "name": "chatLabel",
+            "type": "string",
+            "required": false,
+            "description": "The AI chat button's label. Default \"Ask AI\".",
+            "defaultValue": "'Ask AI'"
+          },
+          {
+            "name": "chatState",
+            "type": "AgentStatusState",
+            "required": false,
+            "description": "What the agent behind the AI button is doing, in AgentStatus's\nvocabulary, so the button can show it working.",
+            "values": [
+              "done",
+              "error",
+              "idle",
+              "thinking",
+              "waiting",
+              "working"
+            ],
+            "defaultValue": "'idle'",
+            "typeRefs": [
+              "AgentStatusState"
+            ]
+          },
+          {
+            "name": "chatExpanded",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the chat the AI button opens is open now, announced as the button's expanded state."
+          },
+          {
+            "name": "primaryAction",
+            "type": "AppToolbarPrimaryAction",
+            "required": false,
+            "description": "The page's primary action, last in the row: a primary Button with a\nleading icon, the AI button's size, folded to its icon when the bar is\nnarrow.",
+            "typeRefs": [
+              "AppToolbarPrimaryAction"
+            ]
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "The size of every control in the bar, on the row-control scale:\n`default` is 40px, `compact` 32px. The search, the icon controls, the\nAI button and the primary action always share one height.",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component the actions' links render with, such as Next.js's `Link`,\nso they navigate through the app's router. Wins over a LinkProvider's;\na plain `<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
+          },
+          {
+            "name": "toolbarLabel",
+            "type": "string",
+            "required": false,
+            "description": "The bar's accessible name. Default \"App toolbar\".",
+            "defaultValue": "'App toolbar'"
+          },
+          {
+            "name": "moreLabel",
+            "type": "string",
+            "required": false,
+            "description": "The More menu button's name, shown when the bar is narrow. Default \"More\".",
+            "defaultValue": "'More'"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes on the bar",
+            "defaultValue": "''"
           }
         ]
       }
@@ -14211,14 +14355,44 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onMarkAllRead",
             "type": "(() => void)",
             "required": false,
-            "description": "Fires when \"Mark all read\" is pressed; the control only renders when this is set."
+            "description": "Fires when Mark all as read is chosen from the header's options menu.\nThe item is disabled while `unreadCount` is zero."
           },
           {
             "name": "markAllLabel",
             "type": "string",
             "required": false,
-            "description": "Text of the mark-all-read control.",
-            "defaultValue": "'Mark all read'"
+            "description": "The options menu's mark-all-read item. Default \"Mark all as read\".",
+            "defaultValue": "'Mark all as read'"
+          },
+          {
+            "name": "onClearAll",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Fires when Clear all is chosen from the header's options menu, a destructive item that empties the inbox."
+          },
+          {
+            "name": "clearAllLabel",
+            "type": "string",
+            "required": false,
+            "description": "The options menu's clear-all item. Default \"Clear all\".",
+            "defaultValue": "'Clear all'"
+          },
+          {
+            "name": "menuItems",
+            "type": "DropdownMenuEntry[]",
+            "required": false,
+            "description": "More items for the header's options menu, after Mark all as read and\nbefore Clear all, such as notification settings or a link to the full\npage.",
+            "defaultValue": "[]",
+            "typeRefs": [
+              "DropdownMenuEntry"
+            ]
+          },
+          {
+            "name": "optionsLabel",
+            "type": "string",
+            "required": false,
+            "description": "The options button's accessible name and tooltip. Default \"Notification options\".",
+            "defaultValue": "'Notification options'"
           },
           {
             "name": "tabs",
@@ -14267,6 +14441,34 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Legacy change callback; fires alongside `onValueChange`.",
             "deprecated": "Use `onValueChange` instead."
+          },
+          {
+            "name": "onSeeAll",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Opens the full list of notifications. When given (or `seeAllHref`), a\nfooter under the list carries a See all button."
+          },
+          {
+            "name": "seeAllHref",
+            "type": "string",
+            "required": false,
+            "description": "Opens the full list at this address instead: the See all button becomes a link."
+          },
+          {
+            "name": "seeAllLabel",
+            "type": "string",
+            "required": false,
+            "description": "The See all button's label. Default \"See all\".",
+            "defaultValue": "'See all'"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component the See all link renders with, such as Next.js's `Link`.\nWins over a LinkProvider's; a plain `<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           },
           {
             "name": "emptyState",
@@ -14344,6 +14546,40 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "Action row under the body — typically compact Buttons like \"Reply\" or \"Retry\"."
+          },
+          {
+            "name": "onSelect",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Opens the notification. The title becomes a button whose hit area\ncovers the whole row, so the row hovers and clicks as one; the action\nrow stays clickable on its own. Replaces the native `onSelect`\nattribute, which fires on text selection inside an input."
+          },
+          {
+            "name": "href",
+            "type": "string",
+            "required": false,
+            "description": "Opens the notification at this address instead: the title becomes a link covering the row."
+          },
+          {
+            "name": "onDismiss",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Clears this one notification. A compact close button sits at the row's\nend, shown on hover and focus (and always on a touch screen), above the\nrow's own click."
+          },
+          {
+            "name": "dismissLabel",
+            "type": "((title: string) => string)",
+            "required": false,
+            "description": "The dismiss button's accessible name, from the title. Default \"Dismiss <title>\".",
+            "defaultValue": "(itemTitle: string) => `Dismiss ${itemTitle}`"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component the row's link renders with, such as Next.js's `Link`, so\nit navigates through the app's router. Wins over a LinkProvider's; a\nplain `<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           },
           {
             "name": "className",
@@ -14801,6 +15037,137 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "Panel content"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "PaymentCard",
+    "label": "Payment card",
+    "slug": "payment-card",
+    "category": "data-display",
+    "description": "The face of a payment card at a card’s aspect ratio, with the brand, last four digits, holder, expiry and a frozen state.",
+    "client": false,
+    "importPath": "rift-ds/components/PaymentCard/PaymentCard",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "PaymentCard",
+        "props": [
+          {
+            "name": "brand",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The issuer's wordmark or logo, at the top start of the face. Text, or a\nnode such as an `<img>` with its own alt text. When it is text it also\nopens the card's accessible name."
+          },
+          {
+            "name": "holderName",
+            "type": "string",
+            "required": true,
+            "description": "The name printed on the card, at the bottom start."
+          },
+          {
+            "name": "last4",
+            "type": "string",
+            "required": true,
+            "description": "The last four digits of the card number, drawn as `•• 5555`."
+          },
+          {
+            "name": "expiry",
+            "type": "PaymentCardExpiry",
+            "required": false,
+            "description": "When the card expires, written in `locale` as a two-digit month and year.",
+            "typeRefs": [
+              "PaymentCardExpiry"
+            ]
+          },
+          {
+            "name": "network",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The card network's mark at the bottom end, such as a logo `<img>` with its alt text."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "A tier or kind printed at the top end, such as \"Plus\" or \"Virtual\"."
+          },
+          {
+            "name": "tone",
+            "type": "\"default\" | \"neutral\"",
+            "required": false,
+            "description": "The face's colour: `default` is the solid inverse face a card reads as\nin a wallet, `neutral` a quieter face on the container ramp.",
+            "values": [
+              "default",
+              "neutral"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
+            "name": "frozen",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws the card frozen: the face dimmed under a lock and the frozen label.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "The face's width step; the height follows from the card's aspect ratio.",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the expiry is written in, such as `ar-EG`. Defaults to\n`en-US`. This component can render from a Server Component, so it takes\nthe prop alone and reads no LocaleProvider.",
+            "defaultValue": "'en-US'"
+          },
+          {
+            "name": "endingInLabel",
+            "type": "string",
+            "required": false,
+            "description": "Read before the last four digits, out of sight. Default \"ending in\".",
+            "defaultValue": "'ending in'"
+          },
+          {
+            "name": "expiresLabel",
+            "type": "string",
+            "required": false,
+            "description": "Read before the expiry, out of sight. Default \"Expires\".",
+            "defaultValue": "'Expires'"
+          },
+          {
+            "name": "frozenLabel",
+            "type": "string",
+            "required": false,
+            "description": "Shown over a frozen face. Default \"Frozen\".",
+            "defaultValue": "'Frozen'"
+          },
+          {
+            "name": "cardLabel",
+            "type": "((parts: PaymentCardLabelParts) => string)",
+            "required": false,
+            "description": "The card's accessible name, written from its parts. Default: the brand\nwhen it is text, then \"card ending in 5555, Jordan Reyes\".",
+            "defaultValue": "({ brand, holderName, last4 }: PaymentCardLabelParts) =>\n  `${brand ? `${brand} card` : 'Card'} ending in ${last4}, ${holderName}`",
+            "typeRefs": [
+              "PaymentCardLabelParts"
+            ]
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes on the face",
+            "defaultValue": "''"
           }
         ]
       }
@@ -16016,9 +16383,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "options",
-            "type": "{ label: string; value: string; disabled?: boolean | undefined; }[]",
+            "type": "{ label: string; value: string; disabled?: boolean | undefined; description?: string | undefined; }[]",
             "required": true,
-            "description": "Radio options"
+            "description": "Radio options. A `description` is a line under the option's label, drawn as its helper text."
           },
           {
             "name": "direction",

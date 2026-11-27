@@ -99,6 +99,13 @@
           "description": "Page content — centred in the main area"
         },
         {
+          "name": "toolbar",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A bar at the top of the content column, held there while the page\nscrolls: a search trigger, a few icon buttons, the account's avatar.\nIt runs the width the content runs (`width`), on the content's own\nsurface, in every `layout`. Lay its items out yourself, for example\nwith a Toolbar or a flex row; the slot only seats and pins them."
+        },
+        {
           "name": "layout",
           "type": "AppSidebarLayout",
           "typeKind": "enum",

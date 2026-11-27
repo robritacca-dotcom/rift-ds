@@ -527,7 +527,7 @@ Nested rectangles sized by value for part-to-whole breakdowns.
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/treemap.md
 
-## Data display (37)
+## Data display (38)
 
 Cards, tables, lists, and badges for presenting structured content.
 
@@ -746,6 +746,14 @@ Who reports to whom: each person a card with their avatar, name and role, their 
 - Import: `import { OrgChart } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/org-chart.md
+
+### Payment card
+
+The face of a payment card at a card’s aspect ratio, with the brand, last four digits, holder, expiry and a frozen state.
+
+- Import: `import { PaymentCard } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/payment-card.md
 
 ### Pixel avatar
 
@@ -1227,7 +1235,7 @@ One-row switch for inspector panels, where the whole bar toggles and the track s
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/inspector-toggle-switch.md
 
-## Layout (12)
+## Layout (13)
 
 Page scaffolding: app shells, sidebars, dividers, and section headings.
 
@@ -1246,6 +1254,14 @@ Collapsible navigation rail whose sub-items open in a side panel beside it or an
 - Import: `import { AppSidebar } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/app-sidebar.md
+
+### App toolbar
+
+The bar along the top of an app’s page: the search, borderless icon controls, the AI button and a primary action, folding in steps as it narrows.
+
+- Import: `import { AppToolbar } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/app-toolbar.md
 
 ### Divider
 

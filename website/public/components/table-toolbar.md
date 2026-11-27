@@ -15,6 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.39.0. The same dat
 ## Alternatives
 
 - Use [Action bar](https://rift-ds.com/components/action-bar.md) instead when the actions finish the work on a long list or form, docked below it rather than over a table.
+- Use [App toolbar](https://rift-ds.com/components/app-toolbar.md) instead when the bar runs along the top of the whole page, holding the app’s search, icon controls and AI chat.
 
 ## TableToolbar props
 

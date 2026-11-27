@@ -77,7 +77,7 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Draws the table with no frame: no outline, no header band and no column\ndividers, the first and last columns' content flush with the page, and\na hovered row lifted into a raised tile that reaches past the columns.\nThe page needs room for that reach on both sides (`--padding-400`).\nWins over `bordered`.",
+          "description": "Draws the table with no frame: no outline, no header band and no column\ndividers, the first and last columns' content flush with the page, and\na hovered row lifted into a raised tile that reaches past the columns.\nThe page needs room for that reach on both sides (`--padding-400`).\nWins over `bordered`. On a phone (a viewport under `BREAKPOINT_PHONE_PX`)\nit is drawn as the plain table, the outer control as an ordinary column.",
           "default": false
         },
         {

@@ -7633,7 +7633,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "frameless",
             "type": "boolean",
             "required": false,
-            "description": "Draws the table with no frame, as Table's `frameless` does: no outline,\nno header band and no column dividers, the first and last columns'\ncontent flush with the page, and a hovered row lifted into a raised\ntile that reaches past the columns. The page needs room for that reach\non both sides (`--padding-400`). A phone's stacked cards keep their own\nlook.",
+            "description": "Draws the table with no frame, as Table's `frameless` does: no outline,\nno header band and no column dividers, the first and last columns'\ncontent flush with the page, and a hovered row lifted into a raised\ntile that reaches past the columns. The page needs room for that reach\non both sides (`--padding-400`). Narrower than a phone (the table's own\nwidth, under `BREAKPOINT_PHONE_PX`) it keeps its usual look.",
             "defaultValue": "false"
           },
           {
@@ -19693,7 +19693,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "frameless",
             "type": "boolean",
             "required": false,
-            "description": "Draws the table with no frame: no outline, no header band and no column\ndividers, the first and last columns' content flush with the page, and\na hovered row lifted into a raised tile that reaches past the columns.\nThe page needs room for that reach on both sides (`--padding-400`).\nWins over `bordered`.",
+            "description": "Draws the table with no frame: no outline, no header band and no column\ndividers, the first and last columns' content flush with the page, and\na hovered row lifted into a raised tile that reaches past the columns.\nThe page needs room for that reach on both sides (`--padding-400`).\nWins over `bordered`. On a phone (a viewport under `BREAKPOINT_PHONE_PX`)\nit is drawn as the plain table, the outer control as an ordinary column.",
             "defaultValue": "false"
           },
           {

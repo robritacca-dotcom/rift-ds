@@ -766,7 +766,7 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Draws the table with no frame, as Table's `frameless` does: no outline,\nno header band and no column dividers, the first and last columns'\ncontent flush with the page, and a hovered row lifted into a raised\ntile that reaches past the columns. The page needs room for that reach\non both sides (`--padding-400`). A phone's stacked cards keep their own\nlook.",
+          "description": "Draws the table with no frame, as Table's `frameless` does: no outline,\nno header band and no column dividers, the first and last columns'\ncontent flush with the page, and a hovered row lifted into a raised\ntile that reaches past the columns. The page needs room for that reach\non both sides (`--padding-400`). Narrower than a phone (the table's own\nwidth, under `BREAKPOINT_PHONE_PX`) it keeps its usual look.",
           "default": false
         },
         {

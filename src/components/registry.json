@@ -1791,7 +1791,7 @@
       "name": "Table",
       "label": "Table",
       "slug": "table",
-      "description": "Data table with flexible cell content, striped rows, compact sizing, code columns, and support for icons, inputs and controls.",
+      "description": "Data table with flexible cell content, striped rows, a frameless look, compact sizing, code columns, and support for icons, inputs and controls.",
       "category": "data-display",
       "client": false,
       "keys": { "by": "none" },

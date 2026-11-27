@@ -50,10 +50,10 @@ type TableOwnProps = {
   /**
    * Adds an outer border + border-radius container, a tinted thead background,
    * and `--color-divider` row lines — matching the bordered table style used on
-   * markdown content pages.
+   * markdown content pages. `frameless` wins when both are set.
    */
   bordered?: boolean;
-  /** Draws a vertical line between columns, as well as the lines between rows. */
+  /** Draws a vertical line between columns, as well as the lines between rows. A frameless table draws none. */
   columnDividers?: boolean;
   /**
    * Draws the table with no frame: no outline, no header band and no column

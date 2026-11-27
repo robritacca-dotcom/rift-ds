@@ -828,7 +828,7 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   onRowOrderChange?: (order: string[]) => void;
   /** The column and row controls' words, merged over their English defaults. */
   columnLabels?: Partial<DataTableColumnLabels>;
-  /** Draws a vertical line between columns, as well as the lines between rows. */
+  /** Draws a vertical line between columns, as well as the lines between rows. A frameless table draws none. */
   columnDividers?: boolean;
   /**
    * Draws the table with no frame, as Table's `frameless` does: no outline,

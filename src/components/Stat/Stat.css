@@ -212,45 +212,45 @@
   margin-block-end: var(--gap-300);
 }
 
+/* A wrapping row, not a fixed grid: the delta sits beside the value while
+   the two fit and wraps onto its own line the moment they do not, so a
+   wide value (a long figure, a monospace theme's numerals) never pushes
+   the delta past the tile's edge at any width. The label takes a whole
+   line of its own, always last. */
 .ds-stat__body {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-areas:
-    'value delta'
-    'label label';
-  justify-items: start;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
   column-gap: var(--gap-200);
   row-gap: var(--gap-050);
 }
 
 .ds-stat__body .ds-stat__value {
-  grid-area: value;
-}
-
-.ds-stat__body .ds-stat__label {
-  grid-area: label;
+  order: 0;
+  min-width: 0;
 }
 
 .ds-stat__body .ds-stat__delta {
-  grid-area: delta;
-  align-self: end;
+  order: 1;
   /* The inline placement's optical baseline. */
   margin-bottom: var(--gap-100);
+}
+
+.ds-stat__body .ds-stat__label {
+  order: 2;
+  flex-basis: 100%;
 }
 
 /* Too narrow for the value and its delta side by side: the delta drops
    under the label, the stacked placement's order. */
 @container ds-stat (max-width: 180px) {
   .ds-stat__body {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      'value'
-      'label'
-      'delta';
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .ds-stat__body .ds-stat__delta {
-    align-self: start;
+    order: 3;
     margin-bottom: 0;
   }
 }

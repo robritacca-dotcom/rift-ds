@@ -83,6 +83,14 @@ export const Compact: Story = {
   args: { size: 'compact', primaryAction: { label: 'Move money', icon: 'swap_horiz' } },
 };
 
+/** `searchGlass` frosts the search, for a bar riding over a map or a shader. */
+export const SearchGlass: Story = {
+  args: { searchGlass: true },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('button', { name: 'Search or ask anything' })).toHaveClass('ds-command-palette-trigger--glass');
+  },
+};
+
 /** An icon control that opens a panel: the bell opens a NotificationCenter below it. */
 export const WithNotifications: Story = {
   args: {

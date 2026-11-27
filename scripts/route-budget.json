@@ -72,6 +72,10 @@
       "css": 159000,
       "js": 482000
     },
+    "/docs/blocks/notifications": {
+      "css": 159000,
+      "js": 482000
+    },
     "/docs/blocks/planner": {
       "css": 159000,
       "js": 482000
@@ -99,6 +103,12 @@
       "js": 506000,
       "css": 142000
     },
+    "/labs/glass-chat": {
+      "css": 131000
+    },
+    "/labs/horizon": {
+      "css": 131000
+    },
     "/labs/marketing": {
       "js": 594000,
       "css": 160000
@@ -107,6 +117,9 @@
       "js": 555000,
       "html": 52000,
       "css": 136000
+    },
+    "/labs/rift": {
+      "css": 131000
     },
     "/labs/site-frame": {
       "js": 794000,
@@ -119,7 +132,11 @@
       "html": 182000
     },
     "/labs/tables": {
-      "html": 64000
+      "html": 64000,
+      "css": 134000
+    },
+    "/labs/tables/full": {
+      "css": 131000
     },
     "/overview": {
       "html": 54000
@@ -152,9 +169,11 @@
       "js": 506000,
       "css": 145000
     },
-    "/docs/blocks/notifications": {
-      "css": 159000,
-      "js": 482000
+    "/templates/roadmap-planner": {
+      "css": 132000
+    },
+    "/templates/team-calendar": {
+      "css": 131000
     }
   },
   "images": {

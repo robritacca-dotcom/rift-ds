@@ -443,8 +443,9 @@ export default function Analytics() {
         />
       </div>
 
+      {/* The map runs under the bar, so the search frosts it. */}
       {!appFrame && (
-        <TemplateToolbar onChat={() => setChatOpen(true)} />
+        <TemplateToolbar onChat={() => setChatOpen(true)} searchGlass />
       )}
 
       {/* The stage passes the pointer through its gaps, so the markers

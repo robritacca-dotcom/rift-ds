@@ -38,6 +38,13 @@ type CommandPaletteTriggerOwnProps = {
   tooltip?: string | false;
   /** Which side the tooltip opens on; below by default, since the trigger usually sits in a top bar. `start` and `end` follow the reading direction. */
   tooltipPosition?: 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end';
+  /**
+   * Frosts the field for a busy ground (a map, a shader, a photo): the page
+   * behind it is blurred and the field takes the glass fill at rest, as
+   * Button's `glass` does, so its prompt reads over whatever is behind it.
+   * Hover is the field's own.
+   */
+  glass?: boolean;
   /** Additional CSS classes */
   className?: string;
 };
@@ -69,6 +76,7 @@ export const CommandPaletteTrigger = React.forwardRef<HTMLButtonElement, Command
       iconOnly = false,
       tooltip,
       tooltipPosition = 'bottom',
+      glass = false,
       className = '',
       ...rest
     },
@@ -79,6 +87,7 @@ export const CommandPaletteTrigger = React.forwardRef<HTMLButtonElement, Command
       baseClass,
       `${baseClass}--${size}`,
       iconOnly ? `${baseClass}--icon-only` : '',
+      glass ? `${baseClass}--glass` : '',
       className,
     ]
       .filter(Boolean)

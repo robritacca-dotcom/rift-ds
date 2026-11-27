@@ -104,6 +104,14 @@
           "default": "bottom"
         },
         {
+          "name": "glass",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Frosts the field for a busy ground (a map, a shader, a photo): the page\nbehind it is blurred and the field takes the glass fill at rest, as\nButton's `glass` does, so its prompt reads over whatever is behind it.\nHover is the field's own.",
+          "default": false
+        },
+        {
           "name": "className",
           "type": "string",
           "typeKind": "primitive",

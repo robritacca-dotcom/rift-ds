@@ -35,3 +35,13 @@ export const IconOnly: Story = {
 export const CustomPrompt: Story = {
   args: { label: 'Search the docs', shortcut: ['/'] },
 };
+
+/** `glass` frosts the ground behind the field and gives it the glass fill at rest, for a bar over a map or a shader. */
+export const Glass: Story = {
+  args: { glass: true },
+};
+
+/** The icon-only circle takes the same glass. */
+export const IconOnlyGlass: Story = {
+  args: { glass: true, iconOnly: true },
+};

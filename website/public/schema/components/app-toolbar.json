@@ -43,6 +43,14 @@
           ]
         },
         {
+          "name": "searchGlass",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Frosts the search field, in both its forms, for a bar that rides over a\nbusy ground (a map or a shader under the top of the page), so its prompt\nreads over it. The other controls are ghost buttons and draw no fill.",
+          "default": false
+        },
+        {
           "name": "actions",
           "type": "AppToolbarAction[]",
           "typeKind": "array",

@@ -64,6 +64,12 @@ type AppToolbarOwnProps = {
    */
   searchKeys?: Shortcut;
   /**
+   * Frosts the search field, in both its forms, for a bar that rides over a
+   * busy ground (a map or a shader under the top of the page), so its prompt
+   * reads over it. The other controls are ghost buttons and draw no fill.
+   */
+  searchGlass?: boolean;
+  /**
    * The icon controls at the end, borderless: notifications, a calendar,
    * help, settings. On a narrow bar every one after the first moves into a
    * More menu, except those that open a panel or are links.
@@ -131,6 +137,7 @@ export function AppToolbar({
   onSearch,
   searchLabel = 'Search or ask anything',
   searchKeys = 'mod+k',
+  searchGlass = false,
   actions = [],
   onChat,
   chatLabel = 'Ask AI',
@@ -168,10 +175,10 @@ export function AppToolbar({
                 by the bar's own width; the hidden one is display: none, so
                 it leaves the tab order and the accessibility tree. */}
             <span className={`${baseClass}__search`}>
-              <CommandPaletteTrigger label={searchLabel} keys={searchKeys} size={size} onClick={onSearch} />
+              <CommandPaletteTrigger label={searchLabel} keys={searchKeys} size={size} glass={searchGlass} onClick={onSearch} />
             </span>
             <span className={`${baseClass}__search-icon`}>
-              <CommandPaletteTrigger label={searchLabel} keys={searchKeys} size={size} iconOnly onClick={onSearch} />
+              <CommandPaletteTrigger label={searchLabel} keys={searchKeys} size={size} iconOnly glass={searchGlass} onClick={onSearch} />
             </span>
           </>
         ) : null}

@@ -1861,6 +1861,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             ]
           },
           {
+            "name": "searchGlass",
+            "type": "boolean",
+            "required": false,
+            "description": "Frosts the search field, in both its forms, for a bar that rides over a\nbusy ground (a map or a shader under the top of the page), so its prompt\nreads over it. The other controls are ghost buttons and draw no fill.",
+            "defaultValue": "false"
+          },
+          {
             "name": "actions",
             "type": "AppToolbarAction[]",
             "required": false,
@@ -6043,6 +6050,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "top"
             ],
             "defaultValue": "'bottom'"
+          },
+          {
+            "name": "glass",
+            "type": "boolean",
+            "required": false,
+            "description": "Frosts the field for a busy ground (a map, a shader, a photo): the page\nbehind it is blurred and the field takes the glass fill at rest, as\nButton's `glass` does, so its prompt reads over whatever is behind it.\nHover is the field's own.",
+            "defaultValue": "false"
           },
           {
             "name": "className",

@@ -25,6 +25,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.39.0. The same dat
 | iconOnly | `boolean` | no | `false` | Fold to the icon alone, an even box the row height across, for a row with no room for the field. The label stays the accessible name. |
 | tooltip | `string \| false` | no |  | The hover and focus tooltip of the icon-only form, which names itself as IconButton does: by default it carries `label`. Pass a string to show different wording, or `false` to opt out. |
 | tooltipPosition | `"top" \| "bottom" \| "left" \| "right" \| "start" \| "end"` | no | `'bottom'` | Which side the tooltip opens on; below by default, since the trigger usually sits in a top bar. `start` and `end` follow the reading direction. |
+| glass | `boolean` | no | `false` | Frosts the field for a busy ground (a map, a shader, a photo): the page behind it is blurred and the field takes the glass fill at rest, as Button's `glass` does, so its prompt reads over whatever is behind it. Hover is the field's own. |
 | className | `string` | no | `''` | Additional CSS classes |
 
 ## Keyboard

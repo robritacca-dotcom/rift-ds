@@ -24,6 +24,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.39.0. The same dat
 | onSearch | `MouseEventHandler<HTMLButtonElement>` | no |  | Opens the app's search, usually a CommandPalette. When given, the bar starts with a search field, never narrower than a usable field, folded to its icon when the bar is narrow. |
 | searchLabel | `string` | no | `'Search or ask anything'` | The search field's prompt and accessible name. Default "Search or ask anything". |
 | searchKeys | `string` | no | `'mod+k'` | The shortcut the search field shows, in the shortcut grammar. The palette owns the key itself; this only draws it. |
+| searchGlass | `boolean` | no | `false` | Frosts the search field, in both its forms, for a bar that rides over a busy ground (a map or a shader under the top of the page), so its prompt reads over it. The other controls are ghost buttons and draw no fill. |
 | actions | `AppToolbarAction[]` | no | `[]` | The icon controls at the end, borderless: notifications, a calendar, help, settings. On a narrow bar every one after the first moves into a More menu, except those that open a panel or are links. |
 | onChat | `MouseEventHandler<HTMLButtonElement>` | no |  | Opens the app's AI chat. When given, an AiButton follows the icon controls, folded to its icon when the bar is narrow. |
 | chatLabel | `string` | no | `'Ask AI'` | The AI chat button's label. Default "Ask AI". |

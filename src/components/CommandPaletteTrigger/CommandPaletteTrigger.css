@@ -116,4 +116,13 @@
   padding-inline: var(--padding-200);
 }
 
+/* Glass: the field frosts what is behind it, for a busy ground, with the
+   floating surfaces' blur and Button's glass fill at rest. The icon-only
+   circle's hover fill carries one more class, so it still fills solid. */
+.ds-command-palette-trigger--glass {
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  background-color: var(--color-bg-glass);
+}
+
 } /* @layer rift.components */

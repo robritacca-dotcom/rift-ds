@@ -24,6 +24,7 @@ export default function TemplateToolbar({
   onChat,
   chatState,
   chatExpanded,
+  searchGlass,
 }: {
   /** Opens the template's chat. */
   onChat: MouseEventHandler<HTMLButtonElement>;
@@ -31,6 +32,8 @@ export default function TemplateToolbar({
   chatState?: AgentStatusState;
   /** Whether the template's chat is open. */
   chatExpanded?: boolean;
+  /** Frosts the search, for a template whose stage runs under the bar. */
+  searchGlass?: boolean;
 }) {
   const notifications = useDemoNotifications({ seeAllHref: "/docs/blocks/notifications" });
   return (
@@ -38,6 +41,7 @@ export default function TemplateToolbar({
       <div className={styles.templateToolbar}>
         <AppToolbar
           onSearch={openSitePalette}
+          searchGlass={searchGlass}
           actions={[
             notifications.action,
             { id: "help", icon: "help", label: "Help" },

@@ -13,21 +13,28 @@
 
 /* ---------------------------------------------------------------- map */
 
-/* Behind everything, bleeding to the column's edges, and dissolving into the
-   page at the bottom, so the panels below rise out of it. */
+/* Behind everything, bleeding to the column's edges and dissolving into the
+   page on every side, so it never meets the surface's edge as a hard cut.
+   The top fades deepest: the top bar, the breadcrumb and the page's name sit
+   over that band, and a quieter map under them keeps them easy to read. The
+   bottom dissolves fully, so the panels below rise out of it; the sides
+   soften just enough to lose the crop. Two masks intersected, one per axis. */
 .map {
   position: absolute;
   inset: 0 0 auto;
   /* The map window's own shape (MAP_BOUNDS is about 1.8 wide to 1 tall), so
      cover crops nothing at any column width; a floor for narrow columns. */
   height: max(440px, 55cqw);
-  mask-image: linear-gradient(to bottom, black 90%, transparent);
+  --analytics-map-fade-y: linear-gradient(to bottom, rgb(0 0 0 / 0.2), black 24%, black 88%, transparent);
+  --analytics-map-fade-x: linear-gradient(to right, transparent, black 7%, black 93%, transparent);
+  mask-image: var(--analytics-map-fade-y), var(--analytics-map-fade-x);
+  mask-composite: intersect;
 }
 
 /* In the app dressing the map starts under the large title, not at the
-   surface's edge, so it fades in at the top as well. */
+   surface's edge, so it fades in from nothing at the top. */
 .mapApp {
-  mask-image: linear-gradient(to bottom, transparent, black 12%, black 90%, transparent);
+  --analytics-map-fade-y: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
 }
 
 /* A city is alive: StatusDot's ring on WorldMap's dot, on the same shimmer

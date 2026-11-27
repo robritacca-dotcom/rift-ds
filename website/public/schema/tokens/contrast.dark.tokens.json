@@ -1274,49 +1274,49 @@
     "radius-100": {
       "$type": "dimension",
       "$value": {
-        "value": 3,
+        "value": 2,
         "unit": "px"
       }
     },
     "radius-1200": {
       "$type": "dimension",
       "$value": {
-        "value": 34,
+        "value": 26,
         "unit": "px"
       }
     },
     "radius-200": {
       "$type": "dimension",
       "$value": {
-        "value": 6,
+        "value": 4,
         "unit": "px"
       }
     },
     "radius-300": {
       "$type": "dimension",
       "$value": {
-        "value": 8,
+        "value": 7,
         "unit": "px"
       }
     },
     "radius-400": {
       "$type": "dimension",
       "$value": {
-        "value": 11,
+        "value": 9,
         "unit": "px"
       }
     },
     "radius-600": {
       "$type": "dimension",
       "$value": {
-        "value": 17,
+        "value": 13,
         "unit": "px"
       }
     },
     "radius-pill": {
       "$type": "dimension",
       "$value": {
-        "value": 8,
+        "value": 7,
         "unit": "px"
       }
     },
@@ -2075,11 +2075,11 @@
     },
     "brand-mark": {
       "$type": "color",
-      "$value": "{color.action-primary-bg}"
+      "$value": "{primitive.blue-05}"
     },
     "brand-mark-end": {
       "$type": "color",
-      "$value": "{color.action-primary-bg-active}"
+      "$value": "{primitive.blue-04}"
     },
     "calendar-cell-bg": {
       "$type": "color",
@@ -2397,7 +2397,7 @@
     },
     "product-mark": {
       "$type": "color",
-      "$value": "{color.core-ui-primary}"
+      "$value": "{primitive.blue-05}"
     },
     "scrim": {
       "$type": "color",

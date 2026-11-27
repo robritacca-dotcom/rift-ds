@@ -47,18 +47,18 @@
 
 @layer rift.preset {
   html[data-brand="violet"], html[data-brand="velvet"] {
-    --color-action-primary-bg: var(--primitive-purple-08);
-    --color-action-primary-bg-active: var(--primitive-purple-10);
-    --color-action-primary-bg-hover: var(--primitive-purple-09);
-    --color-action-primary-border: var(--primitive-purple-11);
-    --color-action-primary-border-secondary: var(--primitive-purple-08);
-    --color-action-primary-border-tertiary: var(--primitive-purple-08);
+    --color-action-primary-bg: var(--primitive-purple-07);
+    --color-action-primary-bg-active: var(--primitive-purple-09);
+    --color-action-primary-bg-hover: var(--primitive-purple-08);
+    --color-action-primary-border: var(--primitive-purple-10);
+    --color-action-primary-border-secondary: var(--primitive-purple-07);
+    --color-action-primary-border-tertiary: var(--primitive-purple-07);
     --color-action-primary-text: var(--primitive-purple-02);
-    --color-action-primary-text-secondary: var(--primitive-purple-11);
-    --color-action-primary-text-tertiary: var(--primitive-purple-09);
-    --color-ai-gradient-end: var(--primitive-purple-10);
-    --color-ai-gradient-mid: var(--primitive-purple-08);
-    --color-ai-gradient-start: var(--primitive-purple-04);
+    --color-action-primary-text-secondary: var(--primitive-purple-10);
+    --color-action-primary-text-tertiary: var(--primitive-purple-08);
+    --color-ai-gradient-end: var(--primitive-purple-09);
+    --color-ai-gradient-mid: var(--primitive-purple-07);
+    --color-ai-gradient-start: var(--primitive-purple-03);
     --color-ambient-1: #D9BE7A;
     --color-ambient-2: #6BAE9E;
     --color-ambient-3: #9E47EF;
@@ -73,10 +73,10 @@
     --color-core-accent-gold: #D9BE7A;
     --color-core-accent-mint: #6BAE9E;
     --color-core-accent-violet: #9E47EF;
-    --color-core-ui-primary: var(--primitive-purple-08);
-    --color-core-ui-secondary: var(--primitive-purple-11);
-    --color-input-border-hover: var(--primitive-purple-06);
-    --color-input-border-selected: var(--primitive-purple-08);
+    --color-core-ui-primary: var(--primitive-purple-07);
+    --color-core-ui-secondary: var(--primitive-purple-10);
+    --color-input-border-hover: var(--primitive-purple-04);
+    --color-input-border-selected: var(--primitive-purple-07);
     --font-caption-letter-spacing: -0.005em;
     --font-display-1-letter-spacing: 0.015em;
     --font-display-1-weight: 400;
@@ -191,6 +191,18 @@
     --primitive-padding-300: 13px;
     --primitive-padding-400: 17px;
     --primitive-padding-500: 21px;
+    --primitive-purple-00: #FBF9FD;
+    --primitive-purple-01: #F4EEFA;
+    --primitive-purple-02: #DAC6F0;
+    --primitive-purple-03: #B791E1;
+    --primitive-purple-04: #8B4DCF;
+    --primitive-purple-05: #8443CD;
+    --primitive-purple-06: #7025C5;
+    --primitive-purple-07: #6A1BC2;
+    --primitive-purple-08: #4E148F;
+    --primitive-purple-09: #370E64;
+    --primitive-purple-10: #21083C;
+    --primitive-purple-11: #19062D;
     --primitive-radius-050: 3px;
     --primitive-radius-100: 6px;
     --primitive-radius-1200: 67px;
@@ -240,13 +252,17 @@
   }
 
   html[data-brand="violet"][data-theme="dark"], html[data-brand="velvet"][data-theme="dark"] {
-    --color-action-primary-border: var(--primitive-purple-08);
-    --color-action-primary-border-secondary: var(--primitive-purple-09);
-    --color-action-primary-text-active: var(--primitive-purple-02);
-    --color-action-primary-text-tertiary: var(--primitive-purple-08);
+    --color-action-primary-border: var(--primitive-purple-07);
+    --color-action-primary-border-secondary: var(--primitive-purple-08);
+    --color-action-primary-text: var(--primitive-neutral-00);
+    --color-action-primary-text-active: var(--primitive-neutral-00);
+    --color-action-primary-text-tertiary: var(--primitive-purple-07);
+    --color-brand-mark: var(--primitive-purple-04);
+    --color-brand-mark-end: var(--primitive-purple-03);
     --color-core-ui-secondary: var(--primitive-purple-09);
-    --color-input-border-hover: var(--primitive-purple-09);
-    --color-input-border-selected: var(--primitive-purple-09);
+    --color-input-border-hover: var(--primitive-purple-08);
+    --color-input-border-selected: var(--primitive-purple-08);
+    --color-product-mark: var(--primitive-purple-04);
     --primitive-neutral-00: #FAF6FE;
     --primitive-neutral-00-a01: rgba(250, 246, 254, 0.01);
     --primitive-neutral-00-a60: rgba(250, 246, 254, 0.6);
@@ -255,6 +271,18 @@
     --primitive-neutral-01-a01: rgba(237, 233, 241, 0.01);
     --primitive-neutral-01-a60: rgba(237, 233, 241, 0.6);
     --primitive-neutral-01-a82: rgba(237, 233, 241, 0.82);
+    --primitive-purple-00: #FCFAFE;
+    --primitive-purple-01: #F6F1FD;
+    --primitive-purple-02: #E2D0F7;
+    --primitive-purple-03: #C7A5F0;
+    --primitive-purple-04: #A46EE7;
+    --primitive-purple-05: #9F65E5;
+    --primitive-purple-06: #904DE1;
+    --primitive-purple-07: #8B45E0;
+    --primitive-purple-08: #6733A5;
+    --primitive-purple-09: #482474;
+    --primitive-purple-10: #2B1545;
+    --primitive-purple-11: #201034;
     --shadow-floating: 0 6px 24px rgba(0, 0, 0, 0.45);
     --shadow-modal: 0 12px 48px rgba(0, 0, 0, 0.5);
     --shadow-table-pinned: 0 0 16px rgba(0, 0, 0, 0.5);

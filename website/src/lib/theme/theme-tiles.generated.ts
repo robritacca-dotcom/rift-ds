@@ -100,8 +100,8 @@ export const THEME_TILES: Record<"light" | "dark", RichDropdownOption[]> = {
     {
       "label": "Blueprint",
       "value": "contrast",
-      "color": "#003DFF",
-      "swatchRadius": "6px",
+      "color": "#1238D4",
+      "swatchRadius": "4px",
       "headingFont": "'IBM Plex Sans', sans-serif",
       "bodyFont": "'IBM Plex Sans', sans-serif",
       "description": "IBM Plex Sans"
@@ -109,7 +109,7 @@ export const THEME_TILES: Record<"light" | "dark", RichDropdownOption[]> = {
     {
       "label": "Velvet",
       "value": "violet",
-      "color": "#7434B3",
+      "color": "#6A1BC2",
       "swatchRadius": "999px",
       "headingFont": "'Playfair Display', serif",
       "bodyFont": "'Plus Jakarta Sans', sans-serif",
@@ -220,7 +220,7 @@ export const THEME_TILES: Record<"light" | "dark", RichDropdownOption[]> = {
       "label": "Blueprint",
       "value": "contrast",
       "color": "#003DFF",
-      "swatchRadius": "6px",
+      "swatchRadius": "4px",
       "headingFont": "'IBM Plex Sans', sans-serif",
       "bodyFont": "'IBM Plex Sans', sans-serif",
       "description": "IBM Plex Sans"
@@ -228,7 +228,7 @@ export const THEME_TILES: Record<"light" | "dark", RichDropdownOption[]> = {
     {
       "label": "Velvet",
       "value": "violet",
-      "color": "#7434B3",
+      "color": "#8B45E0",
       "swatchRadius": "999px",
       "headingFont": "'Playfair Display', serif",
       "bodyFont": "'Plus Jakarta Sans', sans-serif",

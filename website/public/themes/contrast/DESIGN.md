@@ -4,10 +4,10 @@ name: "Blueprint"
 description: "The Blueprint theme of rift-ds: its colours, type, shape, space and depth, as the theme resolves them."
 
 colors:
-  primary: "#003dff"
-  primary-hover: "#002ec2"
-  primary-active: "#002085"
-  on-primary: "#d7e1ff"
+  primary: "#1238d4"
+  primary-hover: "#0e2ba2"
+  primary-active: "#091d6f"
+  on-primary: "#dae0f8"
   primary-dark: "#003dff"
   canvas-light: "#ffffff"
   canvas-dark: "#05070f"
@@ -20,10 +20,10 @@ colors:
   display-dark: "#e7eaf2"
   heading: "#05070f"
   heading-dark: "#e7eaf2"
-  logo: "#003dff"
-  logo-dark: "#003dff"
-  logo-end: "#002085"
-  logo-end-dark: "#002085"
+  logo: "#1238d4"
+  logo-dark: "#507aff"
+  logo-end: "#091d6f"
+  logo-end-dark: "#819fff"
   text-secondary: "#2e3138"
   text-tertiary: "#696b73"
   border: "#cdd0d8"
@@ -31,14 +31,14 @@ colors:
   error: "#d32652"
   success: "#00a66f"
   warning: "#c15123"
-  info: "#275aff"
+  info: "#3656db"
   accent-amber: "#ff8a3d"
   accent-cobalt: "#2e5bff"
   accent-coral: "#ff3d7a"
   accent-gold: "#ffc53d"
   accent-mint: "#00e0b8"
   accent-violet: "#7a3dff"
-  chart-1: "#003dff"
+  chart-1: "#1238d4"
   chart-2: "#00e0b8"
   chart-3: "#ffc53d"
   chart-4: "#ff3d7a"
@@ -121,13 +121,13 @@ typography:
 
 rounded:
   xs: 1px
-  sm: 3px
-  md: 6px
-  input: 8px
-  lg: 11px
-  card: 17px
-  xl: 34px
-  pill: 8px
+  sm: 2px
+  md: 4px
+  input: 7px
+  lg: 9px
+  card: 13px
+  xl: 26px
+  pill: 7px
 
 spacing:
   xxs: 2px
@@ -162,28 +162,28 @@ components:
 
 # Blueprint theme
 
-Blueprint: IBM Plex Sans throughout, #003dff for actions, buttons squared to 8px, 8px inputs and 17px cards. Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.
+Blueprint: IBM Plex Sans throughout, #1238d4 for actions, buttons squared to 7px, 7px inputs and 13px cards. Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.
 
 Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="contrast"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/contrast.
 
 ## Colour
 
-One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles. The logo wears the action colour (`logo`). Its mark is a gradient within that one colour (`logo-end`).
+One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles. The logo has a colour of its own (`logo`), apart from the action colour. Its mark is a gradient within that one colour (`logo-end`).
 
 | Role | Light | Dark | Token |
 | --- | --- | --- | --- |
-| `primary` | `#003dff` | `#003dff` | `--color-action-primary-bg` |
-| `primary-hover` | `#002ec2` | `#002ec2` | `--color-action-primary-bg-hover` |
-| `primary-active` | `#002085` | `#002085` | `--color-action-primary-bg-active` |
-| `on-primary` | `#d7e1ff` | `#d7e1ff` | `--color-action-primary-text` |
+| `primary` | `#1238d4` | `#003dff` | `--color-action-primary-bg` |
+| `primary-hover` | `#0e2ba2` | `#002ec2` | `--color-action-primary-bg-hover` |
+| `primary-active` | `#091d6f` | `#002085` | `--color-action-primary-bg-active` |
+| `on-primary` | `#dae0f8` | `#d7e1ff` | `--color-action-primary-text` |
 | `canvas-light` | `#ffffff` | `#05070f` | `--color-bg-page-primary` |
 | `surface` | `#fcfdff` | `rgba(13, 16, 24, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#efeff1` | `#2e3138` | `--color-bg-container-secondary` |
 | `ink` | `#05070f` | `#e7eaf2` | `--color-text-primary` |
 | `display` | `#05070f` | `#e7eaf2` | `--color-text-display` |
 | `heading` | `#05070f` | `#e7eaf2` | `--color-text-heading` |
-| `logo` | `#003dff` | `#003dff` | `--color-brand-mark` |
-| `logo-end` | `#002085` | `#002085` | `--color-brand-mark-end` |
+| `logo` | `#1238d4` | `#507aff` | `--color-brand-mark` |
+| `logo-end` | `#091d6f` | `#819fff` | `--color-brand-mark-end` |
 | `text-secondary` | `#2e3138` | `#b4b7bf` | `--color-text-secondary` |
 | `text-tertiary` | `#696b73` | `#9c9ea6` | `--color-text-tertiary` |
 | `border` | `#cdd0d8` | `#22242c` | `--color-bg-container-border` |
@@ -191,7 +191,7 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `error` | `#d32652` | `#ff4c79` | `--color-status-error-icon` |
 | `success` | `#00a66f` | `#00d68f` | `--color-status-positive-icon` |
 | `warning` | `#c15123` | `#ff6b2e` | `--color-status-warning-icon` |
-| `info` | `#275aff` | `#507aff` | `--color-status-info-icon` |
+| `info` | `#3656db` | `#507aff` | `--color-status-info-icon` |
 
 Accents, for charts and the background field: amber `#ff8a3d`, cobalt `#2e5bff`, coral `#ff3d7a`, gold `#ffc53d`, mint `#00e0b8`, violet `#7a3dff`.
 
@@ -216,16 +216,16 @@ IBM Plex Sans throughout. Levels inside a tier share a weight and step by size. 
 
 ## Shape
 
-Buttons squared to 8px, 8px inputs and 17px cards. Radius belongs to the element type, never to one instance.
+Buttons squared to 7px, 7px inputs and 13px cards. Radius belongs to the element type, never to one instance.
 
 - `xs`: 1px (`--radius-050`)
-- `sm`: 3px (`--radius-100`)
-- `md`: 6px (`--radius-200`)
-- `input`: 8px (`--radius-300`)
-- `lg`: 11px (`--radius-400`)
-- `card`: 17px (`--radius-600`)
-- `xl`: 34px (`--radius-1200`)
-- `pill`: 8px (`--radius-pill`)
+- `sm`: 2px (`--radius-100`)
+- `md`: 4px (`--radius-200`)
+- `input`: 7px (`--radius-300`)
+- `lg`: 9px (`--radius-400`)
+- `card`: 13px (`--radius-600`)
+- `xl`: 26px (`--radius-1200`)
+- `pill`: 7px (`--radius-pill`)
 
 ## Space
 

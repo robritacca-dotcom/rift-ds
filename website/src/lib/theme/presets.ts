@@ -304,13 +304,16 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
   },
   contrast: {
     label: "Blueprint",
-    brand: "#003DFF",
+    // Royal blue on the light page, where the electric key read thin; dark
+    // mode keeps the electric key, which glows on the night ground.
+    brand: "#1238D4",
+    brandDark: "#003DFF",
     tintOn: true,
     tintSeed: "#003DFF",
     tintStrength: 4,
     // Drafting-table corners: squarer than Getaway, rounder than Smoke,
     // and no pill anywhere.
-    radiusScale: 70,
+    radiusScale: 55,
     pill: false,
     density: 100,
     typeScale: 100,
@@ -366,6 +369,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       "--color-bg-app-shell": "var(--primitive-neutral-09)",
       "--color-bg-app-surface": "var(--primitive-neutral-11)",
       "--color-bg-container-primary-semi": "var(--primitive-neutral-09-a60)",
+      // The electric key reads thin as a mark on the night ground, so the
+      // logo lifts two steps up the ramp, its gradient one more.
+      "--color-brand-mark": "var(--primitive-blue-05)",
+      "--color-brand-mark-end": "var(--primitive-blue-04)",
+      "--color-product-mark": "var(--primitive-blue-05)",
     },
   },
   coral: {
@@ -1065,7 +1073,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
   },
   violet: {
     label: "Velvet",
-    brand: "#7434B3",
+    // A richer, more saturated violet on the light page; dark mode lifts it
+    // brighter so the key still reads as jewel-toned on the night ground.
+    brand: "#6A1BC2",
+    brandDark: "#8B45E0",
     tintOn: true,
     tintSeed: "#9E47EF",
     tintStrength: 5,
@@ -1125,6 +1136,16 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     extraOverrides: {
       "--color-chat-bubble-sent-bg": "var(--primitive-purple-09)",
       "--color-chat-bubble-sent-text": "var(--primitive-purple-02)",
+    },
+    // The key reads dim as a mark on the night ground, so the logo lifts
+    // three steps up the ramp, its gradient one more. The brighter dark key
+    // takes a white label: the derived lilac falls short of AA on it.
+    extraOverridesDark: {
+      "--color-action-primary-text": "var(--primitive-neutral-00)",
+      "--color-action-primary-text-active": "var(--primitive-neutral-00)",
+      "--color-brand-mark": "var(--primitive-purple-04)",
+      "--color-brand-mark-end": "var(--primitive-purple-03)",
+      "--color-product-mark": "var(--primitive-purple-04)",
     },
   },
 };

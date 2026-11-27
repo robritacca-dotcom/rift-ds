@@ -1113,12 +1113,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.9843,
-          0.9725,
-          1
+          0.9882,
+          0.9804,
+          0.9961
         ],
         "alpha": 1,
-        "hex": "#fbf8ff"
+        "hex": "#fcfafe"
       }
     },
     "purple-01": {
@@ -1126,12 +1126,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.9686,
-          0.9412,
-          0.9961
+          0.9647,
+          0.9451,
+          0.9922
         ],
         "alpha": 1,
-        "hex": "#f7f0fe"
+        "hex": "#f6f1fd"
       }
     },
     "purple-02": {
@@ -1139,12 +1139,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.902,
-          0.8235,
-          0.9843
+          0.8863,
+          0.8157,
+          0.9686
         ],
         "alpha": 1,
-        "hex": "#e6d2fb"
+        "hex": "#e2d0f7"
       }
     },
     "purple-03": {
@@ -1152,12 +1152,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.8118,
-          0.6706,
-          0.9686
+          0.7804,
+          0.6471,
+          0.9412
         ],
         "alpha": 1,
-        "hex": "#cfabf7"
+        "hex": "#c7a5f0"
       }
     },
     "purple-04": {
@@ -1165,12 +1165,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.7176,
-          0.5216,
-          0.9412
+          0.6431,
+          0.4314,
+          0.9059
         ],
         "alpha": 1,
-        "hex": "#b785f0"
+        "hex": "#a46ee7"
       }
     },
     "purple-05": {
@@ -1178,12 +1178,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.6588,
-          0.4157,
-          0.9098
+          0.6235,
+          0.3961,
+          0.898
         ],
         "alpha": 1,
-        "hex": "#a86ae8"
+        "hex": "#9f65e5"
       }
     },
     "purple-06": {
@@ -1191,12 +1191,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.5922,
-          0.3294,
-          0.8627
+          0.5647,
+          0.302,
+          0.8824
         ],
         "alpha": 1,
-        "hex": "#9754dc"
+        "hex": "#904de1"
       }
     },
     "purple-07": {
@@ -1204,12 +1204,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.6196,
-          0.2784,
-          0.9373
+          0.5451,
+          0.2706,
+          0.8784
         ],
         "alpha": 1,
-        "hex": "#9e47ef"
+        "hex": "#8b45e0"
       }
     },
     "purple-08": {
@@ -1217,12 +1217,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.4549,
-          0.2039,
-          0.702
+          0.4039,
+          0.2,
+          0.6471
         ],
         "alpha": 1,
-        "hex": "#7434b3"
+        "hex": "#6733a5"
       }
     },
     "purple-09": {
@@ -1230,12 +1230,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.3216,
+          0.2824,
           0.1412,
-          0.4902
+          0.4549
         ],
         "alpha": 1,
-        "hex": "#52247d"
+        "hex": "#482474"
       }
     },
     "purple-10": {
@@ -1243,12 +1243,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.1922,
-          0.0863,
-          0.2902
+          0.1686,
+          0.0824,
+          0.2706
         ],
         "alpha": 1,
-        "hex": "#31164a"
+        "hex": "#2b1545"
       }
     },
     "purple-11": {
@@ -1256,12 +1256,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.149,
-          0.0588,
-          0.2275
+          0.1255,
+          0.0627,
+          0.2039
         ],
         "alpha": 1,
-        "hex": "#260f3a"
+        "hex": "#201034"
       }
     },
     "radius-050": {
@@ -1899,43 +1899,43 @@
     },
     "action-primary-bg": {
       "$type": "color",
-      "$value": "{primitive.purple-08}"
+      "$value": "{primitive.purple-07}"
     },
     "action-primary-bg-active": {
       "$type": "color",
-      "$value": "{primitive.purple-10}"
+      "$value": "{primitive.purple-09}"
     },
     "action-primary-bg-hover": {
       "$type": "color",
-      "$value": "{primitive.purple-09}"
+      "$value": "{primitive.purple-08}"
     },
     "action-primary-border": {
       "$type": "color",
-      "$value": "{primitive.purple-08}"
+      "$value": "{primitive.purple-07}"
     },
     "action-primary-border-secondary": {
       "$type": "color",
-      "$value": "{primitive.purple-09}"
+      "$value": "{primitive.purple-08}"
     },
     "action-primary-border-tertiary": {
       "$type": "color",
-      "$value": "{primitive.purple-08}"
+      "$value": "{primitive.purple-07}"
     },
     "action-primary-text": {
       "$type": "color",
-      "$value": "{primitive.purple-02}"
+      "$value": "{primitive.neutral-00}"
     },
     "action-primary-text-active": {
       "$type": "color",
-      "$value": "{primitive.purple-02}"
+      "$value": "{primitive.neutral-00}"
     },
     "action-primary-text-secondary": {
       "$type": "color",
-      "$value": "{primitive.purple-11}"
+      "$value": "{primitive.purple-10}"
     },
     "action-primary-text-tertiary": {
       "$type": "color",
-      "$value": "{primitive.purple-08}"
+      "$value": "{primitive.purple-07}"
     },
     "ai-button-bg": {
       "$type": "color",
@@ -1943,15 +1943,15 @@
     },
     "ai-gradient-end": {
       "$type": "color",
-      "$value": "{primitive.purple-10}"
+      "$value": "{primitive.purple-09}"
     },
     "ai-gradient-mid": {
       "$type": "color",
-      "$value": "{primitive.purple-08}"
+      "$value": "{primitive.purple-07}"
     },
     "ai-gradient-start": {
       "$type": "color",
-      "$value": "{primitive.purple-04}"
+      "$value": "{primitive.purple-03}"
     },
     "ambient-1": {
       "$type": "color",
@@ -2129,11 +2129,11 @@
     },
     "brand-mark": {
       "$type": "color",
-      "$value": "{color.action-primary-bg}"
+      "$value": "{primitive.purple-04}"
     },
     "brand-mark-end": {
       "$type": "color",
-      "$value": "{color.action-primary-bg-active}"
+      "$value": "{primitive.purple-03}"
     },
     "calendar-cell-bg": {
       "$type": "color",
@@ -2331,7 +2331,7 @@
     },
     "core-ui-primary": {
       "$type": "color",
-      "$value": "{primitive.purple-08}"
+      "$value": "{primitive.purple-07}"
     },
     "core-ui-secondary": {
       "$type": "color",
@@ -2391,7 +2391,7 @@
     },
     "input-border-hover": {
       "$type": "color",
-      "$value": "{primitive.purple-09}"
+      "$value": "{primitive.purple-08}"
     },
     "input-border-primary": {
       "$type": "color",
@@ -2399,7 +2399,7 @@
     },
     "input-border-selected": {
       "$type": "color",
-      "$value": "{primitive.purple-09}"
+      "$value": "{primitive.purple-08}"
     },
     "input-indicator-border": {
       "$type": "color",
@@ -2451,7 +2451,7 @@
     },
     "product-mark": {
       "$type": "color",
-      "$value": "{color.core-ui-primary}"
+      "$value": "{primitive.purple-04}"
     },
     "scrim": {
       "$type": "color",

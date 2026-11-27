@@ -1114,11 +1114,11 @@
         "colorSpace": "srgb",
         "components": [
           0.9843,
-          0.9725,
-          1
+          0.9765,
+          0.9922
         ],
         "alpha": 1,
-        "hex": "#fbf8ff"
+        "hex": "#fbf9fd"
       }
     },
     "purple-01": {
@@ -1126,12 +1126,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.9686,
-          0.9412,
-          0.9961
+          0.9569,
+          0.9333,
+          0.9804
         ],
         "alpha": 1,
-        "hex": "#f7f0fe"
+        "hex": "#f4eefa"
       }
     },
     "purple-02": {
@@ -1139,12 +1139,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.902,
-          0.8235,
-          0.9843
+          0.8549,
+          0.7765,
+          0.9412
         ],
         "alpha": 1,
-        "hex": "#e6d2fb"
+        "hex": "#dac6f0"
       }
     },
     "purple-03": {
@@ -1152,12 +1152,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.8118,
-          0.6706,
-          0.9686
+          0.7176,
+          0.5686,
+          0.8824
         ],
         "alpha": 1,
-        "hex": "#cfabf7"
+        "hex": "#b791e1"
       }
     },
     "purple-04": {
@@ -1165,12 +1165,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.7176,
-          0.5216,
-          0.9412
+          0.5451,
+          0.302,
+          0.8118
         ],
         "alpha": 1,
-        "hex": "#b785f0"
+        "hex": "#8b4dcf"
       }
     },
     "purple-05": {
@@ -1178,12 +1178,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.6588,
-          0.4157,
-          0.9098
+          0.5176,
+          0.2627,
+          0.8039
         ],
         "alpha": 1,
-        "hex": "#a86ae8"
+        "hex": "#8443cd"
       }
     },
     "purple-06": {
@@ -1191,12 +1191,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.5922,
-          0.3294,
-          0.8627
+          0.4392,
+          0.1451,
+          0.7725
         ],
         "alpha": 1,
-        "hex": "#9754dc"
+        "hex": "#7025c5"
       }
     },
     "purple-07": {
@@ -1204,12 +1204,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.6196,
-          0.2784,
-          0.9373
+          0.4157,
+          0.1059,
+          0.7608
         ],
         "alpha": 1,
-        "hex": "#9e47ef"
+        "hex": "#6a1bc2"
       }
     },
     "purple-08": {
@@ -1217,12 +1217,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.4549,
-          0.2039,
-          0.702
+          0.3059,
+          0.0784,
+          0.5608
         ],
         "alpha": 1,
-        "hex": "#7434b3"
+        "hex": "#4e148f"
       }
     },
     "purple-09": {
@@ -1230,12 +1230,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.3216,
-          0.1412,
-          0.4902
+          0.2157,
+          0.0549,
+          0.3922
         ],
         "alpha": 1,
-        "hex": "#52247d"
+        "hex": "#370e64"
       }
     },
     "purple-10": {
@@ -1243,12 +1243,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.1922,
-          0.0863,
-          0.2902
+          0.1294,
+          0.0314,
+          0.2353
         ],
         "alpha": 1,
-        "hex": "#31164a"
+        "hex": "#21083c"
       }
     },
     "purple-11": {
@@ -1256,12 +1256,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.149,
-          0.0588,
-          0.2275
+          0.098,
+          0.0235,
+          0.1765
         ],
         "alpha": 1,
-        "hex": "#260f3a"
+        "hex": "#19062d"
       }
     },
     "radius-050": {
@@ -1899,27 +1899,27 @@
     },
     "action-primary-bg": {
       "$type": "color",
-      "$value": "{primitive.purple-08}"
+      "$value": "{primitive.purple-07}"
     },
     "action-primary-bg-active": {
       "$type": "color",
-      "$value": "{primitive.purple-10}"
+      "$value": "{primitive.purple-09}"
     },
     "action-primary-bg-hover": {
       "$type": "color",
-      "$value": "{primitive.purple-09}"
+      "$value": "{primitive.purple-08}"
     },
     "action-primary-border": {
       "$type": "color",
-      "$value": "{primitive.purple-11}"
+      "$value": "{primitive.purple-10}"
     },
     "action-primary-border-secondary": {
       "$type": "color",
-      "$value": "{primitive.purple-08}"
+      "$value": "{primitive.purple-07}"
     },
     "action-primary-border-tertiary": {
       "$type": "color",
-      "$value": "{primitive.purple-08}"
+      "$value": "{primitive.purple-07}"
     },
     "action-primary-text": {
       "$type": "color",
@@ -1931,11 +1931,11 @@
     },
     "action-primary-text-secondary": {
       "$type": "color",
-      "$value": "{primitive.purple-11}"
+      "$value": "{primitive.purple-10}"
     },
     "action-primary-text-tertiary": {
       "$type": "color",
-      "$value": "{primitive.purple-09}"
+      "$value": "{primitive.purple-08}"
     },
     "ai-button-bg": {
       "$type": "color",
@@ -1943,15 +1943,15 @@
     },
     "ai-gradient-end": {
       "$type": "color",
-      "$value": "{primitive.purple-10}"
+      "$value": "{primitive.purple-09}"
     },
     "ai-gradient-mid": {
       "$type": "color",
-      "$value": "{primitive.purple-08}"
+      "$value": "{primitive.purple-07}"
     },
     "ai-gradient-start": {
       "$type": "color",
-      "$value": "{primitive.purple-04}"
+      "$value": "{primitive.purple-03}"
     },
     "ambient-1": {
       "$type": "color",
@@ -2331,11 +2331,11 @@
     },
     "core-ui-primary": {
       "$type": "color",
-      "$value": "{primitive.purple-08}"
+      "$value": "{primitive.purple-07}"
     },
     "core-ui-secondary": {
       "$type": "color",
-      "$value": "{primitive.purple-11}"
+      "$value": "{primitive.purple-10}"
     },
     "count-badge-bg": {
       "$type": "color",
@@ -2391,7 +2391,7 @@
     },
     "input-border-hover": {
       "$type": "color",
-      "$value": "{primitive.purple-06}"
+      "$value": "{primitive.purple-04}"
     },
     "input-border-primary": {
       "$type": "color",
@@ -2399,7 +2399,7 @@
     },
     "input-border-selected": {
       "$type": "color",
-      "$value": "{primitive.purple-08}"
+      "$value": "{primitive.purple-07}"
     },
     "input-indicator-border": {
       "$type": "color",

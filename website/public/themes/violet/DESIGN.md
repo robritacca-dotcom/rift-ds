@@ -4,11 +4,11 @@ name: "Velvet"
 description: "The Velvet theme of rift-ds: its colours, type, shape, space and depth, as the theme resolves them."
 
 colors:
-  primary: "#7434b3"
-  primary-hover: "#52247d"
-  primary-active: "#31164a"
-  on-primary: "#e6d2fb"
-  primary-dark: "#7434b3"
+  primary: "#6a1bc2"
+  primary-hover: "#4e148f"
+  primary-active: "#370e64"
+  on-primary: "#dac6f0"
+  primary-dark: "#8b45e0"
   canvas-light: "#f0eff1"
   canvas-dark: "#0d0811"
   surface: "#fefdff"
@@ -20,10 +20,10 @@ colors:
   display-dark: "#ede9f1"
   heading: "#0d0811"
   heading-dark: "#ede9f1"
-  logo: "#7434b3"
-  logo-dark: "#7434b3"
-  logo-end: "#31164a"
-  logo-end-dark: "#31164a"
+  logo: "#6a1bc2"
+  logo-dark: "#a46ee7"
+  logo-end: "#370e64"
+  logo-end-dark: "#c7a5f0"
   text-secondary: "#36313a"
   text-tertiary: "#6f6b74"
   border: "#d3cfd7"
@@ -38,7 +38,7 @@ colors:
   accent-gold: "#d9be7a"
   accent-mint: "#6bae9e"
   accent-violet: "#9e47ef"
-  chart-1: "#7434b3"
+  chart-1: "#6a1bc2"
   chart-2: "#6bae9e"
   chart-3: "#d9be7a"
   chart-4: "#d96ba8"
@@ -159,28 +159,28 @@ components:
 
 # Velvet theme
 
-Velvet: Playfair Display headings over Plus Jakarta Sans text, #7434b3 for actions, pill buttons, 17px inputs and 34px cards. Soft shadows, kept for what floats: menus, popovers and dialogs.
+Velvet: Playfair Display headings over Plus Jakarta Sans text, #6a1bc2 for actions, pill buttons, 17px inputs and 34px cards. Soft shadows, kept for what floats: menus, popovers and dialogs.
 
 Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="violet"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/violet.
 
 ## Colour
 
-One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles. The logo wears the action colour (`logo`). Its mark is a gradient within that one colour (`logo-end`).
+One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles. The logo has a colour of its own (`logo`), apart from the action colour. Its mark is a gradient within that one colour (`logo-end`).
 
 | Role | Light | Dark | Token |
 | --- | --- | --- | --- |
-| `primary` | `#7434b3` | `#7434b3` | `--color-action-primary-bg` |
-| `primary-hover` | `#52247d` | `#52247d` | `--color-action-primary-bg-hover` |
-| `primary-active` | `#31164a` | `#31164a` | `--color-action-primary-bg-active` |
-| `on-primary` | `#e6d2fb` | `#e6d2fb` | `--color-action-primary-text` |
+| `primary` | `#6a1bc2` | `#8b45e0` | `--color-action-primary-bg` |
+| `primary-hover` | `#4e148f` | `#6733a5` | `--color-action-primary-bg-hover` |
+| `primary-active` | `#370e64` | `#482474` | `--color-action-primary-bg-active` |
+| `on-primary` | `#dac6f0` | `#faf6fe` | `--color-action-primary-text` |
 | `canvas-light` | `#f0eff1` | `#0d0811` | `--color-bg-page-primary` |
 | `surface` | `#fefdff` | `rgba(21, 17, 25, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#f0eff1` | `#36313a` | `--color-bg-container-secondary` |
 | `ink` | `#0d0811` | `#ede9f1` | `--color-text-primary` |
 | `display` | `#0d0811` | `#ede9f1` | `--color-text-display` |
 | `heading` | `#0d0811` | `#ede9f1` | `--color-text-heading` |
-| `logo` | `#7434b3` | `#7434b3` | `--color-brand-mark` |
-| `logo-end` | `#31164a` | `#31164a` | `--color-brand-mark-end` |
+| `logo` | `#6a1bc2` | `#a46ee7` | `--color-brand-mark` |
+| `logo-end` | `#370e64` | `#c7a5f0` | `--color-brand-mark-end` |
 | `text-secondary` | `#36313a` | `#bbb6bf` | `--color-text-secondary` |
 | `text-tertiary` | `#6f6b74` | `#a29da6` | `--color-text-tertiary` |
 | `border` | `#d3cfd7` | `#29252d` | `--color-bg-container-border` |

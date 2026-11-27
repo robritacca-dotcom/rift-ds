@@ -16,10 +16,10 @@
         "components": [
           0.9765,
           0.9804,
-          1
+          0.9961
         ],
         "alpha": 1,
-        "hex": "#f9faff"
+        "hex": "#f9fafe"
       }
     },
     "blue-01": {
@@ -27,12 +27,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.9451,
+          0.949,
           0.9569,
-          1
+          0.9922
         ],
         "alpha": 1,
-        "hex": "#f1f4ff"
+        "hex": "#f2f4fd"
       }
     },
     "blue-02": {
@@ -40,12 +40,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.8431,
-          0.8824,
-          1
+          0.8549,
+          0.8784,
+          0.9725
         ],
         "alpha": 1,
-        "hex": "#d7e1ff"
+        "hex": "#dae0f8"
       }
     },
     "blue-03": {
@@ -53,12 +53,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.6863,
-          0.7608,
-          1
+          0.7059,
+          0.7529,
+          0.9451
         ],
         "alpha": 1,
-        "hex": "#afc2ff"
+        "hex": "#b4c0f1"
       }
     },
     "blue-04": {
@@ -66,12 +66,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.5059,
-          0.6235,
-          1
+          0.5412,
+          0.6157,
+          0.9176
         ],
         "alpha": 1,
-        "hex": "#819fff"
+        "hex": "#8a9dea"
       }
     },
     "blue-05": {
@@ -79,12 +79,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.3137,
-          0.4784,
-          1
+          0.3647,
+          0.4667,
+          0.8863
         ],
         "alpha": 1,
-        "hex": "#507aff"
+        "hex": "#5d77e2"
       }
     },
     "blue-06": {
@@ -92,12 +92,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.1529,
-          0.3529,
-          1
+          0.2118,
+          0.3373,
+          0.8588
         ],
         "alpha": 1,
-        "hex": "#275aff"
+        "hex": "#3656db"
       }
     },
     "blue-07": {
@@ -105,12 +105,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0,
-          0.2392,
-          1
+          0.0706,
+          0.2196,
+          0.8314
         ],
         "alpha": 1,
-        "hex": "#003dff"
+        "hex": "#1238d4"
       }
     },
     "blue-08": {
@@ -118,12 +118,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0,
-          0.1804,
-          0.7608
+          0.0549,
+          0.1686,
+          0.6353
         ],
         "alpha": 1,
-        "hex": "#002ec2"
+        "hex": "#0e2ba2"
       }
     },
     "blue-09": {
@@ -131,12 +131,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0,
-          0.1255,
-          0.5216
+          0.0353,
+          0.1137,
+          0.4353
         ],
         "alpha": 1,
-        "hex": "#002085"
+        "hex": "#091d6f"
       }
     },
     "blue-10": {
@@ -144,12 +144,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0,
-          0.0706,
-          0.2902
+          0.0196,
+          0.0627,
+          0.2392
         ],
         "alpha": 1,
-        "hex": "#00124a"
+        "hex": "#05103d"
       }
     },
     "blue-11": {
@@ -157,12 +157,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0,
-          0.0471,
-          0.2
+          0.0157,
+          0.0431,
+          0.1647
         ],
         "alpha": 1,
-        "hex": "#000c33"
+        "hex": "#040b2a"
       }
     },
     "border-025": {
@@ -1274,49 +1274,49 @@
     "radius-100": {
       "$type": "dimension",
       "$value": {
-        "value": 3,
+        "value": 2,
         "unit": "px"
       }
     },
     "radius-1200": {
       "$type": "dimension",
       "$value": {
-        "value": 34,
+        "value": 26,
         "unit": "px"
       }
     },
     "radius-200": {
       "$type": "dimension",
       "$value": {
-        "value": 6,
+        "value": 4,
         "unit": "px"
       }
     },
     "radius-300": {
       "$type": "dimension",
       "$value": {
-        "value": 8,
+        "value": 7,
         "unit": "px"
       }
     },
     "radius-400": {
       "$type": "dimension",
       "$value": {
-        "value": 11,
+        "value": 9,
         "unit": "px"
       }
     },
     "radius-600": {
       "$type": "dimension",
       "$value": {
-        "value": 17,
+        "value": 13,
         "unit": "px"
       }
     },
     "radius-pill": {
       "$type": "dimension",
       "$value": {
-        "value": 8,
+        "value": 7,
         "unit": "px"
       }
     },

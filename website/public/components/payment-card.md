@@ -2,7 +2,7 @@
 
 The face of a payment card at a card’s aspect ratio, with the brand, last four digits, holder, expiry and a frozen state.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.39.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: data-display
 - Import: `import { PaymentCard } from 'rift-ds';`

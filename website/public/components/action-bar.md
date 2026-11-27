@@ -2,7 +2,7 @@
 
 A bar docked to the bottom of a long list or form, with a summary line and the primary actions over a progressive blur.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.39.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: actions
 - Import: `import { ActionBar } from 'rift-ds';`

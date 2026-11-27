@@ -2,7 +2,7 @@
 
 The bar along the top of an app’s page: the search, borderless icon controls, the AI button and a primary action, folding in steps as it narrows.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.39.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: layout
 - Import: `import { AppToolbar } from 'rift-ds';`

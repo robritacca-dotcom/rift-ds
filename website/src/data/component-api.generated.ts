@@ -14336,13 +14336,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "unreadCount",
             "type": "number",
             "required": false,
-            "description": "How many notifications are unread, shown under the heading. Omit to hide the line."
+            "description": "How many notifications are unread, shown as a badge beside the title (only announced when filter tabs carry the count). Omit to hide it."
           },
           {
             "name": "unreadCountLabel",
             "type": "((count: number) => string)",
             "required": false,
-            "description": "Text of the unread line under the heading, given the count. Defaults to \"<count> unread\".",
+            "description": "The unread count's text, given the count. Defaults to \"<count> unread\".",
             "defaultValue": "(count) => `${count} unread`"
           },
           {

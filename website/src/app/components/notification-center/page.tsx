@@ -106,6 +106,8 @@ function InboxDemo() {
         ]}
         value={tab}
         onValueChange={setTab}
+        onClearAll={() => setItems([])}
+        seeAllHref="/docs/blocks/notifications"
       >
         {visible.map((item) => (
           <NotificationItem
@@ -115,6 +117,12 @@ function InboxDemo() {
             unread={item.unread}
             media={item.media}
             actions={item.actions}
+            onSelect={() =>
+              setItems((current) =>
+                current.map((other) => (other.id === item.id ? { ...other, unread: false } : other)),
+              )
+            }
+            onDismiss={() => setItems((current) => current.filter((other) => other.id !== item.id))}
           >
             {item.body}
           </NotificationItem>
@@ -139,19 +147,23 @@ export default function NotificationCenterPage() {
         </p>
         <p className={styles.introBody}>
           Toast interrupts, this accumulates. A header with the unread
-          count and a mark all read control, optional filter tabs with
-          counts, and a scrolling list of notification items with their
-          own actions. Filtering stays with you: swap the children when
-          the tab changes.
+          count and an options menu, optional filter tabs with counts, a
+          scrolling list of notification items that open, dismiss and
+          carry their own actions, and a See all link to the full page.
+          Filtering stays with you: swap the children when the tab
+          changes.
         </p>
       </div>
 
       <section className={styles.section}>
         <SectionTitle title="A working inbox" />
         <p className={styles.demoText}>
-          The tabs filter, the counts follow the data, and mark all read
-          clears the dots. Unread items carry an emphasised title and an
-          info coloured dot, never the action colour.
+          The tabs filter and the counts follow the data. Open a row to
+          read it, its close button to clear it, and the options menu to
+          mark all as read or clear the lot; See all goes to the
+          notifications block, the full page. Unread items carry an
+          emphasised title and an info coloured dot, never the action
+          colour.
         </p>
         <InboxDemo />
       </section>

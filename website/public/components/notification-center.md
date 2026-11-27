@@ -17,8 +17,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.39.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | title | `string` | no | `'Notifications'` | Heading shown in the header. Note: this shadows the native `title` tooltip attribute, which NotificationCenter does not expose. |
-| unreadCount | `number` | no |  | How many notifications are unread, shown under the heading. Omit to hide the line. |
-| unreadCountLabel | `((count: number) => string)` | no | `` (count) => `${count} unread` `` | Text of the unread line under the heading, given the count. Defaults to "<count> unread". |
+| unreadCount | `number` | no |  | How many notifications are unread, shown as a badge beside the title (only announced when filter tabs carry the count). Omit to hide it. |
+| unreadCountLabel | `((count: number) => string)` | no | `` (count) => `${count} unread` `` | The unread count's text, given the count. Defaults to "<count> unread". |
 | tabsLabel | `string` | no |  | Accessible name of the filter tablist. Defaults to "<title> filters". |
 | onMarkAllRead | `(() => void)` | no |  | Fires when Mark all as read is chosen from the header's options menu. The item is disabled while `unreadCount` is zero. |
 | markAllLabel | `string` | no | `'Mark all as read'` | The options menu's mark-all-read item. Default "Mark all as read". |

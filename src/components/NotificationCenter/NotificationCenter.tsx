@@ -160,9 +160,9 @@ type NotificationCenterOwnProps = {
    * Note: this shadows the native `title` tooltip attribute, which NotificationCenter does not expose.
    */
   title?: string;
-  /** How many notifications are unread, shown under the heading. Omit to hide the line. */
+  /** How many notifications are unread, shown as a badge beside the title (only announced when filter tabs carry the count). Omit to hide it. */
   unreadCount?: number;
-  /** Text of the unread line under the heading, given the count. Defaults to "<count> unread". */
+  /** The unread count's text, given the count. Defaults to "<count> unread". */
   unreadCountLabel?: (count: number) => string;
   /** Accessible name of the filter tablist. Defaults to "<title> filters". */
   tabsLabel?: string;

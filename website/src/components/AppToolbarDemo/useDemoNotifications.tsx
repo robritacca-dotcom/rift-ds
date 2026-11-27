@@ -6,7 +6,7 @@ import { NotificationCenter, NotificationItem } from "rift-ds/components/Notific
 /**
  * The notifications behind the AppToolbar demos on the app toolbar and app
  * layout pages: a small inbox whose rows open and become read (they stay
- * in the list, unbolded), All and Unread tabs, Mark all read, the empty
+ * in the list, unbolded), All and Unread tabs, Mark all as read, the empty
  * state once Unread has nothing in it, a See all footer, and the count the
  * bell's badge shows. Demo state
  * only; it lasts the visit.

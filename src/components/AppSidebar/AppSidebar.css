@@ -557,6 +557,12 @@
   background-color: var(--color-action-passive-bg-active);
 }
 
+/* The row feeding the open panel: the hover fill, held, a step quieter
+   than the current page's selection. */
+.ds-app-sidebar__btn--open {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
 .ds-app-sidebar__btn-left {
   display: flex;
   align-items: center;
@@ -1347,13 +1353,20 @@
 }
 
 .ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn:hover,
-.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn--active {
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn--active,
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn--open {
   background-color: transparent;
 }
 
 .ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn:hover::before,
-.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn--active::before {
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn--open::before {
   background-color: var(--color-action-passive-bg-hover);
+}
+
+/* The current page's indicator holds the selection fill, a step above the
+   open row's, so the collapsed rail tells the two apart. */
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn--active::before {
+  background-color: var(--color-action-passive-bg-active);
 }
 
 /* The caption: centred under the indicator, the rail's 72px wide

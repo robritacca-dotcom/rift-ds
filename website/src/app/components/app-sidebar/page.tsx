@@ -441,7 +441,7 @@ export default function AppSidebarPage() {
       <section className={styles.section}>
         <SectionTitle title="Panel mode" />
         <p className={styles.sectionBody}>
-          In panel mode, the default, the collapsed rail is the whole first level, so it is 80px wide and names each destination under its icon. Reports opens its sub-items straight into the panel, and Financial planning becomes the panel’s own accordion. The row feeding the open panel carries the selection fill. The layout prop sets how the rail and its panel meet the page.
+          In panel mode, the default, the collapsed rail is the whole first level, so it is 80px wide and names each destination under its icon. Reports opens its sub-items straight into the panel, and Financial planning becomes the panel’s own accordion. The row feeding the open panel takes a quieter open fill, and the current page keeps its selection, so opening a setting never loses your place. The layout prop sets how the rail and its panel meet the page.
         </p>
         <div className={styles.layoutSwitch}>
           <SegmentedControl

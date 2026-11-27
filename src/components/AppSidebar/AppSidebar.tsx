@@ -1092,8 +1092,11 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
             {section.items.map((item) => {
               const hasChildren = item.children && item.children.length > 0;
               const isOpen = openKeys.has(item.key);
-              /* Panel mode: the row feeding a visible panel carries the
-                 selection, so the rail shows which section is open. */
+              /* Panel mode: the row feeding a visible panel takes a quieter
+                 open fill, so the rail shows which section is open, while
+                 the current page keeps the selection: opening a panel
+                 (a setting's choices, a section's pages) has not moved the
+                 reader anywhere yet. */
               const feedsPanel = isPanelMode && hasChildren;
               const isSource = feedsPanel && item.key === panelSourceKey;
               /* The current page is one of this row's children (or theirs).
@@ -1111,8 +1114,8 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                   ),
               );
               const childShows = childCurrent && !isPanelMode && (isExpanded || mobileOpen) && isOpen;
-              const isActive =
-                (isPanelMode && panelVisible ? isSource : activeKey === item.key) && !childShows;
+              const isActive = activeKey === item.key && !childShows;
+              const isPanelOpenRow = isSource && panelVisible && !isActive;
 
               /* A leaf item with an href is a real link; an accordion row
                  stays a button whatever it declares, because its job is to
@@ -1122,6 +1125,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
               const itemClasses = [
                 `${baseClass}__btn`,
                 isActive ? `${baseClass}__btn--active` : '',
+                isPanelOpenRow ? `${baseClass}__btn--open` : '',
               ]
                 .filter(Boolean)
                 .join(' ');

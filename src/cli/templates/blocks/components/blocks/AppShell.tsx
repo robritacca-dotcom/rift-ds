@@ -137,7 +137,7 @@ export const SETTINGS_SECTIONS = [
 function navFor(activeKey: string): AppSidebarSection[] {
   // On the settings page a section is a jump within it; anywhere else it
   // opens the settings page at that section.
-  const base = activeKey === 'settings' ? '' : '/settings';
+  const base = activeKey === 'settings' ? '' : ROUTES.settings;
   return NAV_SECTIONS.map((section) => ({
     ...section,
     items: section.items.map((item) =>
@@ -159,6 +159,15 @@ function navFor(activeKey: string): AppSidebarSection[] {
     ),
   }));
 }
+
+/**
+ * Where the toolbar's links go: the notifications and settings blocks'
+ * pages. Relative, so they resolve beside the page they are on: every block
+ * is a top-level route in your app (`notifications` from /dashboard is
+ * /notifications), and the rift-ds docs preview finds its own copies the
+ * same way. Make them absolute ('/notifications') if your pages nest.
+ */
+const ROUTES = { notifications: 'notifications', settings: 'settings' };
 
 /**
  * The bell's latest notifications. Read your own; See all opens the
@@ -304,7 +313,7 @@ export function AppShell({ activeKey, activeSubKey, breadcrumb, title, descripti
                 <NotificationCenter
                   unreadCount={unread.length}
                   onMarkAllRead={() => setUnread([])}
-                  seeAllHref="/notifications"
+                  seeAllHref={ROUTES.notifications}
                 >
                   {LATEST.map((item) => (
                     <NotificationItem
@@ -322,7 +331,7 @@ export function AppShell({ activeKey, activeSubKey, breadcrumb, title, descripti
               ),
             },
             { id: 'help', icon: 'help', label: 'Help' },
-            { id: 'settings', icon: 'settings', label: 'Settings', href: '/settings' },
+            { id: 'settings', icon: 'settings', label: 'Settings', href: ROUTES.settings },
           ]}
           onChat={() => {}}
         />

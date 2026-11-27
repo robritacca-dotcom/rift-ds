@@ -122,11 +122,11 @@ typography:
 rounded:
   xs: 1px
   sm: 2px
-  md: 4px
+  md: 5px
   input: 7px
-  lg: 9px
-  card: 13px
-  xl: 26px
+  lg: 10px
+  card: 14px
+  xl: 29px
   pill: 7px
 
 spacing:
@@ -162,7 +162,7 @@ components:
 
 # Blueprint theme
 
-Blueprint: IBM Plex Sans throughout, #1238d4 for actions, buttons squared to 7px, 7px inputs and 13px cards. Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.
+Blueprint: IBM Plex Sans throughout, #1238d4 for actions, buttons squared to 7px, 7px inputs and 14px cards. Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.
 
 Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="contrast"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/contrast.
 
@@ -216,15 +216,15 @@ IBM Plex Sans throughout. Levels inside a tier share a weight and step by size. 
 
 ## Shape
 
-Buttons squared to 7px, 7px inputs and 13px cards. Radius belongs to the element type, never to one instance.
+Buttons squared to 7px, 7px inputs and 14px cards. Radius belongs to the element type, never to one instance.
 
 - `xs`: 1px (`--radius-050`)
 - `sm`: 2px (`--radius-100`)
-- `md`: 4px (`--radius-200`)
+- `md`: 5px (`--radius-200`)
 - `input`: 7px (`--radius-300`)
-- `lg`: 9px (`--radius-400`)
-- `card`: 13px (`--radius-600`)
-- `xl`: 26px (`--radius-1200`)
+- `lg`: 10px (`--radius-400`)
+- `card`: 14px (`--radius-600`)
+- `xl`: 29px (`--radius-1200`)
 - `pill`: 7px (`--radius-pill`)
 
 ## Space

@@ -1281,14 +1281,14 @@
     "radius-1200": {
       "$type": "dimension",
       "$value": {
-        "value": 26,
+        "value": 29,
         "unit": "px"
       }
     },
     "radius-200": {
       "$type": "dimension",
       "$value": {
-        "value": 4,
+        "value": 5,
         "unit": "px"
       }
     },
@@ -1302,14 +1302,14 @@
     "radius-400": {
       "$type": "dimension",
       "$value": {
-        "value": 9,
+        "value": 10,
         "unit": "px"
       }
     },
     "radius-600": {
       "$type": "dimension",
       "$value": {
-        "value": 13,
+        "value": 14,
         "unit": "px"
       }
     },

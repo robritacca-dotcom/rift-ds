@@ -101,7 +101,7 @@ export const THEME_TILES: Record<"light" | "dark", RichDropdownOption[]> = {
       "label": "Blueprint",
       "value": "contrast",
       "color": "#1238D4",
-      "swatchRadius": "4px",
+      "swatchRadius": "5px",
       "headingFont": "'IBM Plex Sans', sans-serif",
       "bodyFont": "'IBM Plex Sans', sans-serif",
       "description": "IBM Plex Sans"
@@ -220,7 +220,7 @@ export const THEME_TILES: Record<"light" | "dark", RichDropdownOption[]> = {
       "label": "Blueprint",
       "value": "contrast",
       "color": "#003DFF",
-      "swatchRadius": "4px",
+      "swatchRadius": "5px",
       "headingFont": "'IBM Plex Sans', sans-serif",
       "bodyFont": "'IBM Plex Sans', sans-serif",
       "description": "IBM Plex Sans"

@@ -313,7 +313,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tintStrength: 4,
     // Drafting-table corners: squarer than Getaway, rounder than Smoke,
     // and no pill anywhere.
-    radiusScale: 55,
+    radiusScale: 60,
     pill: false,
     density: 100,
     typeScale: 100,

@@ -60,7 +60,8 @@ type TableOwnProps = {
    * dividers, the first and last columns' content flush with the page, and
    * a hovered row lifted into a raised tile that reaches past the columns.
    * The page needs room for that reach on both sides (`--padding-400`).
-   * Wins over `bordered`.
+   * Wins over `bordered`. On a phone (a viewport under `BREAKPOINT_PHONE_PX`)
+   * it is drawn as the plain table, the outer control as an ordinary column.
    */
   frameless?: boolean;
   /**

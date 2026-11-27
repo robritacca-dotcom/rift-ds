@@ -1501,3 +1501,22 @@ export const FramelessPinned: Story = {
   },
 };
 
+
+/** Narrower than a phone, a frameless table keeps the usual bordered look, its checkbox an ordinary first column. */
+export const FramelessOnPhone: Story = {
+  name: 'Frameless (narrower than a phone)',
+  args: { frameless: true, outerControl: true, selectable: true, pageSize: 4 },
+  decorators: [
+    (Story) => (
+      <div style={{ maxWidth: '360px' }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const table = canvasElement.querySelector('table')!;
+    await waitFor(() => expect(table).toHaveClass('ds-table--bordered'));
+    await expect(table).not.toHaveClass('ds-table--frameless');
+    await expect(table).not.toHaveClass('ds-table--outer-control');
+  },
+};

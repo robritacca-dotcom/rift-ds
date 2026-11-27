@@ -302,278 +302,289 @@
 }
 
 /* ============================================
-   FRAMELESS (`frameless`)
-   No outline, no header band, no column dividers, no table surface: the
-   lines between rows stay, cut to the content. The first and last
-   columns' content sits flush with the page: the scroll container reaches
-   past its column by the bleed (--padding-400) on both sides and the end
-   cells pad back in by it. A hovered row lifts into a raised tile that
-   fills that reach.
-
-   The tile is painted by the cells, never by a shape behind the row, so a
-   sticky cell (DataTable's pinned columns and sticky header) paints its own
-   part of it. Each cell stacks a base (opaque only where it sticks), the
-   row's fill, and its divider along the foot. The tile's edges are shadows
-   that take no room, in the divider's colour, on the very pixels the
-   dividers use: the top edge on the line above, the bottom edge on the
-   row's own line. Where the tile meets a divider that line never changes,
-   so the tile fades in without a second line ever showing.
-
-   Two override hooks: --ds-table-tile, the tile's fill (the raised
-   container surface by default, which keeps a control in the row hovering
-   with the contrast it has on a card), and --ds-table-surface, what a
-   sticky cell and the seam between selected rows are painted with (the
-   page by default; a table on a card sets it to the card's colour).
+   FRAMELESS AND THE OUTER CONTROL: wider than a phone only
+   Below the phone step a frameless table is drawn as the plain table is,
+   and the outer control's column as an ordinary first column: a phone has
+   no hover to reveal the control and no page margin for the tile's reach.
+   DataTable makes the same switch at its own width, so a table in a narrow
+   panel counts there too.
    ============================================ */
 
-.ds-table.ds-table--frameless {
-  --ds-table-bleed: var(--padding-400);
-  --ds-table-radius: var(--radius-300);
+@media (min-width: 601px) {
+  /* ============================================
+     FRAMELESS (`frameless`)
+     No outline, no header band, no column dividers, no table surface: the
+     lines between rows stay, cut to the content. The first and last
+     columns' content sits flush with the page: the scroll container reaches
+     past its column by the bleed (--padding-400) on both sides and the end
+     cells pad back in by it. A hovered row lifts into a raised tile that
+     fills that reach.
 
-  overflow: visible;
-  border-radius: 0;
-}
+     The tile is painted by the cells, never by a shape behind the row, so a
+     sticky cell (DataTable's pinned columns and sticky header) paints its own
+     part of it. Each cell stacks a base (opaque only where it sticks), the
+     row's fill, and its divider along the foot. The tile's edges are shadows
+     that take no room, in the divider's colour, on the very pixels the
+     dividers use: the top edge on the line above, the bottom edge on the
+     row's own line. Where the tile meets a divider that line never changes,
+     so the tile fades in without a second line ever showing.
 
-.ds-table.ds-table--frameless.ds-table--compact {
-  --ds-table-radius: var(--radius-200);
-}
+     Two override hooks: --ds-table-tile, the tile's fill (the raised
+     container surface by default, which keeps a control in the row hovering
+     with the contrast it has on a card), and --ds-table-surface, what a
+     sticky cell and the seam between selected rows are painted with (the
+     page by default; a table on a card sets it to the card's colour).
+     ============================================ */
 
-/* The scroll container reaches out by the bleed. */
-.ds-table__scroll--frameless {
-  margin-inline: calc(-1 * var(--padding-400));
-  max-width: none;
-}
+  .ds-table.ds-table--frameless {
+    --ds-table-bleed: var(--padding-400);
+    --ds-table-radius: var(--radius-300);
 
-.ds-table--frameless .ds-table__head {
-  background: transparent;
-}
+    overflow: visible;
+    border-radius: 0;
+  }
 
-.ds-table--frameless .ds-table__caption {
-  padding-inline: var(--padding-400);
-}
+  .ds-table.ds-table--frameless.ds-table--compact {
+    --ds-table-radius: var(--radius-200);
+  }
 
-/* Rows paint nothing; their cells paint the tile. */
-.ds-table--frameless .ds-table__body .ds-table__row,
-.ds-table--frameless .ds-table__body .ds-table__row:hover,
-.ds-table.ds-table--frameless.ds-table--striped .ds-table__body .ds-table__row:nth-child(even),
-.ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected:nth-child(n) {
-  background-color: transparent;
-}
+  /* The scroll container reaches out by the bleed. */
+  .ds-table__scroll--frameless {
+    margin-inline: calc(-1 * var(--padding-400));
+    max-width: none;
+  }
 
-.ds-table--frameless :is(.ds-table__cell, .ds-table__header-cell) {
-  --ds-table-line: var(--color-table-divider);
-  --ds-table-fill: transparent;
-  --ds-table-edge: transparent;
-  --ds-table-line-size: 100%;
-  --ds-table-line-at: bottom;
-  --ds-table-side: 0 0 transparent;
+  .ds-table--frameless .ds-table__head {
+    background: transparent;
+  }
 
-  border: 0;
-  box-shadow:
-    0 calc(-1 * var(--border-025)) 0 0 var(--ds-table-edge),
-    inset 0 calc(-1 * var(--border-025)) 0 0 var(--ds-table-edge),
-    var(--ds-table-side);
-  background-color: var(--ds-table-base, transparent);
-  background-image:
-    linear-gradient(var(--ds-table-line), var(--ds-table-line)),
-    linear-gradient(var(--ds-table-fill), var(--ds-table-fill));
-  background-size:
-    var(--ds-table-line-size) var(--border-025),
-    100% 100%;
-  background-position:
-    var(--ds-table-line-at),
-    0 0;
-  background-repeat: no-repeat;
-  transition:
-    --ds-table-fill var(--motion-duration-fast) var(--motion-ease-standard),
-    --ds-table-edge var(--motion-duration-fast) var(--motion-ease-standard);
-}
+  .ds-table--frameless .ds-table__caption {
+    padding-inline: var(--padding-400);
+  }
 
-/* The end cells pad in by the bleed, round the tile's corners and draw
-   its side edge; their stretch of divider stops at the content. */
-.ds-table--frameless .ds-table__row > :first-child {
-  --ds-table-side: inset var(--border-025) 0 0 0 var(--ds-table-edge); /* ds-allow(physical): the start side; flipped for rtl below */
-  --ds-table-line-size: calc(100% - var(--ds-table-bleed));
-  --ds-table-line-at: bottom right; /* ds-allow(physical): the divider is cut at the start side; flipped for rtl below */
+  /* Rows paint nothing; their cells paint the tile. */
+  .ds-table--frameless .ds-table__body .ds-table__row,
+  .ds-table--frameless .ds-table__body .ds-table__row:hover,
+  .ds-table.ds-table--frameless.ds-table--striped .ds-table__body .ds-table__row:nth-child(even),
+  .ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected:nth-child(n) {
+    background-color: transparent;
+  }
 
-  padding-inline-start: var(--ds-table-bleed);
-  border-start-start-radius: var(--ds-table-radius);
-  border-end-start-radius: var(--ds-table-radius);
-}
+  .ds-table--frameless :is(.ds-table__cell, .ds-table__header-cell) {
+    --ds-table-line: var(--color-table-divider);
+    --ds-table-fill: transparent;
+    --ds-table-edge: transparent;
+    --ds-table-line-size: 100%;
+    --ds-table-line-at: bottom;
+    --ds-table-side: 0 0 transparent;
 
-.ds-table--frameless .ds-table__row > :last-child {
-  --ds-table-side: inset calc(-1 * var(--border-025)) 0 0 0 var(--ds-table-edge); /* ds-allow(physical): the end side; flipped for rtl below */
-  --ds-table-line-size: calc(100% - var(--ds-table-bleed));
-  --ds-table-line-at: bottom left; /* ds-allow(physical): the divider is cut at the end side; flipped for rtl below */
+    border: 0;
+    box-shadow:
+      0 calc(-1 * var(--border-025)) 0 0 var(--ds-table-edge),
+      inset 0 calc(-1 * var(--border-025)) 0 0 var(--ds-table-edge),
+      var(--ds-table-side);
+    background-color: var(--ds-table-base, transparent);
+    background-image:
+      linear-gradient(var(--ds-table-line), var(--ds-table-line)),
+      linear-gradient(var(--ds-table-fill), var(--ds-table-fill));
+    background-size:
+      var(--ds-table-line-size) var(--border-025),
+      100% 100%;
+    background-position:
+      var(--ds-table-line-at),
+      0 0;
+    background-repeat: no-repeat;
+    transition:
+      --ds-table-fill var(--motion-duration-fast) var(--motion-ease-standard),
+      --ds-table-edge var(--motion-duration-fast) var(--motion-ease-standard);
+  }
 
-  padding-inline-end: var(--ds-table-bleed);
-  border-start-end-radius: var(--ds-table-radius);
-  border-end-end-radius: var(--ds-table-radius);
-}
+  /* The end cells pad in by the bleed, round the tile's corners and draw
+     its side edge; their stretch of divider stops at the content. */
+  .ds-table--frameless .ds-table__row > :first-child {
+    --ds-table-side: inset var(--border-025) 0 0 0 var(--ds-table-edge); /* ds-allow(physical): the start side; flipped for rtl below */
+    --ds-table-line-size: calc(100% - var(--ds-table-bleed));
+    --ds-table-line-at: bottom right; /* ds-allow(physical): the divider is cut at the start side; flipped for rtl below */
 
-.ds-table--frameless:dir(rtl) .ds-table__row > :first-child {
-  --ds-table-side: inset calc(-1 * var(--border-025)) 0 0 0 var(--ds-table-edge);
-  --ds-table-line-at: bottom left; /* ds-allow(physical): the start side in rtl */
-}
+    padding-inline-start: var(--ds-table-bleed);
+    border-start-start-radius: var(--ds-table-radius);
+    border-end-start-radius: var(--ds-table-radius);
+  }
 
-.ds-table--frameless:dir(rtl) .ds-table__row > :last-child {
-  --ds-table-side: inset var(--border-025) 0 0 0 var(--ds-table-edge);
-  --ds-table-line-at: bottom right; /* ds-allow(physical): the end side in rtl */
-}
+  .ds-table--frameless .ds-table__row > :last-child {
+    --ds-table-side: inset calc(-1 * var(--border-025)) 0 0 0 var(--ds-table-edge); /* ds-allow(physical): the end side; flipped for rtl below */
+    --ds-table-line-size: calc(100% - var(--ds-table-bleed));
+    --ds-table-line-at: bottom left; /* ds-allow(physical): the divider is cut at the end side; flipped for rtl below */
 
-/* The header's line hides when the first row is selected. Kept apart
-   from the body's line rules on purpose: a bundler merges adjacent rules
-   with the same body into one :is() list, and an :is() takes its heaviest
-   argument's specificity, which would carry the simple row rule past the
-   seam rule below. */
-.ds-table.ds-table--frameless:has(.ds-table__body .ds-table__row--selected:first-child) .ds-table__header-cell {
-  --ds-table-line: transparent;
-}
+    padding-inline-end: var(--ds-table-bleed);
+    border-start-end-radius: var(--ds-table-radius);
+    border-end-end-radius: var(--ds-table-radius);
+  }
 
-/* A total row keeps its heavier rule, and the line above it gives way so
-   the two never stack. */
-.ds-table.ds-table--frameless .ds-table__body .ds-table__row--total > .ds-table__cell {
-  border-top: var(--border-050) solid var(--color-table-divider);
-}
+  .ds-table--frameless:dir(rtl) .ds-table__row > :first-child {
+    --ds-table-side: inset calc(-1 * var(--border-025)) 0 0 0 var(--ds-table-edge);
+    --ds-table-line-at: bottom left; /* ds-allow(physical): the start side in rtl */
+  }
 
-.ds-table.ds-table--frameless .ds-table__body .ds-table__row:has(+ .ds-table__row--total) > .ds-table__cell {
-  --ds-table-line: transparent;
-}
+  .ds-table--frameless:dir(rtl) .ds-table__row > :last-child {
+    --ds-table-side: inset var(--border-025) 0 0 0 var(--ds-table-edge);
+    --ds-table-line-at: bottom right; /* ds-allow(physical): the end side in rtl */
+  }
 
-/* The last body row has no line under it: the table simply ends. */
-.ds-table--frameless .ds-table__body:last-of-type .ds-table__row:last-child > * {
-  --ds-table-line: transparent;
-}
+  /* The header's line hides when the first row is selected. Kept apart
+     from the body's line rules on purpose: a bundler merges adjacent rules
+     with the same body into one :is() list, and an :is() takes its heaviest
+     argument's specificity, which would carry the simple row rule past the
+     seam rule below. */
+  .ds-table.ds-table--frameless:has(.ds-table__body .ds-table__row--selected:first-child) .ds-table__header-cell {
+    --ds-table-line: transparent;
+  }
 
-/* A tint with no edge (stripe, selection) covers its own line. Striped,
-   hovered and selected share a weight, so the later one wins: selected
-   over hovered over striped. */
-.ds-table.ds-table--frameless.ds-table--striped .ds-table__body .ds-table__row:nth-child(even) > * {
-  --ds-table-fill: var(--color-table-row-stripe-bg);
-  --ds-table-line: transparent;
-}
+  /* A total row keeps its heavier rule, and the line above it gives way so
+     the two never stack. */
+  .ds-table.ds-table--frameless .ds-table__body .ds-table__row--total > .ds-table__cell {
+    border-top: var(--border-050) solid var(--color-table-divider);
+  }
 
-/* The tile, on hover and on keyboard focus inside the row. */
-.ds-table.ds-table--frameless .ds-table__body .ds-table__row:is(:hover, :has(:focus-visible)) > * {
-  --ds-table-fill: var(--ds-table-tile, var(--color-bg-container-primary));
-  --ds-table-edge: var(--color-table-divider);
-}
+  .ds-table.ds-table--frameless .ds-table__body .ds-table__row:has(+ .ds-table__row--total) > .ds-table__cell {
+    --ds-table-line: transparent;
+  }
 
-.ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected > * {
-  --ds-table-fill: var(--color-table-row-selected-bg);
-  --ds-table-line: transparent;
-}
+  /* The last body row has no line under it: the table simply ends. */
+  .ds-table--frameless .ds-table__body:last-of-type .ds-table__row:last-child > * {
+    --ds-table-line: transparent;
+  }
 
-/* The line above a selected row hides too. */
-.ds-table.ds-table--frameless .ds-table__body .ds-table__row:has(+ .ds-table__row--selected) > * {
-  --ds-table-line: transparent;
-}
+  /* A tint with no edge (stripe, selection) covers its own line. Striped,
+     hovered and selected share a weight, so the later one wins: selected
+     over hovered over striped. */
+  .ds-table.ds-table--frameless.ds-table--striped .ds-table__body .ds-table__row:nth-child(even) > * {
+    --ds-table-fill: var(--color-table-row-stripe-bg);
+    --ds-table-line: transparent;
+  }
 
-/* Between two selected rows the line is a seam in the surface colour,
-   straight across the whole row: the selected tint and the divider are a
-   step apart at most, so a divider in its own colour would vanish and a
-   block of selected rows would read as one slab. Where they meet, their
-   corners square off, so the block is one rounded shape. */
-.ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected:has(+ .ds-table__row--selected) > * {
-  --ds-table-line: var(--ds-table-surface, var(--color-bg-page-primary));
-  --ds-table-line-size: 100%;
-  --ds-table-line-at: bottom;
-}
+  /* The tile, on hover and on keyboard focus inside the row. */
+  .ds-table.ds-table--frameless .ds-table__body .ds-table__row:is(:hover, :has(:focus-visible)) > * {
+    --ds-table-fill: var(--ds-table-tile, var(--color-bg-container-primary));
+    --ds-table-edge: var(--color-table-divider);
+  }
 
-.ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected:has(+ .ds-table__row--selected) > :first-child {
-  border-end-start-radius: 0;
-}
+  .ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected > * {
+    --ds-table-fill: var(--color-table-row-selected-bg);
+    --ds-table-line: transparent;
+  }
 
-.ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected:has(+ .ds-table__row--selected) > :last-child {
-  border-end-end-radius: 0;
-}
+  /* The line above a selected row hides too. */
+  .ds-table.ds-table--frameless .ds-table__body .ds-table__row:has(+ .ds-table__row--selected) > * {
+    --ds-table-line: transparent;
+  }
 
-.ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected + .ds-table__row--selected > :first-child {
-  border-start-start-radius: 0;
-}
+  /* Between two selected rows the line is a seam in the surface colour,
+     straight across the whole row: the selected tint and the divider are a
+     step apart at most, so a divider in its own colour would vanish and a
+     block of selected rows would read as one slab. Where they meet, their
+     corners square off, so the block is one rounded shape. */
+  .ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected:has(+ .ds-table__row--selected) > * {
+    --ds-table-line: var(--ds-table-surface, var(--color-bg-page-primary));
+    --ds-table-line-size: 100%;
+    --ds-table-line-at: bottom;
+  }
 
-.ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected + .ds-table__row--selected > :last-child {
-  border-start-end-radius: 0;
-}
+  .ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected:has(+ .ds-table__row--selected) > :first-child {
+    border-end-start-radius: 0;
+  }
 
-/* ============================================
-   OUTER CONTROL (`outerControl`)
-   The first column is a 40px control column (a grip, a checkbox) that
-   takes the place of the start bleed: the scroll container reaches out by
-   its width instead, the control sits inside the tile's start, and the
-   next cell drops its bleed so the content still lines up with the page.
-   The control shows on hover, on keyboard focus, when checked, while any
-   row is selected, and always where there is no hover to reveal it.
-   40px is DataTable's utility column width (UTILITY_COLUMN_WIDTH).
-   ============================================ */
+  .ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected:has(+ .ds-table__row--selected) > :last-child {
+    border-end-end-radius: 0;
+  }
 
-.ds-table__scroll--outer-control {
-  margin-inline-start: -40px; /* ds-allow(spacing): the outer control column, DataTable's UTILITY_COLUMN_WIDTH */
-}
+  .ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected + .ds-table__row--selected > :first-child {
+    border-start-start-radius: 0;
+  }
 
-.ds-table--outer-control .ds-table__caption {
-  padding-inline-start: 40px; /* ds-allow(spacing): the outer control column */
-}
+  .ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected + .ds-table__row--selected > :last-child {
+    border-start-end-radius: 0;
+  }
 
-/* The control's cell starts the tile: corners and side edge, but no
-   bleed and no stretch of divider (a seam between selected rows still
-   crosses it). */
-.ds-table.ds-table--outer-control .ds-table__row > :first-child {
-  --ds-table-line: transparent;
+  /* ============================================
+     OUTER CONTROL (`outerControl`)
+     The first column is a 40px control column (a grip, a checkbox) that
+     takes the place of the start bleed: the scroll container reaches out by
+     its width instead, the control sits inside the tile's start, and the
+     next cell drops its bleed so the content still lines up with the page.
+     The control shows on hover, on keyboard focus, when checked, while any
+     row is selected, and always where there is no hover to reveal it.
+     40px is DataTable's utility column width (UTILITY_COLUMN_WIDTH).
+     ============================================ */
 
-  width: 40px; /* ds-allow(spacing): the outer control column */
-  padding-inline: 0;
-  text-align: center;
-}
+  .ds-table__scroll--outer-control {
+    margin-inline-start: -40px; /* ds-allow(spacing): the outer control column, DataTable's UTILITY_COLUMN_WIDTH */
+  }
 
-/* An auto-laid-out table squeezes a cell to its content's minimum, so the
-   column's width is held by its content too. */
-.ds-table--outer-control .ds-table__row > :first-child > .ds-table__cell-content {
-  min-width: 40px; /* ds-allow(spacing): the outer control column */
-  justify-content: center;
-}
+  .ds-table--outer-control .ds-table__caption {
+    padding-inline-start: 40px; /* ds-allow(spacing): the outer control column */
+  }
 
-.ds-table--outer-control .ds-table__row > :first-child > * {
-  opacity: 0;
-  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
-}
+  /* The control's cell starts the tile: corners and side edge, but no
+     bleed and no stretch of divider (a seam between selected rows still
+     crosses it). */
+  .ds-table.ds-table--outer-control .ds-table__row > :first-child {
+    --ds-table-line: transparent;
 
-.ds-table--outer-control .ds-table__body .ds-table__row:is(:hover, :has(:focus-visible), .ds-table__row--selected) > :first-child > *,
-.ds-table--outer-control .ds-table__row > :first-child:has(:focus-visible, :checked, [aria-checked="true"], [aria-checked="mixed"]) > *,
-.ds-table--outer-control:is(:hover, [data-selecting], :has(.ds-table__body :is(:checked, [aria-checked="true"]))) .ds-table__head .ds-table__row > :first-child > *,
-.ds-table--outer-control:is([data-selecting], :has(.ds-table__body :is(:checked, [aria-checked="true"]))) .ds-table__body .ds-table__row > :first-child > * {
-  opacity: 1;
-}
+    width: 40px; /* ds-allow(spacing): the outer control column */
+    padding-inline: 0;
+    text-align: center;
+  }
 
-@media (hover: none) {
+  /* An auto-laid-out table squeezes a cell to its content's minimum, so the
+     column's width is held by its content too. */
+  .ds-table--outer-control .ds-table__row > :first-child > .ds-table__cell-content {
+    min-width: 40px; /* ds-allow(spacing): the outer control column */
+    justify-content: center;
+  }
+
   .ds-table--outer-control .ds-table__row > :first-child > * {
+    opacity: 0;
+    transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .ds-table--outer-control .ds-table__body .ds-table__row:is(:hover, :has(:focus-visible), .ds-table__row--selected) > :first-child > *,
+  .ds-table--outer-control .ds-table__row > :first-child:has(:focus-visible, :checked, [aria-checked="true"], [aria-checked="mixed"]) > *,
+  .ds-table--outer-control:is(:hover, [data-selecting], :has(.ds-table__body :is(:checked, [aria-checked="true"]))) .ds-table__head .ds-table__row > :first-child > *,
+  .ds-table--outer-control:is([data-selecting], :has(.ds-table__body :is(:checked, [aria-checked="true"]))) .ds-table__body .ds-table__row > :first-child > * {
     opacity: 1;
   }
-}
 
-/* The cell after the control: no bleed, no corner, no side edge, and a
-   divider across its full width, starting at the content. */
-.ds-table.ds-table--outer-control .ds-table__row > :first-child + * {
-  --ds-table-side: 0 0 transparent;
-  --ds-table-line-size: 100%;
-  --ds-table-line-at: bottom;
-
-  padding-inline-start: 0;
-  border-start-start-radius: 0;
-  border-end-start-radius: 0;
-}
-
-/* Forced colours drop shadows and fills, so the tile and the selection
-   are outlined in system colours instead. */
-@media (forced-colors: active) {
-  .ds-table--frameless .ds-table__body .ds-table__row:is(:hover, :has(:focus-visible)) {
-    outline: var(--border-025) solid CanvasText;
-    outline-offset: calc(-1 * var(--border-025));
+  @media (hover: none) {
+    .ds-table--outer-control .ds-table__row > :first-child > * {
+      opacity: 1;
+    }
   }
 
-  .ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected {
-    outline: var(--border-025) solid Highlight;
-    outline-offset: calc(-1 * var(--border-025));
+  /* The cell after the control: no bleed, no corner, no side edge, and a
+     divider across its full width, starting at the content. */
+  .ds-table.ds-table--outer-control .ds-table__row > :first-child + * {
+    --ds-table-side: 0 0 transparent;
+    --ds-table-line-size: 100%;
+    --ds-table-line-at: bottom;
+
+    padding-inline-start: 0;
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+  }
+
+  /* Forced colours drop shadows and fills, so the tile and the selection
+     are outlined in system colours instead. */
+  @media (forced-colors: active) {
+    .ds-table--frameless .ds-table__body .ds-table__row:is(:hover, :has(:focus-visible)) {
+      outline: var(--border-025) solid CanvasText;
+      outline-offset: calc(-1 * var(--border-025));
+    }
+
+    .ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected {
+      outline: var(--border-025) solid Highlight;
+      outline-offset: calc(-1 * var(--border-025));
+    }
   }
 }
 

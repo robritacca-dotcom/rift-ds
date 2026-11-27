@@ -835,8 +835,8 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
    * no header band and no column dividers, the first and last columns'
    * content flush with the page, and a hovered row lifted into a raised
    * tile that reaches past the columns. The page needs room for that reach
-   * on both sides (`--padding-400`). A phone's stacked cards keep their own
-   * look.
+   * on both sides (`--padding-400`). Narrower than a phone (the table's own
+   * width, under `BREAKPOINT_PHONE_PX`) it keeps its usual look.
    */
   frameless?: boolean;
   /**
@@ -1660,8 +1660,9 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     setMeasured(next);
   }, [needsMeasure, measured, tableEl, byKey, cellText]);
   const layoutReady = fixedLayout && !needsMeasure;
-  // A phone's stacked cards are their own surface, so frameless is the grid's.
-  const frameless = framelessProp && !stacked;
+  // Narrower than a phone, the table keeps its usual bordered look (and its
+  // utility columns their usual place), as Table.css does below the phone step.
+  const frameless = framelessProp && !narrow;
   const outer = frameless && outerControl && utilityKeys.length > 0;
   /* The filler column takes the width the columns leave over. The fixed
      grid always draws it; a browser-laid-out table draws it too when it has

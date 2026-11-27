@@ -58,6 +58,7 @@ export default function StatPage() {
           the label; deltaPlacement=&quot;inline&quot; moves it to the top, riding the
           value&apos;s baseline, which is the arrangement dashboard KPI tiles want.
           deltaPlacement=&quot;auto&quot; chooses by the room it has: inline in a wide tile,
+          under the value whenever a long figure leaves it no room beside it, and
           stacked once the tile is narrow, such as two KPI tiles side by side on a phone.
           It fills its parent and reads its own width, so it restacks wherever it sits.
         </p>

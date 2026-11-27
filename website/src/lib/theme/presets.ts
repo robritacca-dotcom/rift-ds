@@ -331,7 +331,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     headingTone: "ink",
     textTone: "ink",
     fontLabel: "IBM Plex Sans",
-    // Electric sextet: the ambient palette run hot around the pure-blue key.
+    // Electric sextet: the ambient palette run hot around the blue key.
     accents: {
       coral: "#FF3D7A",
       violet: "#7A3DFF",
@@ -341,7 +341,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       mint: "#00E0B8",
     },
     // Electric neighbours: every hue saturated up to sit beside the
-    // pure-blue key. Blue is the action family, left alone.
+    // blue key. Blue is the action family, left alone.
     advanced: bases({
       red: "#FF2E63",
       orange: "#FF6B2E",
@@ -1199,7 +1199,7 @@ export const THEME_TAGLINES: Readonly<Record<string, string>> = {
   warm: "Warm and bookish, a serif heading over an easy sans, like a well-loved paperback.",
   mono: "Black and white on flat surfaces with tight corners, with colour kept for light, status and charts.",
   marquee: "A film title card, heavy condensed headlines and buttons in mustard over an inky blue-green page with square corners.",
-  contrast: "Precise and engineered, an electric blue with drafting-table corners and one technical face.",
+  contrast: "Precise and engineered, a royal blue that turns electric in the dark, with drafting-table corners and one technical face.",
   coral: "Sunny and welcoming, a hospitality look of coral warmth and soft, round corners.",
   plum: "Bright and confident, safety-orange buttons and navy headlines in a quirky grotesk on crisp white, over slate near-blacks in the dark.",
   gold: "Bold and electric, bright yellow on ink with grotesk headings and a quicker step.",

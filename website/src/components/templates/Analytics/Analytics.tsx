@@ -4,6 +4,9 @@
  * The analytics template: a realtime overview for Lumenfold, a fictional web
  * analytics product. A world map is the page's backdrop, its cities pulsing
  * with who is on the site this minute, and the charts run on from under it.
+ * The map dissolves on every edge, deepest behind the top bar and the page's
+ * name so they read over it, and the bar's search is frosted (AppToolbar's
+ * `searchGlass`) because the map runs under it.
  *
  * Composition calls, against design.md's Template screens rules: the shell,
  * top bar and panels are merchant sales' (rule 9), so the two read as

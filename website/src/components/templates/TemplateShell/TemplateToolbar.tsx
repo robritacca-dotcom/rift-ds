@@ -9,7 +9,8 @@
  * The search opens the site's command palette; the bell opens a
  * notification panel whose See all goes to the notifications block, and
  * the gear goes to the settings block, so a template shows where those
- * pages land. A template passes only how its AI button opens its chat.
+ * pages land. A template passes how its AI button opens its chat, and
+ * `searchGlass` when its stage runs under the bar (the analytics map).
  */
 
 import type { MouseEventHandler } from "react";

@@ -168,18 +168,51 @@ export function ColumnsDemo() {
   );
 }
 
-/** The frameless look, with the row checkbox hung as the outer control. */
+/** The whole table, frameless: the working table's columns, control bar,
+    and paging, with a switch for what the outer control holds: the row
+    checkbox, or the grip that reorders rows. */
 export function FramelessDemo() {
+  const [control, setControl] = useState<"checkbox" | "grip">("checkbox");
   return (
-    <DataTable
-      columns={pick("account", "owner", "stage", "value")}
-      rows={ACCOUNTS_ROWS.slice(0, 5)}
-      frameless
-      outerControl
-      selectable
-      defaultSelectedIds={[ACCOUNTS_ROWS[1].id, ACCOUNTS_ROWS[2].id]}
-      caption="Accounts, frameless"
-    />
+    <div className={styles.demoStack}>
+      <SegmentedControl
+        size="compact"
+        aria-label="Outer control"
+        segments={[
+          { value: "checkbox", label: "Checkbox" },
+          { value: "grip", label: "Reorder grip" },
+        ]}
+        value={control}
+        onValueChange={(value) => setControl(value as "checkbox" | "grip")}
+      />
+      <DataTable
+        columns={accountColumns}
+        rows={makeAccounts(16)}
+        frameless
+        outerControl
+        selectable={control === "checkbox"}
+        reorderableRows={control === "grip"}
+        columnMenu
+        multiSort
+        pageSize={5}
+        caption="Accounts, frameless"
+        toolbar={
+          <TableToolbar
+            bulkActions={[
+              { id: "assign", label: "Assign owner", icon: "person_add", onSelect: () => {} },
+              { id: "delete", label: "Delete", icon: "delete", destructive: true, onSelect: () => {} },
+            ]}
+            primaryAction={{
+              id: "new",
+              label: "New account",
+              icon: "add",
+              onSelect: () => {},
+              menu: [{ id: "import", label: "Import", icon: "upload", onSelect: () => {} }],
+            }}
+          />
+        }
+      />
+    </div>
   );
 }
 

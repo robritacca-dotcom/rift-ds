@@ -2,12 +2,16 @@
 
 import React, { useId, useState } from 'react';
 import { EmptyState, type EmptyStateProps } from '../EmptyState/EmptyState';
+import { Badge } from '../Badge/Badge';
+import { Button } from '../Button/Button';
+import { IconButton } from '../IconButton/IconButton';
+import { Tabs } from '../Tabs/Tabs';
+import { DropdownMenu, type DropdownMenuEntry } from '../DropdownMenu/DropdownMenu';
 import './NotificationCenter.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
-import { logicalArrowKey } from '../../behaviors/direction';
-import { formatNumber } from '../../behaviors/locale';
 import { useLocale } from '../../behaviors/LocaleProvider';
+import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 
 export interface NotificationCenterTab {
   /** Display label */
@@ -35,6 +39,29 @@ type NotificationItemOwnProps = {
   media?: string | React.ReactNode;
   /** Action row under the body — typically compact Buttons like "Reply" or "Retry". */
   actions?: React.ReactNode;
+  /**
+   * Opens the notification. The title becomes a button whose hit area
+   * covers the whole row, so the row hovers and clicks as one; the action
+   * row stays clickable on its own. Replaces the native `onSelect`
+   * attribute, which fires on text selection inside an input.
+   */
+  onSelect?: () => void;
+  /** Opens the notification at this address instead: the title becomes a link covering the row. */
+  href?: string;
+  /**
+   * Clears this one notification. A compact close button sits at the row's
+   * end, shown on hover and focus (and always on a touch screen), above the
+   * row's own click.
+   */
+  onDismiss?: () => void;
+  /** The dismiss button's accessible name, from the title. Default "Dismiss <title>". */
+  dismissLabel?: (title: string) => string;
+  /**
+   * The component the row's link renders with, such as Next.js's `Link`, so
+   * it navigates through the app's router. Wins over a LinkProvider's; a
+   * plain `<a>` when neither is set.
+   */
+  linkComponent?: LinkComponent;
   /** Additional CSS classes */
   className?: string;
   /** Supporting copy under the title. */
@@ -59,6 +86,11 @@ export const NotificationItem = React.forwardRef<HTMLElement, NotificationItemPr
       unreadLabel = 'Unread',
       media,
       actions,
+      onSelect,
+      href,
+      onDismiss,
+      dismissLabel = (itemTitle: string) => `Dismiss ${itemTitle}`,
+      linkComponent,
       className = '',
       children,
       ...rest
@@ -66,8 +98,10 @@ export const NotificationItem = React.forwardRef<HTMLElement, NotificationItemPr
     ref,
   ) => {
     const baseClass = 'ds-notification-item';
+    const Link = useLinkComponent(linkComponent);
+    const interactive = Boolean(href || onSelect);
 
-    const classes = [baseClass, unread ? `${baseClass}--unread` : '', className]
+    const classes = [baseClass, unread ? `${baseClass}--unread` : '', interactive ? `${baseClass}--interactive` : '', className]
       .filter(Boolean)
       .join(' ');
 
@@ -84,7 +118,24 @@ export const NotificationItem = React.forwardRef<HTMLElement, NotificationItemPr
         )}
         <div className={`${baseClass}__body`}>
           <div className={`${baseClass}__top`}>
-            <span className={`${baseClass}__title`}>{title}</span>
+            {href ? (
+              <Link href={href} className={`${baseClass}__title ${baseClass}__open`} onClick={onSelect}>
+                {title}
+              </Link>
+            ) : onSelect ? (
+              <button type="button" className={`${baseClass}__title ${baseClass}__open`} onClick={onSelect}>
+                {title}
+              </button>
+            ) : (
+              <span className={`${baseClass}__title`}>{title}</span>
+            )}
+            {/* The dismiss sits just before the time, so the time and the
+                dot hang at the row's end whether it shows or not. */}
+            {onDismiss && (
+              <span className={`${baseClass}__dismiss`}>
+                <IconButton icon="close" label={dismissLabel(title)} variant="tertiary" size="compact" onClick={onDismiss} />
+              </span>
+            )}
             {time && <span className={`${baseClass}__time`}>{time}</span>}
             {unread && (
               <span className={`${baseClass}__dot`}>
@@ -109,16 +160,31 @@ type NotificationCenterOwnProps = {
    * Note: this shadows the native `title` tooltip attribute, which NotificationCenter does not expose.
    */
   title?: string;
-  /** How many notifications are unread, shown under the heading. Omit to hide the line. */
+  /** How many notifications are unread, shown as a badge beside the title (only announced when filter tabs carry the count). Omit to hide it. */
   unreadCount?: number;
-  /** Text of the unread line under the heading, given the count. Defaults to "<count> unread". */
+  /** The unread count's text, given the count. Defaults to "<count> unread". */
   unreadCountLabel?: (count: number) => string;
   /** Accessible name of the filter tablist. Defaults to "<title> filters". */
   tabsLabel?: string;
-  /** Fires when "Mark all read" is pressed; the control only renders when this is set. */
+  /**
+   * Fires when Mark all as read is chosen from the header's options menu.
+   * The item is disabled while `unreadCount` is zero.
+   */
   onMarkAllRead?: () => void;
-  /** Text of the mark-all-read control. */
+  /** The options menu's mark-all-read item. Default "Mark all as read". */
   markAllLabel?: string;
+  /** Fires when Clear all is chosen from the header's options menu, a destructive item that empties the inbox. */
+  onClearAll?: () => void;
+  /** The options menu's clear-all item. Default "Clear all". */
+  clearAllLabel?: string;
+  /**
+   * More items for the header's options menu, after Mark all as read and
+   * before Clear all, such as notification settings or a link to the full
+   * page.
+   */
+  menuItems?: DropdownMenuEntry[];
+  /** The options button's accessible name and tooltip. Default "Notification options". */
+  optionsLabel?: string;
   /** Filter tabs under the header, each with an optional count. */
   tabs?: NotificationCenterTab[];
   /**
@@ -151,6 +217,20 @@ type NotificationCenterOwnProps = {
    * @deprecated Use `onValueChange` instead.
    */
   onTabChange?: (value: string) => void;
+  /**
+   * Opens the full list of notifications. When given (or `seeAllHref`), a
+   * footer under the list carries a See all button.
+   */
+  onSeeAll?: () => void;
+  /** Opens the full list at this address instead: the See all button becomes a link. */
+  seeAllHref?: string;
+  /** The See all button's label. Default "See all". */
+  seeAllLabel?: string;
+  /**
+   * The component the See all link renders with, such as Next.js's `Link`.
+   * Wins over a LinkProvider's; a plain `<a>` when neither is set.
+   */
+  linkComponent?: LinkComponent;
   /** What to render when there are no children — defaults to a built-in empty state. */
   emptyState?: React.ReactNode;
   /**
@@ -188,7 +268,11 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
       unreadCountLabel = (count) => `${count} unread`,
       tabsLabel,
       onMarkAllRead,
-      markAllLabel = 'Mark all read',
+      markAllLabel = 'Mark all as read',
+      onClearAll,
+      clearAllLabel = 'Clear all',
+      menuItems = [],
+      optionsLabel = 'Notification options',
       tabs,
       value,
       defaultValue,
@@ -198,6 +282,10 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
       onTabChange,
       emptyState,
       emptyStateLabels,
+      onSeeAll,
+      seeAllHref,
+      seeAllLabel = 'See all',
+      linkComponent,
       locale: localeProp,
       className = '',
       children,
@@ -221,7 +309,6 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
     // tab values are consumer strings and not guaranteed id-safe.
     const idBase = useId();
     const panelId = `${idBase}-panel`;
-    const tabIdFor = (index: number) => `${idBase}-tab-${index}`;
     const activeTabIndex = tabs?.findIndex((tab) => tab.value === currentTab) ?? -1;
     const hasTabs = !!tabs && tabs.length > 0;
 
@@ -231,36 +318,22 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
       onTabChange?.(next);
     };
 
-    const handleTabKeyDown = (e: React.KeyboardEvent, index: number) => {
-      if (!tabs) return;
-      let target: NotificationCenterTab | undefined;
-      switch (logicalArrowKey(e.key, e.currentTarget)) {
-        case 'ArrowRight':
-          e.preventDefault();
-          target = tabs[(index + 1) % tabs.length];
-          break;
-        case 'ArrowLeft':
-          e.preventDefault();
-          target = tabs[(index - 1 + tabs.length) % tabs.length];
-          break;
-        case 'Home':
-          e.preventDefault();
-          target = tabs[0];
-          break;
-        case 'End':
-          e.preventDefault();
-          target = tabs[tabs.length - 1];
-          break;
-      }
-      if (target) {
-        selectTab(target.value);
-        const tabList = (e.target as HTMLElement).parentElement;
-        const buttons = tabList?.querySelectorAll<HTMLButtonElement>(`.${baseClass}__tab`);
-        buttons?.[tabs.indexOf(target)]?.focus();
-      }
-    };
-
     const hasItems = React.Children.count(children) > 0;
+
+    // The header's options menu: Mark all as read first, the host's items,
+    // then Clear all set apart as the destructive one.
+    const options: DropdownMenuEntry[] = [
+      ...(onMarkAllRead
+        ? [{ label: markAllLabel, icon: 'done_all', onClick: onMarkAllRead, disabled: unreadCount === 0 }]
+        : []),
+      ...menuItems,
+      ...(onClearAll
+        ? [
+            ...(onMarkAllRead || menuItems.length > 0 ? [{ type: 'separator' as const }] : []),
+            { label: clearAllLabel, icon: 'delete_sweep', onClick: onClearAll, destructive: true, disabled: !hasItems },
+          ]
+        : []),
+    ];
 
     const classes = [baseClass, className].filter(Boolean).join(' ');
 
@@ -269,49 +342,42 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
         <header className={`${baseClass}__header`}>
           <div className={`${baseClass}__heading`}>
             <span className={`${baseClass}__title`}>{title}</span>
-            {unreadCount !== undefined && unreadCount > 0 && (
-              <span className={`${baseClass}__unread`} aria-live="polite">
-                {unreadCountLabel(unreadCount)}
-              </span>
-            )}
+            {/* The live region stays mounted, so the count reaching zero is
+                announced as well as each step down to it. */}
+            {/* With filter tabs the Unread tab carries the count, so the
+                badge leaves the header and the count is only announced. */}
+            <span className={hasTabs ? 'ds-visually-hidden' : `${baseClass}__unread`} aria-live="polite">
+              {unreadCount !== undefined && unreadCount > 0 ? (
+                hasTabs ? (
+                  unreadCountLabel(unreadCount)
+                ) : (
+                  <Badge variant="info" label={unreadCountLabel(unreadCount)} />
+                )
+              ) : null}
+            </span>
           </div>
-          {onMarkAllRead && (
-            <button type="button" className={`${baseClass}__mark-all`} onClick={onMarkAllRead}>
-              {markAllLabel}
-            </button>
-          )}
+          {options.length > 0 ? (
+            <DropdownMenu
+              className={`${baseClass}__options`}
+              align="end"
+              items={options}
+              trigger={<IconButton icon="more_horiz" label={optionsLabel} variant="tertiary" size="compact" />}
+            />
+          ) : null}
         </header>
 
         {hasTabs && (
-          <div className={`${baseClass}__tabs`} role="tablist" aria-label={tabsLabel ?? `${title} filters`}>
-            {tabs.map((tab, index) => {
-              const isActive = tab.value === currentTab;
-              return (
-                <button
-                  key={tab.value}
-                  type="button"
-                  id={tabIdFor(index)}
-                  role="tab"
-                  aria-selected={isActive}
-                  aria-controls={panelId}
-                  tabIndex={isActive ? 0 : -1}
-                  className={[
-                    `${baseClass}__tab`,
-                    isActive ? `${baseClass}__tab--active` : '',
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
-                  onClick={() => selectTab(tab.value)}
-                  onKeyDown={(e) => handleTabKeyDown(e, index)}
-                >
-                  {tab.label}
-                  {tab.count !== undefined && (
-                    <span className={`${baseClass}__tab-count`}>{formatNumber(tab.count, locale)}</span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
+          // The library's Tabs, compact, driving the list below as their
+          // panel: it owns the keys (arrows, Home and End) and the counts.
+          <Tabs
+            className={`${baseClass}__tabs`}
+            size="compact"
+            aria-label={tabsLabel ?? `${title} filters`}
+            tabs={tabs.map((tab) => ({ value: tab.value, label: tab.label, count: tab.count, panelId }))}
+            value={currentTab}
+            onValueChange={selectTab}
+            locale={locale}
+          />
         )}
 
         {/* The list is the panel the tabs control — tabpanel only when tabs exist. */}
@@ -319,7 +385,7 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
           className={`${baseClass}__list`}
           role={hasTabs ? 'tabpanel' : undefined}
           id={hasTabs ? panelId : undefined}
-          aria-labelledby={hasTabs && activeTabIndex >= 0 ? tabIdFor(activeTabIndex) : undefined}
+          aria-label={hasTabs && activeTabIndex >= 0 ? tabs[activeTabIndex].label : undefined}
         >
           {hasItems
             ? children
@@ -335,6 +401,20 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
                 />
               )}
         </div>
+
+        {onSeeAll || seeAllHref ? (
+          <footer className={`${baseClass}__footer`}>
+            <Button
+              variant="tertiary"
+              size="compact"
+              label={seeAllLabel}
+              iconRight="arrow_forward"
+              href={seeAllHref}
+              linkComponent={linkComponent}
+              onClick={onSeeAll}
+            />
+          </footer>
+        ) : null}
       </section>
     );
   },

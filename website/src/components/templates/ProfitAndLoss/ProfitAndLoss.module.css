@@ -16,39 +16,6 @@
   padding: var(--padding-500) var(--padding-1000) var(--padding-1000);
 }
 
-/* ------------------------------------------------------------- top bar */
-
-.topBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap-200);
-}
-
-.search {
-  position: relative;
-  width: 320px;
-  max-width: 100%;
-}
-
-/* The shortcut hint rides inside the field, over its end padding; it is
-   decorative furniture, so it never intercepts the pointer. */
-.searchKbd {
-  position: absolute;
-  top: 50%;
-  inset-inline-end: var(--padding-200);
-  transform: translateY(-50%);
-  display: inline-flex;
-  gap: var(--gap-050);
-  pointer-events: none;
-}
-
-.topBarActions {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-200);
-}
-
 /* ----------------------------------------------------------- statement */
 
 .page {
@@ -132,34 +99,9 @@
   }
 }
 
-/* ---------------------------------------------------------- responsive */
-
-.searchIconMobile {
-  display: none;
-}
-
 @media (max-width: 1080px) {
   .content {
     padding: var(--padding-400);
-  }
-}
-
-/* Mobile: AppSidebar's fixed hamburger (40px at a 20px viewport inset)
-   overlays this row's start, so the row clears its footprint, the search
-   field folds to its icon, and the actions keep the end: one 40px row. */
-@media (max-width: 768px) {
-  .topBar {
-    padding-inline-start: 56px;
-    justify-content: flex-end;
-    min-height: 40px;
-  }
-
-  .search {
-    display: none;
-  }
-
-  .searchIconMobile {
-    display: inline-flex;
   }
 }
 

@@ -157,10 +157,10 @@
         },
         {
           "name": "options",
-          "type": "{ label: string; value: string; disabled?: boolean | undefined; }[]",
+          "type": "{ label: string; value: string; disabled?: boolean | undefined; description?: string | undefined; }[]",
           "typeKind": "array",
           "required": true,
-          "description": "Radio options"
+          "description": "Radio options. A `description` is a line under the option's label, drawn as its helper text."
         },
         {
           "name": "direction",

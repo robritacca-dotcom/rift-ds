@@ -17,12 +17,10 @@
  */
 
 import React from "react";
-import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import { Icon } from "rift-ds/components/Icon/Icon";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { PageHeader } from "rift-ds/components/PageHeader/PageHeader";
 import { Button } from "rift-ds/components/Button/Button";
-import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import {
   DataTable,
   type DataTableColumn,
@@ -35,8 +33,6 @@ import {
 } from "rift-ds/components/Dropdown/Dropdown";
 import { EmptyState } from "rift-ds/components/EmptyState/EmptyState";
 import { FunnelChart } from "rift-ds/components/FunnelChart/FunnelChart";
-import { Input } from "rift-ds/components/Input/Input";
-import { Kbd } from "rift-ds/components/Kbd/Kbd";
 import { LegendTile } from "rift-ds/components/LegendTile/LegendTile";
 import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -48,7 +44,7 @@ import styles from "./MarketingDashboard.module.css";
 import { useStagedProductName } from "../useStagedProductName";
 import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import TemplateShell from "../TemplateShell/TemplateShell";
-import StickyTopBar from "../TemplateShell/StickyTopBar";
+import TemplateToolbar from "../TemplateShell/TemplateToolbar";
 import { PUBLISHER_MARKS, PublisherMark } from "../PublisherMarks/PublisherMarks";
 import { ProductMark } from "../ProductMark/ProductMark";
 import { useSampleEntities } from "../sampleEntities";
@@ -461,44 +457,7 @@ export default function MarketingDashboard() {
     >
         {!appFrame && (
         <>
-        <StickyTopBar>
-          <div className={styles.topBar}>
-            <div className={styles.search}>
-              <Input
-                placeholder="Search campaigns"
-                iconLeft="search"
-                aria-label="Search campaigns"
-              />
-              <span className={styles.searchKbd} aria-hidden="true">
-                <Kbd size="compact">⌘</Kbd>
-                <Kbd size="compact">K</Kbd>
-              </span>
-            </div>
-            <div className={styles.topBarActions}>
-              {/* Mobile: the full search field folds to this icon, riding
-                  with the other actions on the right. */}
-              <IconButton
-                glass
-                icon="search"
-                variant="secondary"
-                tone="neutral"
-                label="Search campaigns"
-                className={styles.searchIconMobile}
-              />
-              <AiButton
-                label="Ask AI"
-                onClick={() => setChatOpen(true)}
-              />
-              <IconButton
-                glass
-                icon="notifications"
-                variant="secondary"
-                tone="neutral"
-                label="Notifications"
-              />
-            </div>
-          </div>
-        </StickyTopBar>
+        <TemplateToolbar onChat={() => setChatOpen(true)} />
         </>
         )}
         {/* In the app frame the frame names the page, so only the actions stay. */}

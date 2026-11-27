@@ -1,0 +1,216 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.39.0",
+  "kind": "component",
+  "name": "AppToolbar",
+  "label": "App toolbar",
+  "slug": "app-toolbar",
+  "category": "layout",
+  "description": "The bar along the top of an app’s page: the search, borderless icon controls, the AI button and a primary action, folding in steps as it narrows.",
+  "client": false,
+  "importPath": "rift-ds/components/AppToolbar/AppToolbar",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/app-toolbar",
+  "markdownUrl": "https://rift-ds.com/components/app-toolbar.md",
+  "exports": [
+    {
+      "component": "AppToolbar",
+      "props": [
+        {
+          "name": "onSearch",
+          "type": "MouseEventHandler<HTMLButtonElement>",
+          "typeKind": "function",
+          "required": false,
+          "description": "Opens the app's search, usually a CommandPalette. When given, the bar\nstarts with a search field, never narrower than a usable field, folded\nto its icon when the bar is narrow."
+        },
+        {
+          "name": "searchLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The search field's prompt and accessible name. Default \"Search or ask anything\".",
+          "default": "Search or ask anything"
+        },
+        {
+          "name": "searchKeys",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The shortcut the search field shows, in the shortcut grammar. The\npalette owns the key itself; this only draws it.",
+          "default": "mod+k",
+          "typeRefs": [
+            "Shortcut"
+          ]
+        },
+        {
+          "name": "actions",
+          "type": "AppToolbarAction[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The icon controls at the end, borderless: notifications, a calendar,\nhelp, settings. On a narrow bar every one after the first moves into a\nMore menu, except those that open a panel or are links.",
+          "defaultExpression": "[]",
+          "typeRefs": [
+            "AppToolbarAction"
+          ]
+        },
+        {
+          "name": "onChat",
+          "type": "MouseEventHandler<HTMLButtonElement>",
+          "typeKind": "function",
+          "required": false,
+          "description": "Opens the app's AI chat. When given, an AiButton follows the icon\ncontrols, folded to its icon when the bar is narrow."
+        },
+        {
+          "name": "chatLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The AI chat button's label. Default \"Ask AI\".",
+          "default": "Ask AI"
+        },
+        {
+          "name": "chatState",
+          "type": "AgentStatusState",
+          "typeKind": "enum",
+          "values": [
+            "done",
+            "error",
+            "idle",
+            "thinking",
+            "waiting",
+            "working"
+          ],
+          "required": false,
+          "description": "What the agent behind the AI button is doing, in AgentStatus's\nvocabulary, so the button can show it working.",
+          "default": "idle",
+          "typeRefs": [
+            "AgentStatusState"
+          ]
+        },
+        {
+          "name": "chatExpanded",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the chat the AI button opens is open now, announced as the button's expanded state."
+        },
+        {
+          "name": "primaryAction",
+          "type": "AppToolbarPrimaryAction",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The page's primary action, last in the row: a primary Button with a\nleading icon, the AI button's size, folded to its icon when the bar is\nnarrow.",
+          "typeRefs": [
+            "AppToolbarPrimaryAction"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "The size of every control in the bar, on the row-control scale:\n`default` is 40px, `compact` 32px. The search, the icon controls, the\nAI button and the primary action always share one height.",
+          "default": "default"
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component the actions' links render with, such as Next.js's `Link`,\nso they navigate through the app's router. Wins over a LinkProvider's;\na plain `<a>` when neither is set.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
+        },
+        {
+          "name": "toolbarLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The bar's accessible name. Default \"App toolbar\".",
+          "default": "App toolbar"
+        },
+        {
+          "name": "moreLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The More menu button's name, shown when the bar is narrow. Default \"More\".",
+          "default": "More"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the bar",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "AgentStatusState": {
+      "kind": "type",
+      "definition": "type AgentStatusState =\n  | 'idle'\n  | 'thinking'\n  | 'working'\n  | 'waiting'\n  | 'done'\n  | 'error';"
+    },
+    "AppToolbarAction": {
+      "kind": "interface",
+      "definition": "interface AppToolbarAction {\n  /** Stable id for the action. */\n  id: string;\n  /** Material Symbol name (string) or custom element. */\n  icon: string | React.ReactNode;\n  /** What the action does: the button's accessible name, its tooltip, and its row in the More menu. */\n  label: string;\n  /** Runs the action. */\n  onSelect?: () => void;\n  /**\n   * Makes the control a link to this address instead, such as the settings\n   * page. A link never folds into the More menu, since a menu row is not a\n   * link.\n   */\n  href?: string;\n  /**\n   * A panel the button opens below it, such as a NotificationCenter. The\n   * panel draws its own surface; the bar gives it the floating edge. An\n   * action with a panel never folds into the More menu, since a menu row\n   * cannot open one.\n   */\n  panel?: React.ReactNode;\n  /** A count or dot on the button, such as unread notifications. */\n  badge?: number | string | true;\n}",
+      "description": "One of the bar's icon controls, drawn as a borderless IconButton."
+    },
+    "AppToolbarPrimaryAction": {
+      "kind": "interface",
+      "definition": "interface AppToolbarPrimaryAction {\n  /** What the action does: the button's label, and its name when the bar folds it to its icon. */\n  label: string;\n  /** Material Symbol name (string) or custom element, leading the label. */\n  icon: string | React.ReactNode;\n  /** Runs the action. */\n  onSelect?: () => void;\n}",
+      "description": "The bar's one primary action: a primary Button with a leading icon, last in the row."
+    },
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "Shortcut": {
+      "kind": "type",
+      "definition": "type Shortcut = string;",
+      "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "HTMLButtonElement": "typescript",
+    "MouseEventHandler": "react",
+    "ReactNode": "react"
+  },
+  "keys": {
+    "by": "platform",
+    "note": "Tab moves through its controls in order; each control, the More menu among them, keeps its own keys."
+  },
+  "size": {
+    "gzip": 18743
+  },
+  "alternatives": [
+    {
+      "name": "TableToolbar",
+      "when": "the bar sits over a table and holds its search, filters and view settings",
+      "schemaUrl": "https://rift-ds.com/schema/components/table-toolbar.json"
+    },
+    {
+      "name": "Toolbar",
+      "when": "the controls act on a canvas or a view and sit together in one pill",
+      "schemaUrl": "https://rift-ds.com/schema/components/toolbar.json"
+    }
+  ]
+}

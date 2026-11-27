@@ -357,6 +357,49 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "Record": "typescript"
     }
   },
+  "app-toolbar": {
+    "types": {
+      "AgentStatusState": {
+        "kind": "type",
+        "definition": "type AgentStatusState =\n  | 'idle'\n  | 'thinking'\n  | 'working'\n  | 'waiting'\n  | 'done'\n  | 'error';"
+      },
+      "AppToolbarAction": {
+        "kind": "interface",
+        "definition": "interface AppToolbarAction {\n  /** Stable id for the action. */\n  id: string;\n  /** Material Symbol name (string) or custom element. */\n  icon: string | React.ReactNode;\n  /** What the action does: the button's accessible name, its tooltip, and its row in the More menu. */\n  label: string;\n  /** Runs the action. */\n  onSelect?: () => void;\n  /**\n   * Makes the control a link to this address instead, such as the settings\n   * page. A link never folds into the More menu, since a menu row is not a\n   * link.\n   */\n  href?: string;\n  /**\n   * A panel the button opens below it, such as a NotificationCenter. The\n   * panel draws its own surface; the bar gives it the floating edge. An\n   * action with a panel never folds into the More menu, since a menu row\n   * cannot open one.\n   */\n  panel?: React.ReactNode;\n  /** A count or dot on the button, such as unread notifications. */\n  badge?: number | string | true;\n}",
+        "description": "One of the bar's icon controls, drawn as a borderless IconButton."
+      },
+      "AppToolbarPrimaryAction": {
+        "kind": "interface",
+        "definition": "interface AppToolbarPrimaryAction {\n  /** What the action does: the button's label, and its name when the bar folds it to its icon. */\n  label: string;\n  /** Material Symbol name (string) or custom element, leading the label. */\n  icon: string | React.ReactNode;\n  /** Runs the action. */\n  onSelect?: () => void;\n}",
+        "description": "The bar's one primary action: a primary Button with a leading icon, last in the row."
+      },
+      "LinkComponent": {
+        "kind": "type",
+        "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+        "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+        "refs": [
+          "LinkComponentProps"
+        ]
+      },
+      "LinkComponentProps": {
+        "kind": "type",
+        "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+        "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+      },
+      "Shortcut": {
+        "kind": "type",
+        "definition": "type Shortcut = string;",
+        "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+      }
+    },
+    "externalTypes": {
+      "ComponentPropsWithRef": "react",
+      "ElementType": "react",
+      "HTMLButtonElement": "typescript",
+      "MouseEventHandler": "react",
+      "ReactNode": "react"
+    }
+  },
   "area-chart": {
     "types": {
       "AreaSeriesConfig": {
@@ -2088,10 +2131,47 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
   },
   "notification-center": {
     "types": {
+      "DropdownMenuEntry": {
+        "kind": "type",
+        "definition": "type DropdownMenuEntry =\n  | DropdownMenuItem\n  | DropdownMenuSeparator\n  | DropdownMenuGroup;",
+        "refs": [
+          "DropdownMenuGroup",
+          "DropdownMenuItem",
+          "DropdownMenuSeparator"
+        ]
+      },
+      "DropdownMenuGroup": {
+        "kind": "component-props",
+        "component": "DropdownMenu",
+        "see": "get_component(\"DropdownMenu\")"
+      },
+      "DropdownMenuItem": {
+        "kind": "component-props",
+        "component": "DropdownMenu",
+        "see": "get_component(\"DropdownMenu\")"
+      },
+      "DropdownMenuSeparator": {
+        "kind": "component-props",
+        "component": "DropdownMenu",
+        "see": "get_component(\"DropdownMenu\")"
+      },
       "EmptyStateProps": {
         "kind": "component-props",
         "component": "EmptyState",
         "see": "get_component(\"EmptyState\")"
+      },
+      "LinkComponent": {
+        "kind": "type",
+        "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+        "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+        "refs": [
+          "LinkComponentProps"
+        ]
+      },
+      "LinkComponentProps": {
+        "kind": "type",
+        "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+        "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
       },
       "NotificationCenterTab": {
         "kind": "interface",
@@ -2099,6 +2179,8 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       }
     },
     "externalTypes": {
+      "ComponentPropsWithRef": "react",
+      "ElementType": "react",
       "Partial": "typescript",
       "Pick": "typescript",
       "ReactNode": "react"
@@ -2190,6 +2272,23 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
   },
   "panel": {
     "types": {},
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
+  "payment-card": {
+    "types": {
+      "PaymentCardExpiry": {
+        "kind": "type",
+        "definition": "type PaymentCardExpiry = { month: number; year: number };",
+        "description": "A card's expiry: the month (1 to 12) and the full year."
+      },
+      "PaymentCardLabelParts": {
+        "kind": "type",
+        "definition": "type PaymentCardLabelParts = {\n  /** The brand, when `brand` is text; otherwise undefined. */\n  brand?: string;\n  /** The holder's name. */\n  holderName: string;\n  /** The last four digits. */\n  last4: string;\n  /** The tier, when `label` is given. */\n  label?: string;\n};",
+        "description": "What the default accessible name is written from."
+      }
+    },
     "externalTypes": {
       "ReactNode": "react"
     }

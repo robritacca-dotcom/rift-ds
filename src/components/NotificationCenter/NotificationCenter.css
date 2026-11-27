@@ -27,115 +27,60 @@
    HEADER
    ============================================ */
 
+/* The header and the footer take CommandPalette's frame: its search row's
+   16px by 20px with a rule under it, and its footer's 12px by 20px with a
+   rule over it, so a notification panel reads as the palette's sibling. */
 .ds-notification-center__header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: var(--gap-200);
-  padding: var(--padding-300) var(--padding-300) var(--padding-150);
+  padding: var(--padding-400) var(--padding-500);
+  border-bottom: var(--border-025) solid var(--color-divider);
 }
 
 .ds-notification-center__heading {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--gap-100);
   min-width: 0;
 }
 
 .ds-notification-center__title {
   color: var(--color-text-primary);
-  font-family: var(--font-title-body-family);
-  font-size: var(--font-title-body-size);
-  font-weight: var(--font-title-body-weight);
-  line-height: var(--font-title-body-line-height);
-  letter-spacing: var(--font-title-body-letter-spacing);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   white-space: nowrap;
 }
 
 .ds-notification-center__unread {
-  color: var(--color-text-tertiary);
-  font-family: var(--font-paragraph-sm-family);
-  font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-paragraph-sm-weight);
-  line-height: var(--font-paragraph-sm-line-height);
-  letter-spacing: var(--font-paragraph-sm-letter-spacing);
-  white-space: nowrap;
+  display: inline-flex;
 }
 
-.ds-notification-center__mark-all {
+.ds-notification-center__options {
   flex: none;
-  padding: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-action-primary-text-tertiary);
-  font-family: var(--font-paragraph-sm-emphasis-family);
-  font-size: var(--font-paragraph-sm-emphasis-size);
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  line-height: var(--font-paragraph-sm-emphasis-line-height);
-  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
-  transition: color var(--motion-duration-fast) var(--motion-ease-standard);
-}
-
-.ds-notification-center__mark-all:hover {
-  color: var(--color-action-primary-text-secondary);
-}
-
-.ds-notification-center__mark-all:focus-visible {
-  outline: 2px solid var(--color-action-primary-bg);
-  outline-offset: 2px;
-  border-radius: var(--radius-050);
 }
 
 /* ============================================
    FILTER TABS
    ============================================ */
 
+/* With tabs under it, the header hands its rule to them, so one rule sits
+   under the whole head rather than one under each part. */
+.ds-notification-center__header:has(+ .ds-notification-center__tabs) {
+  padding-block-end: var(--padding-200);
+  border-bottom: none;
+}
+
 .ds-notification-center__tabs {
-  display: flex;
-  gap: var(--gap-050);
-  padding: 0 var(--padding-300) var(--padding-150);
+  /* Tabs draws itself; the panel only seats it on the header's inset and
+     closes the head with the rule, with no padding under the tabs so the
+     selected tab's underline sits flush on that rule. */
+  padding: 0 var(--padding-500);
   border-bottom: var(--border-025) solid var(--color-divider);
-}
-
-.ds-notification-center__tab {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gap-050);
-  padding: var(--padding-100) var(--padding-200);
-  background: none;
-  border: none;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  color: var(--color-text-secondary);
-  font-family: var(--font-paragraph-sm-emphasis-family);
-  font-size: var(--font-paragraph-sm-emphasis-size);
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  line-height: var(--font-paragraph-sm-emphasis-line-height);
-  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
-  transition:
-    background-color var(--motion-duration-fast) var(--motion-ease-standard),
-    color var(--motion-duration-fast) var(--motion-ease-standard);
-}
-
-.ds-notification-center__tab:hover {
-  background-color: var(--color-action-passive-bg-hover);
-  color: var(--color-text-primary);
-}
-
-.ds-notification-center__tab:focus-visible {
-  outline: 2px solid var(--color-action-primary-bg);
-  outline-offset: -2px;
-}
-
-.ds-notification-center__tab--active {
-  background-color: var(--color-action-passive-bg-active);
-  color: var(--color-text-primary);
-}
-
-.ds-notification-center__tab-count {
-  color: var(--color-text-tertiary);
-  font-variant-numeric: tabular-nums;
 }
 
 /* ============================================
@@ -146,11 +91,12 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding: var(--padding-100) 0;
-}
-
-.ds-notification-center__list > .ds-notification-item:not(:last-child) {
-  border-bottom: var(--border-025) solid var(--color-divider);
+  /* CommandPalette's list inset: rows sit 8px in from the panel's edges, so
+     a row's wash reads as a rounded row inside the panel, and its 12px
+     padding keeps the text edge on the header's 20px. */
+  padding: var(--padding-200);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-bg-container-border) transparent;
 }
 
 /* Give the built-in empty state breathing room */
@@ -164,9 +110,11 @@
 
 .ds-notification-item {
   display: flex;
-  align-items: flex-start;
-  gap: var(--gap-200);
-  padding: var(--padding-200) var(--padding-300);
+  align-items: center;
+  gap: var(--gap-300);
+  /* A CommandPalette row: 12px inside the list's 8px inset. */
+  padding: var(--padding-300);
+  border-radius: var(--radius-200);
 }
 
 /* The slot is a fixed column as wide as its largest medium — an sm Avatar
@@ -183,7 +131,8 @@
 }
 
 .ds-notification-item__media .material-symbols-rounded {
-  --icon-size: var(--icon-size-600);
+  /* The palette's row icon. */
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-notification-item__body {
@@ -203,18 +152,26 @@
 .ds-notification-item__title {
   flex: 1 1 auto;
   min-width: 0;
-  color: var(--color-text-primary);
-  font-family: var(--font-paragraph-sm-family);
-  font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-paragraph-sm-weight);
-  line-height: var(--font-paragraph-sm-line-height);
-  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  /* Wraps rather than ellipsizes: a notification's title is its meaning,
+     and a narrow panel or a phone would otherwise cut its last words. */
+  overflow-wrap: anywhere;
+  /* A read row: the paragraph face in the secondary text colour. Unread
+     takes the palette's emphasised label in the primary colour, so a row
+     reads as new by weight, colour and the dot, and opening it only
+     unbolds it. */
+  color: var(--color-text-secondary);
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
 }
 
 .ds-notification-item--unread .ds-notification-item__title {
-  font-family: var(--font-paragraph-sm-emphasis-family);
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
 }
 
 .ds-notification-item__time {
@@ -226,6 +183,11 @@
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
   white-space: nowrap;
+}
+
+/* An unread row's time takes the info colour beside its dot. */
+.ds-notification-item--unread .ds-notification-item__time {
+  color: var(--color-status-info-text);
 }
 
 /* Unread dot — informational, so it takes the info status colour rather
@@ -242,7 +204,9 @@
 }
 
 .ds-notification-item__text {
-  color: var(--color-text-secondary);
+  /* The palette's row description, wrapping in full: a notification's
+     copy carries its facts (an amount, a name), so none of it is cut. */
+  color: var(--color-text-tertiary);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);
@@ -255,6 +219,88 @@
   align-items: center;
   gap: var(--gap-200);
   padding-top: var(--padding-050);
+}
+
+/* ============================================
+   INTERACTIVE ITEM
+   With onSelect or href the title is a button
+   or link whose hit area is stretched over the
+   row, so the row hovers and clicks as one;
+   the action row sits above it and keeps its
+   own clicks. Hover and focus take the passive
+   wash at the inner radius step, as a
+   CommandPalette row does.
+   ============================================ */
+
+.ds-notification-item--interactive {
+  position: relative;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-notification-item--interactive:hover,
+.ds-notification-item--interactive:has(.ds-notification-item__open:focus-visible) {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-notification-item__open {
+  display: block;
+  padding: 0;
+  background: none;
+  border: none;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  /* The row carries the focus ring. */
+  outline: none;
+}
+
+.ds-notification-item__open::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.ds-notification-item--interactive .ds-notification-item__actions {
+  position: relative;
+  z-index: 1;
+}
+
+/* The dismiss: in the title row just before the time, so the time and the
+   dot hang at the row's end; above the stretched open control; shown while
+   the row is hovered or holds focus, and always where there is no hover to
+   reveal it. Kept in the layout at rest, so a row never jumps as it
+   appears, and pulled into the row's padding above and below, so the
+   compact button never makes the row taller than its text. */
+.ds-notification-item__dismiss {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: inline-flex;
+  margin-block: calc(var(--padding-150) * -1);
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-notification-item:hover .ds-notification-item__dismiss,
+.ds-notification-item:focus-within .ds-notification-item__dismiss {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .ds-notification-item__dismiss {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.ds-notification-center__footer {
+  display: flex;
+  justify-content: center;
+  padding: var(--padding-300) var(--padding-500);
+  border-top: var(--border-025) solid var(--color-divider);
 }
 
 /* ============================================

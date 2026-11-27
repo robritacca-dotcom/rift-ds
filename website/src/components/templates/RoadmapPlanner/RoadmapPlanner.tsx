@@ -22,12 +22,10 @@
  */
 
 import React from "react";
-import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { Avatar } from "rift-ds/components/Avatar/Avatar";
 import { Badge } from "rift-ds/components/Badge/Badge";
 import { Button } from "rift-ds/components/Button/Button";
-import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { Divider } from "rift-ds/components/Divider/Divider";
 import {
   Dropdown,
@@ -39,15 +37,13 @@ import {
   type GanttChartItem,
   type GanttChartMilestone,
 } from "rift-ds/components/GanttChart/GanttChart";
-import { Input } from "rift-ds/components/Input/Input";
-import { Kbd } from "rift-ds/components/Kbd/Kbd";
 import { Panel } from "rift-ds/components/Panel/Panel";
 import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./RoadmapPlanner.module.css";
 import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import TemplateShell from "../TemplateShell/TemplateShell";
-import StickyTopBar from "../TemplateShell/StickyTopBar";
+import TemplateToolbar from "../TemplateShell/TemplateToolbar";
 import { ProductMark } from "../ProductMark/ProductMark";
 
 /* ---------------------------------------------------------------- data */
@@ -533,44 +529,7 @@ export default function RoadmapPlanner() {
       }
     >
           {!appFrame && (
-          <StickyTopBar>
-            <div className={styles.topBar}>
-              <div className={styles.search}>
-                <Input
-                  placeholder="Search initiatives"
-                  iconLeft="search"
-                  aria-label="Search initiatives"
-                />
-                <span className={styles.searchKbd} aria-hidden="true">
-                  <Kbd size="compact">⌘</Kbd>
-                  <Kbd size="compact">K</Kbd>
-                </span>
-              </div>
-              <div className={styles.topBarActions}>
-                {/* Mobile: the full search field folds to this icon, riding
-                    with the other actions on the right. */}
-                <IconButton
-                  glass
-                  icon="search"
-                  variant="secondary"
-                  tone="neutral"
-                  label="Search initiatives"
-                  className={styles.searchIconMobile}
-                />
-                <AiButton
-                  label="Ask AI"
-                  onClick={() => setChatOpen(true)}
-                />
-                <IconButton
-                  glass
-                  icon="notifications"
-                  variant="secondary"
-                  tone="neutral"
-                  label="Notifications"
-                />
-              </div>
-            </div>
-          </StickyTopBar>
+          <TemplateToolbar onChat={() => setChatOpen(true)} />
           )}
 
           {/* ------------------------------------------- controls row */}

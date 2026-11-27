@@ -35,6 +35,14 @@ type AppLayoutOwnProps = {
   /** Page content — centred in the main area */
   children: React.ReactNode;
   /**
+   * A bar at the top of the content column, held there while the page
+   * scrolls: a search trigger, a few icon buttons, the account's avatar.
+   * It runs the width the content runs (`width`), on the content's own
+   * surface, in every `layout`. Lay its items out yourself, for example
+   * with a Toolbar or a flex row; the slot only seats and pins them.
+   */
+  toolbar?: React.ReactNode;
+  /**
    * How the rail and the content meet the page, one of the three app shell
    * modes. `flush` runs the rail edge to edge on the shell
    * colour behind a hairline, the content centred beside it on the crisp
@@ -128,6 +136,7 @@ export const AppLayout = React.forwardRef<HTMLDivElement, AppLayoutProps>(
       logoText,
       logo,
       children,
+      toolbar,
       layout = 'inset',
       width = 'contained',
       theme = 'dark',
@@ -157,6 +166,15 @@ export const AppLayout = React.forwardRef<HTMLDivElement, AppLayoutProps>(
         delete scroller.dataset.scrolling;
       }, MOTION_SCROLL_SETTLE_MS);
     }, []);
+
+    const content = (
+      <div className={`${baseClass}__content`}>
+        {toolbar != null && toolbar !== false ? (
+          <div className={`${baseClass}__toolbar`}>{toolbar}</div>
+        ) : null}
+        {children}
+      </div>
+    );
 
     const classes = [
       baseClass,
@@ -203,11 +221,11 @@ export const AppLayout = React.forwardRef<HTMLDivElement, AppLayoutProps>(
             // inside it scrolls, so the scrollbar never squares a corner.
             <div className={`${baseClass}__surface`}>
               <div className={`${baseClass}__scroller`} onScroll={handleSurfaceScroll}>
-                <div className={`${baseClass}__content`}>{children}</div>
+                {content}
               </div>
             </div>
           ) : (
-            <div className={`${baseClass}__content`}>{children}</div>
+            content
           )}
         </main>
       </div>

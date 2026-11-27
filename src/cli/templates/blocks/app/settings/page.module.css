@@ -1,11 +1,165 @@
-/* The settings column: one section under another, held to a reading width
-   so a row of fields never stretches across a wide screen. Each section
-   lays its heading beside its fields once it has the room, and stacks them
-   on a phone. */
+/* The settings page: a standard page, its groups across the whole content
+   column. Every group is a heading over rows, and every row the same shape
+   whatever its control: an optional icon tile, the label over its sentence,
+   then the value and the control at the end. A phone stacks the end under
+   the text. */
 
-.column {
+.page {
   display: flex;
   flex-direction: column;
   gap: var(--gap-1000);
-  max-width: 880px;
+}
+
+/* A rule parts one group from the next. */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+}
+
+.group + .group {
+  padding-top: var(--padding-1000);
+  border-top: var(--border-025) solid var(--color-divider);
+}
+
+.groupTitle {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+}
+
+/* A row: the tile and the text take the room, the end holds the value and
+   the control; what sits below (a field being edited, a meter) spans it. */
+.row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: 'tile text end' 'below below below';
+  align-items: center;
+  column-gap: var(--gap-400);
+  row-gap: var(--gap-300);
+}
+
+.row:not(:has(.tile)) {
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: 'text end' 'below below';
+}
+
+.tile {
+  grid-area: tile;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-height-default);
+  height: var(--control-height-default);
+  border-radius: var(--radius-300);
+  background-color: var(--color-bg-container-secondary);
+  color: var(--color-icon-primary);
+}
+
+.tile[data-status='positive'] {
+  background-color: var(--color-status-positive-bg);
+  color: var(--color-status-positive-icon);
+}
+
+.text {
+  grid-area: text;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.label {
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+}
+
+.description {
+  color: var(--color-text-secondary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.end {
+  grid-area: end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--gap-300);
+}
+
+.value {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  font-variant-numeric: tabular-nums;
+}
+
+.below {
+  grid-area: below;
+  min-width: 0;
+}
+
+/* Two labelled controls to a row, the way settings read together sit. */
+.fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-500);
+}
+
+/* A row in edit: its field over Save and Cancel. */
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  max-width: 420px; /* a field's comfortable width */
+}
+
+.editorActions {
+  display: flex;
+  gap: var(--gap-200);
+}
+
+@media (max-width: 600px) {
+  .row,
+  .row:not(:has(.tile)) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'text' 'end' 'below';
+  }
+
+  .row:has(.tile) {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: 'tile text' 'end end' 'below below';
+  }
+
+  .end {
+    justify-content: flex-start;
+  }
+
+  .fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

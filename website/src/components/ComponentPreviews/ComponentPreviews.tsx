@@ -48,6 +48,8 @@ import { SplitButton } from "rift-ds/components/SplitButton/SplitButton";
 import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
 import { LegendTile } from "rift-ds/components/LegendTile/LegendTile";
 import { Panel } from "rift-ds/components/Panel/Panel";
+import { AppToolbar } from "rift-ds/components/AppToolbar/AppToolbar";
+import { PaymentCard } from "rift-ds/components/PaymentCard/PaymentCard";
 import { Stack } from "rift-ds/components/Stack/Stack";
 import { Grid } from "rift-ds/components/Grid/Grid";
 import { Icon } from "rift-ds/components/Icon/Icon";
@@ -1854,6 +1856,27 @@ const previews: Record<string, () => ReactNode> = {
       <FileRow name="Report.pdf" meta="2.4 MB" size="compact" />
       <FileRow name="Budget.xlsx" meta="88 KB" size="compact" />
     </div>
+  ),
+  "app-toolbar": () => (
+    <>
+      <div style={{ width: "220px" }}>
+        <AppToolbar
+          onSearch={() => {}}
+          actions={[
+            { id: "notifications", icon: "notifications", label: "Notifications", badge: 3 },
+            { id: "help", icon: "help", label: "Help" },
+          ]}
+          onChat={() => {}}
+        />
+      </div>
+    </>
+  ),
+  "payment-card": () => (
+    <>
+      <div style={{ width: "190px" }}>
+        <PaymentCard brand="Northlight" holderName="Jordan Reyes" last4="5555" label="Plus" size="compact" />
+      </div>
+    </>
   ),
   "panel": () => (
     <>

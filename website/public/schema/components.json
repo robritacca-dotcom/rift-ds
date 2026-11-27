@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.39.0",
   "package": "rift-ds",
-  "count": 197,
+  "count": 199,
   "components": [
     {
       "name": "Accordion",
@@ -143,6 +143,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/app-sidebar.json",
       "docsUrl": "https://rift-ds.com/components/app-sidebar",
       "markdownUrl": "https://rift-ds.com/components/app-sidebar.md"
+    },
+    {
+      "name": "AppToolbar",
+      "label": "App toolbar",
+      "slug": "app-toolbar",
+      "category": "layout",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/app-toolbar.json",
+      "docsUrl": "https://rift-ds.com/components/app-toolbar",
+      "markdownUrl": "https://rift-ds.com/components/app-toolbar.md"
     },
     {
       "name": "AreaChart",
@@ -1253,6 +1263,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/panel.json",
       "docsUrl": "https://rift-ds.com/components/panel",
       "markdownUrl": "https://rift-ds.com/components/panel.md"
+    },
+    {
+      "name": "PaymentCard",
+      "label": "Payment card",
+      "slug": "payment-card",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/payment-card.json",
+      "docsUrl": "https://rift-ds.com/components/payment-card",
+      "markdownUrl": "https://rift-ds.com/components/payment-card.md"
     },
     {
       "name": "PieChart",

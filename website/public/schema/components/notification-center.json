@@ -29,14 +29,14 @@
           "type": "number",
           "typeKind": "primitive",
           "required": false,
-          "description": "How many notifications are unread, shown under the heading. Omit to hide the line."
+          "description": "How many notifications are unread, shown as a badge beside the title (only announced when filter tabs carry the count). Omit to hide it."
         },
         {
           "name": "unreadCountLabel",
           "type": "((count: number) => string)",
           "typeKind": "function",
           "required": false,
-          "description": "Text of the unread line under the heading, given the count. Defaults to \"<count> unread\".",
+          "description": "The unread count's text, given the count. Defaults to \"<count> unread\".",
           "defaultExpression": "(count) => `${count} unread`"
         },
         {
@@ -51,15 +51,49 @@
           "type": "(() => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires when \"Mark all read\" is pressed; the control only renders when this is set."
+          "description": "Fires when Mark all as read is chosen from the header's options menu.\nThe item is disabled while `unreadCount` is zero."
         },
         {
           "name": "markAllLabel",
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Text of the mark-all-read control.",
-          "default": "Mark all read"
+          "description": "The options menu's mark-all-read item. Default \"Mark all as read\".",
+          "default": "Mark all as read"
+        },
+        {
+          "name": "onClearAll",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when Clear all is chosen from the header's options menu, a destructive item that empties the inbox."
+        },
+        {
+          "name": "clearAllLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The options menu's clear-all item. Default \"Clear all\".",
+          "default": "Clear all"
+        },
+        {
+          "name": "menuItems",
+          "type": "DropdownMenuEntry[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "More items for the header's options menu, after Mark all as read and\nbefore Clear all, such as notification settings or a link to the full\npage.",
+          "defaultExpression": "[]",
+          "typeRefs": [
+            "DropdownMenuEntry"
+          ]
+        },
+        {
+          "name": "optionsLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The options button's accessible name and tooltip. Default \"Notification options\".",
+          "default": "Notification options"
         },
         {
           "name": "tabs",
@@ -115,6 +149,38 @@
           "required": false,
           "description": "Legacy change callback; fires alongside `onValueChange`.",
           "deprecated": "Use `onValueChange` instead."
+        },
+        {
+          "name": "onSeeAll",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Opens the full list of notifications. When given (or `seeAllHref`), a\nfooter under the list carries a See all button."
+        },
+        {
+          "name": "seeAllHref",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Opens the full list at this address instead: the See all button becomes a link."
+        },
+        {
+          "name": "seeAllLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The See all button's label. Default \"See all\".",
+          "default": "See all"
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component the See all link renders with, such as Next.js's `Link`.\nWins over a LinkProvider's; a plain `<a>` when neither is set.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
         },
         {
           "name": "emptyState",
@@ -205,6 +271,45 @@
           "description": "Action row under the body — typically compact Buttons like \"Reply\" or \"Retry\"."
         },
         {
+          "name": "onSelect",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Opens the notification. The title becomes a button whose hit area\ncovers the whole row, so the row hovers and clicks as one; the action\nrow stays clickable on its own. Replaces the native `onSelect`\nattribute, which fires on text selection inside an input."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Opens the notification at this address instead: the title becomes a link covering the row."
+        },
+        {
+          "name": "onDismiss",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Clears this one notification. A compact close button sits at the row's\nend, shown on hover and focus (and always on a touch screen), above the\nrow's own click."
+        },
+        {
+          "name": "dismissLabel",
+          "type": "((title: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The dismiss button's accessible name, from the title. Default \"Dismiss <title>\".",
+          "defaultExpression": "(itemTitle: string) => `Dismiss ${itemTitle}`"
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component the row's link renders with, such as Next.js's `Link`, so\nit navigates through the app's router. Wins over a LinkProvider's; a\nplain `<a>` when neither is set.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
+        },
+        {
           "name": "className",
           "type": "string",
           "typeKind": "primitive",
@@ -223,10 +328,47 @@
     }
   ],
   "types": {
+    "DropdownMenuEntry": {
+      "kind": "type",
+      "definition": "type DropdownMenuEntry =\n  | DropdownMenuItem\n  | DropdownMenuSeparator\n  | DropdownMenuGroup;",
+      "refs": [
+        "DropdownMenuGroup",
+        "DropdownMenuItem",
+        "DropdownMenuSeparator"
+      ]
+    },
+    "DropdownMenuGroup": {
+      "kind": "component-props",
+      "component": "DropdownMenu",
+      "see": "get_component(\"DropdownMenu\")"
+    },
+    "DropdownMenuItem": {
+      "kind": "component-props",
+      "component": "DropdownMenu",
+      "see": "get_component(\"DropdownMenu\")"
+    },
+    "DropdownMenuSeparator": {
+      "kind": "component-props",
+      "component": "DropdownMenu",
+      "see": "get_component(\"DropdownMenu\")"
+    },
     "EmptyStateProps": {
       "kind": "component-props",
       "component": "EmptyState",
       "see": "get_component(\"EmptyState\")"
+    },
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
     },
     "NotificationCenterTab": {
       "kind": "interface",
@@ -234,6 +376,8 @@
     }
   },
   "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
     "Partial": "typescript",
     "Pick": "typescript",
     "ReactNode": "react"
@@ -280,6 +424,6 @@
     }
   ],
   "size": {
-    "gzip": 2274
+    "gzip": 13382
   }
 }

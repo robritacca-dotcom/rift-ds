@@ -156,6 +156,21 @@
   opacity: 1;
 }
 
+/* The bar itself is the library's AppToolbar (TemplateToolbar.tsx), which
+   lays out and folds its own controls; the holder only gives it the row. */
+.templateToolbar {
+  display: flex;
+  min-height: var(--control-height-default);
+}
+
+/* Phones: AppSidebar's menu button floats at the row's start (40px at the
+   16px inset), so the bar starts after it and shares its row. */
+@media (max-width: 768px) {
+  .templateToolbar {
+    padding-inline-start: calc(var(--control-height-default) + var(--padding-400));
+  }
+}
+
 /* A one-pixel marker at the bar's resting place: the bar is stuck once
    it scrolls out of view. Absolute, so the column's flex gap skips it; it
    keeps its static position at the column's top, and the column is its

@@ -30,9 +30,7 @@
  */
 
 import React from "react";
-import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
-import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import {
   Dropdown,
   type DropdownOption,
@@ -43,7 +41,6 @@ import {
   type GlobePoint,
   type GlobeRotation,
 } from "rift-ds/components/Globe/Globe";
-import { Input } from "rift-ds/components/Input/Input";
 import { Kbd } from "rift-ds/components/Kbd/Kbd";
 import { MapCallout } from "rift-ds/components/MapCallout/MapCallout";
 import { MapLegend } from "rift-ds/components/MapLegend/MapLegend";
@@ -57,7 +54,7 @@ import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./RelayConsole.module.css";
 import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import TemplateShell from "../TemplateShell/TemplateShell";
-import StickyTopBar from "../TemplateShell/StickyTopBar";
+import TemplateToolbar from "../TemplateShell/TemplateToolbar";
 import { ProductMark } from "../ProductMark/ProductMark";
 
 /* ---------------------------------------------------------------- data */
@@ -484,44 +481,7 @@ export default function RelayConsole() {
       }
     >
           {!appFrame && (
-          <StickyTopBar>
-            <div className={styles.topBar}>
-              <div className={styles.search}>
-                <Input
-                  placeholder="Search stations"
-                  iconLeft="search"
-                  aria-label="Search stations"
-                />
-                <span className={styles.searchKbd} aria-hidden="true">
-                  <Kbd size="compact">⌘</Kbd>
-                  <Kbd size="compact">K</Kbd>
-                </span>
-              </div>
-              <div className={styles.topBarActions}>
-                {/* Mobile: the full search field folds to this icon, riding
-                    with the other actions on the right. */}
-                <IconButton
-                  glass
-                  icon="search"
-                  variant="secondary"
-                  tone="neutral"
-                  label="Search stations"
-                  className={styles.searchIconMobile}
-                />
-                <AiButton
-                  label="Ask AI"
-                  onClick={() => setChatOpen(true)}
-                />
-                <IconButton
-                  glass
-                  icon="notifications"
-                  variant="secondary"
-                  tone="neutral"
-                  label="Notifications"
-                />
-              </div>
-            </div>
-          </StickyTopBar>
+          <TemplateToolbar onChat={() => setChatOpen(true)} />
           )}
 
           {/* ------------------------------------------------- the stage */}

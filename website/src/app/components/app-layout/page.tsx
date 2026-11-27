@@ -3,8 +3,11 @@
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import { AppLayout } from "rift-ds/components/AppLayout/AppLayout";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { AppToolbar } from "rift-ds/components/AppToolbar/AppToolbar";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import { openSitePalette } from "@/components/SitePalette/palette-bus";
+import { useDemoNotifications } from "@/components/AppToolbarDemo/useDemoNotifications";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
@@ -53,6 +56,7 @@ function DemoContent({ heading, body }: { heading: string; body: string }) {
 }
 
 export default function AppLayoutPage() {
+  const notifications = useDemoNotifications();
   return (
     <div className={styles.dsContent}>
       <PageBreadcrumb />
@@ -152,6 +156,49 @@ export default function AppLayoutPage() {
               heading="Dashboard"
               body="The rail runs edge to edge on the shell colour behind a hairline, and the content sits crisp beside it, nothing raised."
             />
+          </AppLayout>
+        </div>
+      </section>
+
+      {/* Toolbar */}
+      <section className={styles.section}>
+        <SectionTitle title="Toolbar" />
+        <p className={styles.introBody}>
+          The toolbar slot seats a bar at the top of the content column, at
+          the width the content runs, and holds it there while the page
+          scrolls, on the content&apos;s own surface in every layout. Put an
+          AppToolbar in it for the usual search, icon controls and AI chat, or any
+          row of your own. Scroll the demo to see the bar hold its place.
+        </p>
+        <div className={styles.layoutDemo}>
+          <AppLayout
+            sections={demoSections}
+            profile={demoProfile}
+            activeKey="dashboard"
+            logoText="Northlight"
+            toolbar={
+              <AppToolbar
+                onSearch={openSitePalette}
+                actions={[
+                  notifications.action,
+                  { id: "help", icon: "help", label: "Help" },
+                  { id: "settings", icon: "settings", label: "Settings", href: "#settings" },
+                ]}
+                onChat={() => {}}
+              />
+            }
+          >
+            <DemoContent
+              heading="Dashboard"
+              body="The bar above stays pinned at the top of the surface while this content scrolls under it."
+            />
+            {["Balances", "Recent activity", "Scheduled payments", "Statements"].map((heading) => (
+              <DemoContent
+                key={heading}
+                heading={heading}
+                body="More of the page, so the surface scrolls and the toolbar holds its place above it."
+              />
+            ))}
           </AppLayout>
         </div>
       </section>

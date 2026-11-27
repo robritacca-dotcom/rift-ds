@@ -57,31 +57,40 @@
       "html": 354000
     },
     "/docs/blocks/app-shell": {
-      "css": 159000
+      "css": 159000,
+      "js": 482000
     },
     "/docs/blocks/dashboard": {
-      "css": 159000
+      "css": 159000,
+      "js": 482000
     },
     "/docs/blocks/docs": {
-      "css": 159000
+      "css": 159000,
+      "js": 482000
     },
     "/docs/blocks/landing": {
-      "css": 159000
+      "css": 159000,
+      "js": 482000
     },
     "/docs/blocks/planner": {
-      "css": 159000
+      "css": 159000,
+      "js": 482000
     },
     "/docs/blocks/pricing": {
-      "css": 159000
+      "css": 159000,
+      "js": 482000
     },
     "/docs/blocks/settings": {
-      "css": 159000
+      "css": 159000,
+      "js": 482000
     },
     "/docs/blocks/shader-scene": {
-      "css": 159000
+      "css": 159000,
+      "js": 482000
     },
     "/docs/blocks/sign-in": {
-      "css": 159000
+      "css": 159000,
+      "js": 482000
     },
     "/foundations/layout": {
       "html": 32000
@@ -97,7 +106,7 @@
     "/labs/raceway-chat": {
       "js": 555000,
       "html": 52000,
-      "css": 131000
+      "css": 136000
     },
     "/labs/site-frame": {
       "js": 794000,
@@ -142,6 +151,10 @@
     "/templates/profit-and-loss": {
       "js": 506000,
       "css": 145000
+    },
+    "/docs/blocks/notifications": {
+      "css": 159000,
+      "js": 482000
     }
   },
   "images": {

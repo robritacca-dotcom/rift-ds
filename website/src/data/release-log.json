@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.40.0",
+      "date": "2026-11-27",
+      "title": "AppToolbar, PaymentCard and popups on top",
+      "body": [
+        "AppToolbar is new: the bar along the top of an app’s page, always in one order (the search, the icon controls, the AI button and the primary action), folding by its own width. AppLayout takes a `toolbar` slot to pin it, and `searchGlass` frosts its search over a busy ground. PaymentCard is new too: a payment card’s face with two tones, a frozen state and a compact size.",
+        "Every anchored popup now opens in the browser’s top layer, so a parent’s mask or stacking context can no longer cut it off. AppSidebar keeps the current page selected while its side panel is open, and Stat’s auto placement wraps a delta under a long value instead of clipping it.",
+        "Blueprint and Velvet set their action colour per mode, and lighten their logo in the dark. NotificationCenter gains rows that open and dismiss, RadioGroup options take a description, and the app blocks are rebuilt on AppLayout and AppToolbar."
+      ]
+    },
+    {
       "version": "1.39.0",
       "date": "2026-11-26",
       "title": "One rail everywhere, and ThreadHistory",

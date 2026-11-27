@@ -1481,20 +1481,19 @@ export default function DesignSystemLanding() {
             aria-label="Explore the system"
             buttons={[
               { label: "Playground", variant: "primary" as const, size: "compact" as const, href: "/playground", iconLeft: "palette", iconRight: "arrow_forward" },
-              { label: "Templates", variant: "secondary" as const, size: "compact" as const, glass: true, href: "/templates", iconLeft: "dashboard", iconRight: "arrow_forward" },
+              { label: "Templates", variant: "secondary" as const, tone: "neutral" as const, size: "compact" as const, glass: true, href: "/templates", iconLeft: "dashboard", iconRight: "arrow_forward" },
               ...(SHOW_FIGMA_LINKS
                 ? [
                     {
                       label: "Figma kit",
                       className: styles.phoneHidden,
                       variant: "secondary" as const,
+                      tone: "neutral" as const,
                       size: "compact" as const,
                       glass: true,
                       iconLeft: <FigmaIcon />,
-                      iconRight: "open_in_new",
-                      href: FIGMA_URL,
-                      target: "_blank",
-                      rel: "noopener noreferrer",
+                      iconRight: "arrow_forward",
+                      href: "/docs/figma",
                     },
                   ]
                 : []),

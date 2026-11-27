@@ -42,7 +42,7 @@
  *     session tabs, mentions, and the trailing seat's pair, the agent pane
  *     (closed on arrival, a header toggle away) and the artifact panel, inline beside the
  *     conversation on a wide window and a sheet on a narrow one.
- *   - People are initials (rule 4): the one person here is the profile row.
+ *   - People (rule 4): the one person here is the profile row, on initials.
  *   - No app-frame dressing (rule 8): a chat session has no tab-bar shape on
  *     a phone, where this screen is already the full-screen chat.
  *

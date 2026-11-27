@@ -22,5 +22,17 @@ export const PHOTO_PORTRAIT = photo("tall");
 /** A square picture. */
 export const PHOTO_SQUARE = PHOTOS[2];
 
+/**
+ * Four portraits, 320 by 320, for a demo's people: two adults and two
+ * children, generated, of no one real. Each is cropped to the face so it
+ * reads at an avatar's size.
+ */
+export const PORTRAITS = {
+  woman: "/images/attachments/person-maya.jpg",
+  man: "/images/attachments/person-daniel.jpg",
+  boy: "/images/attachments/person-leo.jpg",
+  girl: "/images/attachments/person-ivy.jpg",
+};
+
 /** The first page of a document, as a host would render it for a PDF: a letter page, 1200 by 1553. */
 export const DOCUMENT_FIRST_PAGE = "/images/attachments/document-page.png";

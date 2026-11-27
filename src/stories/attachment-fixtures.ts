@@ -16,6 +16,10 @@ import photo7 from './assets/attachments/photo-7.jpg';
 import photoTall from './assets/attachments/photo-tall.jpg';
 import photoWide from './assets/attachments/photo-wide.jpg';
 import photoWideMono from './assets/attachments/photo-wide-mono.jpg';
+import personDaniel from './assets/attachments/person-daniel.jpg';
+import personIvy from './assets/attachments/person-ivy.jpg';
+import personLeo from './assets/attachments/person-leo.jpg';
+import personMaya from './assets/attachments/person-maya.jpg';
 
 /** Seven square pictures, for grids and galleries. */
 export const PHOTOS = [photo1, photo2, photo3, photo4, photo5, photo6, photo7];
@@ -31,6 +35,18 @@ export const PHOTO_PORTRAIT = photoTall;
 
 /** A square picture. */
 export const PHOTO_SQUARE = photo3;
+
+/**
+ * Four portraits, 320 by 320, for a demo's people: two adults and two
+ * children, generated, of no one real. Each is cropped to the face so it
+ * reads at an avatar's size.
+ */
+export const PORTRAITS = {
+  woman: personMaya,
+  man: personDaniel,
+  boy: personLeo,
+  girl: personIvy,
+};
 
 /** The first page of a document, as a host would render it for a PDF: a letter page, 1200 by 1553. */
 export const DOCUMENT_FIRST_PAGE = documentPage;

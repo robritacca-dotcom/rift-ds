@@ -1039,7 +1039,7 @@
       "name": "table",
       "type": "registry:ui",
       "title": "Table",
-      "description": "Data table with flexible cell content, striped rows, compact sizing, code columns, and support for icons, inputs and controls."
+      "description": "Data table with flexible cell content, striped rows, a frameless look, compact sizing, code columns, and support for icons, inputs and controls."
     },
     {
       "name": "table-toolbar",

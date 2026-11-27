@@ -1,6 +1,6 @@
 # Table
 
-Data table with flexible cell content, striped rows, compact sizing, code columns, and support for icons, inputs and controls.
+Data table with flexible cell content, striped rows, a frameless look, compact sizing, code columns, and support for icons, inputs and controls.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -24,10 +24,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same dat
 | rows | `TableRow[]` | yes |  | Row data |
 | size | `"default" \| "compact"` | no | `'default'` | Visual size |
 | striped | `boolean` | no | `false` | Alternating row background colours |
-| bordered | `boolean` | no | `false` | Adds an outer border + border-radius container, a tinted thead background, and `--color-divider` row lines — matching the bordered table style used on markdown content pages. |
-| columnDividers | `boolean` | no | `false` | Draws a vertical line between columns, as well as the lines between rows. |
+| bordered | `boolean` | no | `false` | Adds an outer border + border-radius container, a tinted thead background, and `--color-divider` row lines — matching the bordered table style used on markdown content pages. `frameless` wins when both are set. |
+| columnDividers | `boolean` | no | `false` | Draws a vertical line between columns, as well as the lines between rows. A frameless table draws none. |
 | frameless | `boolean` | no | `false` | Draws the table with no frame: no outline, no header band and no column dividers, the first and last columns' content flush with the page, and a hovered row lifted into a raised tile that reaches past the columns. The page needs room for that reach on both sides (`--padding-400`). Wins over `bordered`. On a phone (a viewport under `BREAKPOINT_PHONE_PX`) it is drawn as the plain table, the outer control as an ordinary column. |
-| outerControl | `boolean` | no | `false` | With `frameless`, makes the first column the row's outer control: a 40px column, its content centred, that sits inside the tile's start and shows on hover, on keyboard focus, when checked, or while any row's is checked. Put a drag grip or a checkbox in it. The page needs 40px of room on the table's start side for it. Leave at least one other column without a width: when every column has one, the browser stretches them all, the control's with them. |
+| outerControl | `boolean` | no | `false` | With `frameless`, makes the first column the row's outer control: a 40px column, its content centred, that sits inside the tile's start and shows on hover, on keyboard focus, when checked, or while any row is checked. Put a drag grip or a checkbox in it. The page needs 40px of room on the table's start side for it. Leave at least one other column without a width: when every column has one, the browser stretches them all, the control's with them. |
 | caption | `string` | no |  | Accessible caption for the table |
 | captionHidden | `boolean` | no | `false` | Whether to visually hide the caption (still available to screen readers) |
 | className | `string` | no | `''` | Additional CSS classes |

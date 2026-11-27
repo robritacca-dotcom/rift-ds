@@ -7626,7 +7626,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "columnDividers",
             "type": "boolean",
             "required": false,
-            "description": "Draws a vertical line between columns, as well as the lines between rows.",
+            "description": "Draws a vertical line between columns, as well as the lines between rows. A frameless table draws none.",
             "defaultValue": "false"
           },
           {
@@ -19631,7 +19631,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Table",
     "slug": "table",
     "category": "data-display",
-    "description": "Data table with flexible cell content, striped rows, compact sizing, code columns, and support for icons, inputs and controls.",
+    "description": "Data table with flexible cell content, striped rows, a frameless look, compact sizing, code columns, and support for icons, inputs and controls.",
     "client": false,
     "importPath": "rift-ds/components/Table/Table",
     "barrel": "main",
@@ -19679,14 +19679,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "bordered",
             "type": "boolean",
             "required": false,
-            "description": "Adds an outer border + border-radius container, a tinted thead background,\nand `--color-divider` row lines — matching the bordered table style used on\nmarkdown content pages.",
+            "description": "Adds an outer border + border-radius container, a tinted thead background,\nand `--color-divider` row lines — matching the bordered table style used on\nmarkdown content pages. `frameless` wins when both are set.",
             "defaultValue": "false"
           },
           {
             "name": "columnDividers",
             "type": "boolean",
             "required": false,
-            "description": "Draws a vertical line between columns, as well as the lines between rows.",
+            "description": "Draws a vertical line between columns, as well as the lines between rows. A frameless table draws none.",
             "defaultValue": "false"
           },
           {
@@ -19700,7 +19700,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "outerControl",
             "type": "boolean",
             "required": false,
-            "description": "With `frameless`, makes the first column the row's outer control: a\n40px column, its content centred, that sits inside the tile's start and\nshows on hover, on keyboard focus, when checked, or while any row's is\nchecked. Put a drag grip or a checkbox in it. The page needs 40px of\nroom on the table's start side for it. Leave at least one other column\nwithout a width: when every column has one, the browser stretches them\nall, the control's with them.",
+            "description": "With `frameless`, makes the first column the row's outer control: a\n40px column, its content centred, that sits inside the tile's start and\nshows on hover, on keyboard focus, when checked, or while any row is\nchecked. Put a drag grip or a checkbox in it. The page needs 40px of\nroom on the table's start side for it. Leave at least one other column\nwithout a width: when every column has one, the browser stretches them\nall, the control's with them.",
             "defaultValue": "false"
           },
           {

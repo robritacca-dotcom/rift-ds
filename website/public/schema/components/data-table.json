@@ -758,7 +758,7 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Draws a vertical line between columns, as well as the lines between rows.",
+          "description": "Draws a vertical line between columns, as well as the lines between rows. A frameless table draws none.",
           "default": false
         },
         {

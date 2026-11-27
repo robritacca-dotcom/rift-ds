@@ -797,7 +797,7 @@ Headline metrics with labels, trend deltas, an optional icon tile and caption, a
 
 ### Table
 
-Data table with flexible cell content, striped rows, compact sizing, code columns, and support for icons, inputs and controls.
+Data table with flexible cell content, striped rows, a frameless look, compact sizing, code columns, and support for icons, inputs and controls.
 
 - Import: `import { Table } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')

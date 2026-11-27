@@ -90,6 +90,13 @@ const git = (...args) => execFileSync('git', args, { cwd: repoRoot, encoding: 'u
  * `schema` + `property` (a JSON pointer) for a meta-schema property.
  */
 const SANCTIONED_BREAKS = [
+  {
+    since: '1.40.0',
+    component: 'RadioGroup',
+    prop: 'options',
+    change: 'type',
+    reason: 'Widened, not narrowed: an option may now carry an optional description, drawn as its helper text, so every options array that type-checked before still does.',
+  },
 ];
 
 /* ── Baseline ──────────────────────────────────────────────────────────── */

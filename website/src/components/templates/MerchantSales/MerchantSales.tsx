@@ -23,14 +23,10 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { CHAT_SOURCE_ATTRIBUTE, describeSelection, useChatAgentState, useChatWidget, useSelectionFocus } from "rift-ds/chat";
 import { PageHeader } from "rift-ds/components/PageHeader/PageHeader";
 import { Button } from "rift-ds/components/Button/Button";
-import { IconButton } from "rift-ds/components/IconButton/IconButton";
-import { Input } from "rift-ds/components/Input/Input";
-import { Kbd } from "rift-ds/components/Kbd/Kbd";
 import { LegendTile } from "rift-ds/components/LegendTile/LegendTile";
 import { AreaChart, ComboChart } from "rift-ds/charts";
 import { Stat } from "rift-ds/components/Stat/Stat";
@@ -46,7 +42,7 @@ import type { TableToolbarSelection } from "rift-ds/components/TableToolbar/Tabl
 import { MOTION_ACTION_DISMISS_MS } from "rift-ds/tokens/motion";
 import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import TemplateShell from "../TemplateShell/TemplateShell";
-import StickyTopBar from "../TemplateShell/StickyTopBar";
+import TemplateToolbar from "../TemplateShell/TemplateToolbar";
 import { ProductMark } from "../ProductMark/ProductMark";
 import { useSampleEntities } from "../sampleEntities";
 import {
@@ -363,49 +359,14 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
       }
     >
           {!appFrame && (
-          <StickyTopBar>
-            <div className={styles.topBar}>
-              <div className={styles.search}>
-                <Input
-                  placeholder="Search Larkspur"
-                  iconLeft="search"
-                  aria-label="Search Larkspur"
-                />
-                <span className={styles.searchKbd} aria-hidden="true">
-                  <Kbd size="compact">⌘</Kbd>
-                  <Kbd size="compact">K</Kbd>
-                </span>
-              </div>
-              <div className={styles.topBarActions}>
-                {/* Mobile: the full search field folds to this icon, riding
-                    with the other actions on the right. */}
-                <IconButton
-                  glass
-                  icon="search"
-                  variant="secondary"
-                  tone="neutral"
-                  label="Search Larkspur"
-                  className={styles.searchIconMobile}
-                />
-                <AiButton
-                  label="Ask AI"
-                  state={agentState}
-                  aria-expanded={open}
-                  onClick={(event) => {
-                    returnFocusRef.current = event.currentTarget;
-                    toggleOpen();
-                  }}
-                />
-                <IconButton
-                  glass
-                  icon="notifications"
-                  variant="secondary"
-                  tone="neutral"
-                  label="Notifications"
-                />
-              </div>
-            </div>
-          </StickyTopBar>
+          <TemplateToolbar
+            chatState={agentState}
+            chatExpanded={open}
+            onChat={(event) => {
+              returnFocusRef.current = event.currentTarget;
+              toggleOpen();
+            }}
+          />
           )}
 
           {/* --------------------------------------------- page head */}

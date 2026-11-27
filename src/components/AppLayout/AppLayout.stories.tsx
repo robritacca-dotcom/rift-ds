@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor } from 'storybook/test';
 import { AppLayout } from './AppLayout';
+import { AppToolbar } from '../AppToolbar/AppToolbar';
 
 const sampleSections = [
   {
@@ -194,4 +195,50 @@ export const WithSidebarProps: Story = {
     await waitFor(() => expect(fold).toHaveAttribute('aria-expanded', 'true'));
     await expect(canvasElement.querySelector('.ds-app-sidebar__footer-action')).not.toBeNull();
   },
+};
+
+/** The bar a working app keeps above its page, an AppToolbar. */
+const sampleToolbar = (
+  <AppToolbar
+    onSearch={() => {}}
+    actions={[
+      { id: 'notifications', icon: 'notifications', label: 'Notifications', badge: 3 },
+      { id: 'help', icon: 'help', label: 'Help' },
+    ]}
+    onChat={() => {}}
+  />
+);
+
+/** Rows enough to scroll, so the pinned bar shows what passes under it. */
+const longContent = (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-500)' }}>
+    <h1 style={{ fontSize: 40, fontWeight: 700, color: 'var(--color-text-primary)' }}>Dashboard</h1>
+    {Array.from({ length: 16 }, (_, index) => (
+      <p key={index} style={{ fontSize: 16, color: 'var(--color-text-tertiary)', maxWidth: 640 }}>
+        Row {index + 1}. The toolbar stays pinned at the top of the content column while this scrolls under it.
+      </p>
+    ))}
+  </div>
+);
+
+/** `toolbar` seats a bar at the top of the content column and pins it
+    while the surface scrolls, at the width the content runs. */
+export const WithToolbar: Story = {
+  args: { toolbar: sampleToolbar, children: longContent },
+  play: async ({ canvasElement }) => {
+    const bar = canvasElement.querySelector<HTMLElement>('.ds-app-layout__toolbar');
+    await expect(bar).not.toBeNull();
+    await expect(bar!.parentElement).toHaveClass('ds-app-layout__content');
+    await expect(getComputedStyle(bar!).position).toBe('sticky');
+  },
+};
+
+/** The toolbar in the flush layout: pinned to the viewport as the page scrolls. */
+export const WithToolbarFlush: Story = {
+  args: { ...WithToolbar.args, layout: 'flush' },
+};
+
+/** The toolbar in the floating layout, beside the glass rail. */
+export const WithToolbarFloating: Story = {
+  args: { ...WithToolbar.args, layout: 'floating' },
 };

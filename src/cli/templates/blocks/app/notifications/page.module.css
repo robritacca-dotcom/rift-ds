@@ -1,0 +1,63 @@
+/* The notifications column: the filters over the list, across the whole
+   content column, with each row's time held to the far edge. Each day's
+   rows sit under a quiet label, the rows themselves the notification
+   panel's own, so the page and the panel read as one list at two sizes. */
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+}
+
+.category {
+  width: 220px; /* room for the longest category */
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+}
+
+/* The palette's group label: small, tertiary, inset to the rows' text. */
+.groupLabel {
+  margin: 0;
+  padding: 0 var(--padding-300);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* On the page the rows part with a rule, as a long list reads best; the
+   panel keeps the palette's unruled rows. */
+.list > :global(.ds-notification-item) + :global(.ds-notification-item) {
+  border-top: var(--border-025) solid var(--color-divider);
+}
+
+@media (max-width: 480px) {
+  .category {
+    width: 100%;
+  }
+}

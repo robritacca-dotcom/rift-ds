@@ -49,6 +49,7 @@ export const CHROMELESS_ROUTES = new Set([
   "/docs/blocks/dashboard",
   "/docs/blocks/settings",
   "/docs/blocks/planner",
+  "/docs/blocks/notifications",
   "/docs/blocks/sign-in",
   "/docs/blocks/shader-scene",
   "/docs/blocks/docs",

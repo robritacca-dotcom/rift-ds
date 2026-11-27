@@ -1207,6 +1207,8 @@ const EXCLUDED_ROUTES = new Map([
     'the settings block rendered full screen from the file the init bin ships: placeholder data in a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
   ['/docs/blocks/planner',
     'the planner block rendered full screen from the file the init bin ships: placeholder data in a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
+  ['/docs/blocks/notifications',
+    'the notifications block rendered full screen from the file the init bin ships: placeholder data in a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
   ['/docs/blocks/sign-in',
     'the sign-in block rendered full screen from the file the init bin ships: placeholder data in a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
   ['/docs/blocks/shader-scene',

@@ -176,8 +176,8 @@ type RadioGroupOwnProps = {
    * Grouping itself stays React state (`value`/`onValueChange`).
    */
   name?: string;
-  /** Radio options */
-  options: { label: string; value: string; disabled?: boolean }[];
+  /** Radio options. A `description` is a line under the option's label, drawn as its helper text. */
+  options: { label: string; value: string; disabled?: boolean; description?: string }[];
   /** Layout direction */
   direction?: 'vertical' | 'horizontal';
   /** Called with the newly selected value */
@@ -288,6 +288,7 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
               key={option.value}
               name={name}
               label={option.label}
+              helperText={option.description}
               value={option.value}
               checked={value === option.value}
               disabled={option.disabled}

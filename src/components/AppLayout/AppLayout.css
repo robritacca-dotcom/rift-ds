@@ -64,6 +64,53 @@
 }
 
 /* ============================================
+   TOOLBAR — the slot at the top of the content
+   column, pinned while the page (or, inset, the
+   surface) scrolls. It pulls up through the top
+   padding so, pinned, it meets the top edge with
+   no band of content showing above it, and it
+   wears the content's own surface so what scrolls
+   under it is covered.
+   ============================================ */
+.ds-app-layout__toolbar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--layer-sticky);
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  min-height: var(--control-height-default);
+  margin-block-start: calc(var(--padding-1000) * -1);
+  /* The content column's gap sits under it; the bar's own block padding
+     is the room above and below its controls. */
+  margin-block-end: calc(var(--gap-1000) * -1 + var(--gap-500));
+  padding-block: var(--padding-400);
+  background-color: var(--ds-shell-surface);
+}
+
+/* The bar's controls centre on the rail's logo row: the rail's own top
+   (the float gap and its hairline when floating, the edge when flush), its
+   --padding-500 top padding and half its 24px logo row (AppSidebar's
+   geometry), less half a control. Inset sets the bar inside the raised
+   surface, below the rail's row, and keeps the even padding. */
+.ds-app-layout:not(.ds-app-layout--floating, .ds-app-layout--inset) .ds-app-layout__toolbar {
+  padding-block-start: var(--padding-300);
+}
+
+.ds-app-layout--floating .ds-app-layout__toolbar {
+  padding-block-start: calc(
+    var(--ds-sidebar-float-inset, 20px) + var(--border-025) + var(--padding-500) + 24px / 2 -
+      var(--control-height-default) / 2
+  );
+}
+
+/* A sticky box pins inside its scroller's padding, so inside the inset
+   surface it pins at minus that padding to meet the surface's top edge. */
+.ds-app-layout--inset .ds-app-layout__toolbar {
+  inset-block-start: calc(var(--padding-1000) * -1);
+}
+
+/* ============================================
    FLOATING LAYOUT — the rail floats as a glass
    card, so the main column clears its inset on
    both sides of it
@@ -167,6 +214,23 @@
   .ds-app-layout__scroller {
     overflow-y: visible;
     padding: var(--padding-500) var(--padding-400);
+  }
+
+  /* Phones: the rail's drawer trigger floats at the top start corner, so
+     the bar starts after it and its controls share the trigger's row, in
+     every mode. */
+  .ds-app-layout[data-ds-shell] .ds-app-layout__toolbar {
+    padding-block-start: var(--padding-400);
+  }
+
+  .ds-app-layout__toolbar {
+    margin-block-start: calc(var(--padding-500) * -1);
+    padding-inline-start: calc(var(--control-height-default) + var(--gap-300));
+  }
+
+  /* The surface no longer scrolls here; the page does. */
+  .ds-app-layout--inset .ds-app-layout__toolbar {
+    inset-block-start: 0;
   }
 }
 

@@ -1,0 +1,142 @@
+/* ============================================
+   APP TOOLBAR — the bar along the top of an
+   app's page, always in one order: the search,
+   space, the icon controls, the AI button and
+   the primary action
+   ============================================ */
+
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
+/* Base: its own inline-size container, so it folds by the room it has,
+   not the viewport (an open rail or chat narrows it). */
+.ds-app-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-500);
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--control-height-default);
+  container: ds-app-toolbar / inline-size;
+}
+
+.ds-app-toolbar--compact {
+  min-block-size: var(--control-height-compact);
+}
+
+/* Clusters */
+.ds-app-toolbar__start,
+.ds-app-toolbar__end {
+  display: flex;
+  align-items: center;
+  min-inline-size: 0;
+}
+
+.ds-app-toolbar__start {
+  flex: 1 1 auto;
+  gap: var(--gap-300);
+}
+
+/* The end: the icon controls, the AI button and the primary action, a step
+   further apart than the controls among themselves. */
+.ds-app-toolbar__end {
+  flex: none;
+  gap: var(--gap-300);
+}
+
+/* Search: a field never narrower than a usable one, growing with the room
+   up to the prompt and its keycaps with a little air, until the bar folds
+   it to its icon. */
+.ds-app-toolbar__search {
+  display: flex;
+  flex: 0 1 320px;
+  min-inline-size: 240px;
+}
+
+.ds-app-toolbar__search > * {
+  inline-size: 100%;
+}
+
+/* The icon controls: borderless tertiary IconButtons, close together. */
+.ds-app-toolbar__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+}
+
+.ds-app-toolbar__control,
+.ds-app-toolbar__more,
+.ds-app-toolbar__search-icon,
+.ds-app-toolbar__wide,
+.ds-app-toolbar__narrow {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* A control's panel (a NotificationCenter): the popover keeps the floating
+   edge and the shadow, and the panel inside fills it, its own border
+   giving way so the two never draw a card inside a card. */
+.ds-app-toolbar__panel-host .ds-popover__panel {
+  inline-size: min(380px, calc(100vw - var(--padding-400) * 2));
+  padding: 0;
+  overflow: hidden;
+}
+
+.ds-app-toolbar__panel-host .ds-popover__panel > * {
+  border: none;
+  border-radius: 0;
+}
+
+/* Folding, in steps by the bar's own width. Each folding control has two
+   forms; the one not shown is display: none, so it leaves the tab order
+   and the accessibility tree. */
+.ds-app-toolbar__search-icon,
+.ds-app-toolbar__narrow,
+.ds-app-toolbar__more {
+  display: none;
+}
+
+/* First the AI button and the primary action fold to their icons. */
+@container ds-app-toolbar (max-width: 720px) {
+  .ds-app-toolbar__wide {
+    display: none;
+  }
+
+  .ds-app-toolbar__narrow {
+    display: inline-flex;
+  }
+}
+
+/* Then the search folds to its icon. */
+@container ds-app-toolbar (max-width: 560px) {
+  .ds-app-toolbar__search {
+    display: none;
+  }
+
+  .ds-app-toolbar__search-icon {
+    display: inline-flex;
+  }
+
+  .ds-app-toolbar {
+    gap: var(--gap-300);
+  }
+}
+
+/* Last, every icon control after the first moves into the More menu. */
+@container ds-app-toolbar (max-width: 420px) {
+  .ds-app-toolbar__control--foldable {
+    display: none;
+  }
+
+  .ds-app-toolbar__more {
+    display: inline-flex;
+  }
+
+  .ds-app-toolbar__end {
+    gap: var(--gap-200);
+  }
+}
+
+} /* @layer rift.components */

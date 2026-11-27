@@ -92,10 +92,14 @@
   width: var(--control-height-default);
   padding: 0;
   color: var(--color-action-icon-default);
+  /* IconButton's glyph at this size, so the folded trigger stands in a row
+     of icon buttons as one of them. */
+  --icon-size: var(--icon-size-600);
 }
 
 .ds-command-palette-trigger--compact.ds-command-palette-trigger--icon-only {
   width: var(--control-height-compact);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-command-palette-trigger--icon-only:hover {

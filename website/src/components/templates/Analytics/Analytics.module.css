@@ -269,41 +269,6 @@
   border-radius: var(--radius-pill);
 }
 
-/* ------------------------------------------------------------ top bar */
-
-.topBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap-200);
-}
-
-.search {
-  position: relative;
-  width: 320px;
-  max-width: 100%;
-}
-
-.searchKbd {
-  position: absolute;
-  top: 50%;
-  right: var(--padding-200);
-  transform: translateY(-50%);
-  display: inline-flex;
-  gap: var(--gap-050);
-  pointer-events: none;
-}
-
-.topBarActions {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-200);
-}
-
-.searchIconMobile {
-  display: none;
-}
-
 /* ---------------------------------------------------------- responsive */
 
 /* The grid restacks by the room the column has, as merchant sales'
@@ -323,23 +288,6 @@
 @media (max-width: 1080px) {
   .content {
     padding: var(--padding-400);
-  }
-}
-
-/* Mobile: AppSidebar's fixed hamburger overlays this row's left end, so the
-   search folds to its icon and the actions keep the right. */
-@media (max-width: 768px) {
-  .search {
-    display: none;
-  }
-
-  .searchIconMobile {
-    display: inline-flex;
-  }
-
-  .topBar {
-    justify-content: flex-end;
-    min-height: 40px;
   }
 }
 

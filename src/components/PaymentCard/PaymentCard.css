@@ -1,0 +1,182 @@
+/* ============================================
+   PAYMENT CARD — the face of a payment card at
+   a card's fixed aspect ratio (ISO/IEC 7810
+   ID-1, 85.60 × 53.98 mm)
+   ============================================ */
+
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
+/* Base */
+.ds-payment-card {
+  position: relative;
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 340px;
+  aspect-ratio: 85.6 / 53.98;
+  overflow: hidden;
+  /* The solid face: the inverse end of the container ramp, raised on the
+     floating elevation, so it reads as an object set on the page. */
+  background-color: var(--color-bg-container-inverse);
+  color: var(--color-text-on-inverse);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+  box-shadow: var(--shadow-floating);
+  container: ds-payment-card / inline-size;
+}
+
+.ds-payment-card__face {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  block-size: 100%;
+  box-sizing: border-box;
+  padding: var(--padding-500);
+}
+
+/* Rows */
+.ds-payment-card__top,
+.ds-payment-card__bottom {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-300);
+  min-inline-size: 0;
+}
+
+.ds-payment-card__bottom {
+  align-items: flex-end;
+}
+
+.ds-payment-card__brand {
+  display: flex;
+  align-items: center;
+  min-inline-size: 0;
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+}
+
+/* A logo given as an image sits at the wordmark's height. */
+.ds-payment-card__brand img,
+.ds-payment-card__brand svg,
+.ds-payment-card__network img,
+.ds-payment-card__network svg {
+  display: block;
+  block-size: var(--icon-size-600);
+  inline-size: auto;
+}
+
+.ds-payment-card__label {
+  flex: none;
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+}
+
+/* A card number reads left to right in every script, as it is printed on
+   the card; the row itself still sits at the inline start. */
+.ds-payment-card__number {
+  align-self: flex-start;
+  inline-size: fit-content;
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--font-overline-letter-spacing);
+}
+
+.ds-payment-card__holder {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  min-inline-size: 0;
+}
+
+.ds-payment-card__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+}
+
+.ds-payment-card__expiry {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-payment-card__network {
+  flex: none;
+  display: flex;
+  align-items: center;
+}
+
+/* Tones */
+.ds-payment-card--neutral {
+  background-color: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+}
+
+/* Sizes */
+.ds-payment-card--compact {
+  max-inline-size: 240px;
+  border-radius: var(--radius-300);
+}
+
+.ds-payment-card--compact .ds-payment-card__face {
+  padding: var(--padding-400);
+}
+
+.ds-payment-card--compact .ds-payment-card__brand {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+}
+
+.ds-payment-card--compact .ds-payment-card__number {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+/* States: frozen dims the face under a lock, the disabled treatment's
+   opacity without its cursor, since the card is not a control. */
+.ds-payment-card--frozen .ds-payment-card__face {
+  opacity: 0.4;
+}
+
+.ds-payment-card__frozen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-100);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+}
+
+.ds-payment-card__lock {
+  --icon-size: var(--icon-size-600);
+}
+
+} /* @layer rift.components */

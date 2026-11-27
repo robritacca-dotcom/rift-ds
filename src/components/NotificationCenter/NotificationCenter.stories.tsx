@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor } from 'storybook/test';
 import { NotificationCenter, NotificationItem } from './NotificationCenter';
 import { Avatar } from '../Avatar/Avatar';
 import { Button } from '../Button/Button';
@@ -197,4 +198,93 @@ export const SingleItem: Story = {
       <NotificationCenter {...args} />
     </div>
   ),
+};
+
+const INBOX = [
+  { id: 'payment', icon: 'payments', title: 'Payment received', time: '2m', text: 'Northwind Supply paid invoice 1042.' },
+  { id: 'card', icon: 'credit_card_off', title: 'Card frozen', time: '1h', text: 'The card ending in 7781 is frozen until you unfreeze it.' },
+  { id: 'statement', icon: 'description', title: 'Statement ready', time: 'Mon', text: 'Your October statement is ready to download.' },
+];
+
+function InteractiveInbox() {
+  const [unread, setUnread] = useState<string[]>(['payment', 'card']);
+  const [tab, setTab] = useState('all');
+  const [cleared, setCleared] = useState(false);
+  const inbox = cleared ? [] : INBOX;
+  const items = tab === 'unread' ? inbox.filter((item) => unread.includes(item.id)) : inbox;
+  return (
+    <NotificationCenter
+      unreadCount={unread.length}
+      onMarkAllRead={() => setUnread([])}
+      onClearAll={() => {
+        setCleared(true);
+        setUnread([]);
+      }}
+      menuItems={[
+        { label: 'Notification settings', icon: 'settings', onClick: () => {} },
+        { label: 'Open notifications', icon: 'open_in_new', onClick: () => {} },
+      ]}
+      tabs={[
+        { label: 'All', value: 'all' },
+        { label: 'Unread', value: 'unread', count: unread.length },
+      ]}
+      value={tab}
+      onValueChange={setTab}
+      onSeeAll={() => {}}
+      emptyStateLabels={{ title: 'You’re all caught up', description: 'New notifications will show up here.' }}
+    >
+      {items.map((item) => (
+        <NotificationItem
+          key={item.id}
+          media={item.icon}
+          title={item.title}
+          time={item.time}
+          unread={unread.includes(item.id)}
+          onSelect={() => setUnread((ids) => ids.filter((id) => id !== item.id))}
+        >
+          {item.text}
+        </NotificationItem>
+      ))}
+    </NotificationCenter>
+  );
+}
+
+/**
+ * An inbox whose rows open, on CommandPalette's rhythm: opening a row reads
+ * it, so it unbolds and loses its dot but stays in the list; the header's
+ * options menu holds Mark all as read, the host's items and Clear all; the
+ * Unread tab shows the empty state once nothing is unread, and the inbox
+ * once it is cleared; See all sits in the footer.
+ */
+export const Interactive: Story = {
+  render: () => <InteractiveInbox />,
+  play: async ({ canvas, canvasElement }) => {
+    const rows = () => canvasElement.querySelectorAll('.ds-notification-item').length;
+    const unreadRows = () => canvasElement.querySelectorAll('.ds-notification-item--unread').length;
+    await expect(rows()).toBe(3);
+    await expect(unreadRows()).toBe(2);
+    // The whole row is the open control: what sits under its description is the row's button.
+    const text = canvasElement.querySelector('.ds-notification-item__text')!;
+    const box = text.getBoundingClientRect();
+    const hit = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+    await expect(hit).toHaveClass('ds-notification-item__open');
+    // Opening a row reads it and keeps it.
+    await userEvent.click(canvas.getByRole('button', { name: 'Payment received' }));
+    await waitFor(() => expect(unreadRows()).toBe(1));
+    await expect(rows()).toBe(3);
+    // Mark all as read lives in the header's options menu.
+    await userEvent.click(canvas.getByRole('button', { name: 'Notification options' }));
+    await userEvent.click(await canvas.findByRole('menuitem', { name: /Mark all as read/ }));
+    await waitFor(() => expect(unreadRows()).toBe(0));
+    await expect(rows()).toBe(3);
+    // The Unread tab is empty now.
+    await userEvent.click(canvas.getByRole('tab', { name: /Unread/ }));
+    await waitFor(() => expect(canvas.getByText('You’re all caught up')).toBeVisible());
+    await userEvent.click(canvas.getByRole('tab', { name: /All/ }));
+    // Clear all empties the inbox itself.
+    await userEvent.click(canvas.getByRole('button', { name: 'Notification options' }));
+    await userEvent.click(await canvas.findByRole('menuitem', { name: /Clear all/ }));
+    await waitFor(() => expect(rows()).toBe(0));
+    await expect(canvas.getByText('You’re all caught up')).toBeVisible();
+  },
 };

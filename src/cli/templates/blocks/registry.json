@@ -4,7 +4,7 @@
     {
       "name": "app-shell",
       "label": "App shell",
-      "description": "A sidebar in your pick of the three shell modes, a top bar with search, AI and colour mode, a page header, and an empty page with the spacing set.",
+      "description": "A sidebar in your pick of the three shell modes, a top bar with search, notifications, settings and AI, a page header, and an empty page with the spacing set.",
       "route": "/starter",
       "files": [
         "components/blocks/AppShell.tsx",
@@ -28,14 +28,27 @@
     {
       "name": "settings",
       "label": "Settings",
-      "description": "The app shell with a column of settings sections, each saving on its own, and a profile form checked in one pass.",
+      "description": "A standard page per settings section, opened from the sidebar’s side panel: rows of a label, its help, the value and an Edit that changes it in place.",
       "route": "/settings",
       "files": [
         "components/blocks/AppShell.tsx",
         "components/blocks/AppShell.module.css",
         "app/settings/page.tsx",
         "app/settings/page.module.css",
-        "app/settings/ProfileForm.tsx"
+        "app/settings/Settings.tsx"
+      ]
+    },
+    {
+      "name": "notifications",
+      "label": "Notifications",
+      "description": "The full list a notification panel’s See all opens: All and Unread tabs, a category filter, and rows by day, each read on open and cleared on its own.",
+      "route": "/notifications",
+      "files": [
+        "components/blocks/AppShell.tsx",
+        "components/blocks/AppShell.module.css",
+        "app/notifications/page.tsx",
+        "app/notifications/page.module.css",
+        "app/notifications/Inbox.tsx"
       ]
     },
     {

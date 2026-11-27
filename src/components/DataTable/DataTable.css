@@ -9,6 +9,17 @@
 
 @layer rift.tokens, rift.preset, rift.components;
 
+/* A pinned cell paints its row tint through this property, inside a
+   gradient over its opaque body. Registered as a colour so it can fade:
+   unregistered, it switched at once while the rest of the row faded its
+   background, so the pinned cell lit up a beat before the row caught up.
+   Browsers without @property switch it at once, as before. */
+@property --ds-dt-tint {
+  syntax: '<color>';
+  initial-value: transparent;
+  inherits: false;
+}
+
 @layer rift.components {
 
 .ds-data-table {
@@ -180,6 +191,9 @@
   z-index: 1;
   background-color: var(--color-table-body-bg);
   background-image: linear-gradient(var(--ds-dt-tint), var(--ds-dt-tint));
+  /* The row's own fade (.ds-table__row in Table.css), so the pinned
+     cells and the rest of the row change together. */
+  transition: --ds-dt-tint var(--motion-duration-base) var(--motion-ease-standard);
 }
 
 /* Body rows only: the header row is a row too, and never takes a hover tint. */
@@ -1364,6 +1378,39 @@
   margin-block-end: var(--gap-300);
   /* Banner is a page-wide strip; over a table it takes the frame's corner. */
   border-radius: var(--radius-300);
+}
+
+/* ============================================
+   FRAMELESS (`frameless`, `outerControl`)
+   Table.css draws the frameless table and its outer control on the
+   classes this table shares; this only fits DataTable's own frame and its
+   sticky cells to it. The frame drops its outline and surface and reaches
+   past its column by the tile's bleed, or by the outer control's 40px on
+   the start side. A sticky cell (a pinned column, a sticky header) keeps
+   an opaque base, the surface the table sits on rather than the bordered
+   table's body, and paints the frameless line and tile over it instead of
+   its own tint.
+   ============================================ */
+
+.ds-table__wrapper.ds-data-table__frame--frameless {
+  margin-inline: calc(-1 * var(--padding-400));
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.ds-table__wrapper.ds-data-table__frame--outer-control {
+  margin-inline-start: -40px; /* ds-allow(spacing): the outer control column, UTILITY_COLUMN_WIDTH */
+}
+
+.ds-table.ds-table--frameless .ds-data-table__cell--pinned,
+.ds-table.ds-table--frameless.ds-data-table__grid--sticky .ds-table__head .ds-table__header-cell {
+  --ds-table-base: var(--ds-table-surface, var(--color-bg-page-primary));
+
+  background-color: var(--ds-table-base);
+  background-image:
+    linear-gradient(var(--ds-table-line), var(--ds-table-line)),
+    linear-gradient(var(--ds-table-fill), var(--ds-table-fill));
 }
 
 } /* @layer rift.components */

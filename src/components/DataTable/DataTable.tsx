@@ -830,6 +830,23 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   columnLabels?: Partial<DataTableColumnLabels>;
   /** Draws a vertical line between columns, as well as the lines between rows. */
   columnDividers?: boolean;
+  /**
+   * Draws the table with no frame, as Table's `frameless` does: no outline,
+   * no header band and no column dividers, the first and last columns'
+   * content flush with the page, and a hovered row lifted into a raised
+   * tile that reaches past the columns. The page needs room for that reach
+   * on both sides (`--padding-400`). A phone's stacked cards keep their own
+   * look.
+   */
+  frameless?: boolean;
+  /**
+   * With `frameless`, hangs the first utility column (the row grip of
+   * `reorderableRows`, else the checkbox of `selectable`) as the row's outer
+   * control: inside the tile's start, showing on hover, on keyboard focus,
+   * when checked, or while any row is selected. The page needs 40px of room
+   * on the table's start side for it.
+   */
+  outerControl?: boolean;
   /** How every cell's text fits unless its column says otherwise: `wrap` (the default), `nowrap`, `truncate` or `lines-2`. */
   cellText?: DataTableCellText;
   /** The actions a row offers, in an actions column that sticks to the end edge: inline ones as icon buttons, the rest in a More menu. */
@@ -1011,6 +1028,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   onRowOrderChange,
   columnLabels,
   columnDividers = false,
+  frameless: framelessProp = false,
+  outerControl = false,
   cellText = 'wrap',
   rowActions,
   rowActionsVisibility = 'hover',
@@ -3657,12 +3676,16 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
 
   const hasChrome = searchable || Boolean(toolbar);
   const classes = [baseClass, refreshing ? `${baseClass}--refreshing` : '', className].filter(Boolean).join(' ');
+  // A phone's stacked cards are their own surface, so frameless is the grid's.
+  const frameless = framelessProp && !stacked;
+  const outer = frameless && outerControl && utilityKeys.length > 0;
   const tableClasses = [
     'ds-table',
     `ds-table--${size}`,
     striped ? 'ds-table--striped' : '',
-    'ds-table--bordered',
-    columnDividers ? 'ds-table--column-dividers' : '',
+    frameless ? 'ds-table--frameless' : 'ds-table--bordered',
+    outer ? 'ds-table--outer-control' : '',
+    columnDividers && !frameless ? 'ds-table--column-dividers' : '',
     layoutReady ? `${baseClass}__grid--fixed` : '',
     stickyHeader || virtual ? `${baseClass}__grid--sticky` : '',
     stacked ? `${baseClass}__grid--stacked` : '',
@@ -3716,7 +3739,18 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
           </span>
         )}
         {visibleRows.length > 0 || firstLoad ? (
-          <ScrollRegion className={`ds-table__wrapper ${baseClass}__frame`} style={frameStyle} onNode={setFrameEl}>
+          <ScrollRegion
+            className={[
+              'ds-table__wrapper',
+              `${baseClass}__frame`,
+              frameless ? `${baseClass}__frame--frameless` : '',
+              outer ? `${baseClass}__frame--outer-control` : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            style={frameStyle}
+            onNode={setFrameEl}
+          >
             {(refreshing || searching) && (
               <div className={`${baseClass}__progress`} role="progressbar" aria-label={loadWords.loading} />
             )}
@@ -3728,6 +3762,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
               role={gridMode ? 'grid' : stacked ? 'table' : undefined}
               aria-rowcount={virtual ? virtualItems.length + 1 : undefined}
               aria-multiselectable={gridMode && selectable ? true : undefined}
+              // While any row is selected a frameless table's outer controls all show.
+              data-selecting={selectable && currentSelection.length > 0 ? '' : undefined}
               style={
                 {
                   ...(layoutReady ? layoutVars(widthsState) : {}),
@@ -3812,7 +3848,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
             title={loadWords.errorTitle}
             description={error}
             action={retryButton || undefined}
-            variant="bordered"
+            variant={frameless ? 'plain' : 'bordered'}
             size="compact"
             role="alert"
           />
@@ -3822,7 +3858,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
               icon="search_off"
               title={emptyStateLabels?.title ?? 'No matching rows'}
               description={emptyStateLabels?.description ?? 'Adjust the search or filters and try again.'}
-              variant="bordered"
+              variant={frameless ? 'plain' : 'bordered'}
               size="compact"
             />
           ))

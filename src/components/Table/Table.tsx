@@ -7,6 +7,7 @@ import React from 'react';
 import './Table.css';
 import { ScrollRegion } from '../../behaviors/ScrollRegion';
 import '../../behaviors/visually-hidden.css';
+import { warnOnce } from '../../behaviors/devWarning';
 
 export interface TableColumn {
   /** Unique column identifier, used as the key into each row's cells */
@@ -54,6 +55,22 @@ type TableOwnProps = {
   bordered?: boolean;
   /** Draws a vertical line between columns, as well as the lines between rows. */
   columnDividers?: boolean;
+  /**
+   * Draws the table with no frame: no outline, no header band and no column
+   * dividers, the first and last columns' content flush with the page, and
+   * a hovered row lifted into a raised tile that reaches past the columns.
+   * The page needs room for that reach on both sides (`--padding-400`).
+   * Wins over `bordered`.
+   */
+  frameless?: boolean;
+  /**
+   * With `frameless`, makes the first column the row's outer control: a
+   * 40px column, its content centred, that sits inside the tile's start and
+   * shows on hover, on keyboard focus, when checked, or while any row's is
+   * checked. Put a drag grip or a checkbox in it. The page needs 40px of
+   * room on the table's start side for it.
+   */
+  outerControl?: boolean;
   /** Accessible caption for the table */
   caption?: string;
   /** Whether to visually hide the caption (still available to screen readers) */
@@ -84,6 +101,8 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
       striped = false,
       bordered = false,
       columnDividers = false,
+      frameless = false,
+      outerControl = false,
       caption,
       captionHidden = false,
       className = '',
@@ -92,13 +111,20 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
     ref,
   ) => {
     const baseClass = 'ds-table';
+    if (frameless && bordered) warnOnce('Table: `frameless` and `bordered` both set; frameless wins.');
+    const framed = bordered && !frameless;
+    const outer = frameless && outerControl;
+    // The outer control's column is centred whatever the column says.
+    const alignOf = (col: TableColumn, index: number) => (outer && index === 0 ? 'center' : col.align);
 
     const classes = [
       baseClass,
       `${baseClass}--${size}`,
       striped ? `${baseClass}--striped` : '',
-      bordered ? `${baseClass}--bordered` : '',
-      columnDividers ? `${baseClass}--column-dividers` : '',
+      framed ? `${baseClass}--bordered` : '',
+      columnDividers && !frameless ? `${baseClass}--column-dividers` : '',
+      frameless ? `${baseClass}--frameless` : '',
+      outer ? `${baseClass}--outer-control` : '',
       className,
     ]
       .filter(Boolean)
@@ -106,7 +132,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
 
     // A bordered table draws its visible caption outside the outline (see
     // the frame rule in Table.css), so the <caption> itself is hidden.
-    const outsideCaption = bordered && caption && !captionHidden;
+    const outsideCaption = framed && caption && !captionHidden;
 
     const table = (
       <table {...rest} ref={ref} className={classes}>
@@ -122,7 +148,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
 
         <thead className={`${baseClass}__head`}>
           <tr className={`${baseClass}__row ${baseClass}__row--header`}>
-            {columns.map((col) => (
+            {columns.map((col, index) => (
               <th
                 key={col.key}
                 className={`${baseClass}__header-cell`}
@@ -130,7 +156,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
                 aria-sort={col.sort === 'asc' ? 'ascending' : col.sort === 'desc' ? 'descending' : undefined}
                 style={{
                   width: col.width,
-                  textAlign: col.align || 'start',
+                  textAlign: alignOf(col, index) || 'start',
                 }}
               >
                 {/* An empty header cell is unannounced — fall back to the
@@ -153,7 +179,8 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
                 .filter(Boolean)
                 .join(' ')}
             >
-              {columns.map((col) => {
+              {columns.map((col, index) => {
+                const align = alignOf(col, index);
                 const content = (
                   <div
                     className={`${baseClass}__cell-content${col.mono ? ` ${baseClass}__cell-content--mono` : ''}`}
@@ -161,12 +188,12 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
                       // flex-start and flex-end follow the reading direction;
                       // left and right stay on their screen side.
                       justifyContent:
-                        col.align === 'center'
+                        align === 'center'
                           ? 'center'
-                          : col.align === 'end'
+                          : align === 'end'
                             ? 'flex-end'
-                            : col.align === 'left' || col.align === 'right'
-                              ? col.align
+                            : align === 'left' || align === 'right'
+                              ? align
                               : 'flex-start',
                     }}
                   >
@@ -191,7 +218,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
 
     // The bordered wrapper is the table's scroll container: a named,
     // focusable region while it overflows, a plain div while it fits.
-    if (bordered) {
+    if (framed) {
       const region = <ScrollRegion className={`${baseClass}__wrapper`}>{table}</ScrollRegion>;
       if (!outsideCaption) return region;
       return (
@@ -207,7 +234,16 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
     // The plain table scrolls in a borderless container of its own, the
     // same region as the bordered one, so a wide table scrolls inside its
     // column rather than running off the page.
-    return <ScrollRegion className={`${baseClass}__scroll`}>{table}</ScrollRegion>;
+    // A frameless table's scroll container reaches past its column by the
+    // tile's bleed (and the outer control's width) so the tile has room.
+    const scrollClasses = [
+      `${baseClass}__scroll`,
+      frameless ? `${baseClass}__scroll--frameless` : '',
+      outer ? `${baseClass}__scroll--outer-control` : '',
+    ]
+      .filter(Boolean)
+      .join(' ');
+    return <ScrollRegion className={scrollClasses}>{table}</ScrollRegion>;
   },
 );
 

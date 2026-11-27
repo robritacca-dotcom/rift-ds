@@ -1402,3 +1402,102 @@ export const ControlledView: Story = {
     await waitFor(() => expect(canvas.getAllByRole('row').length).toBeGreaterThan(3));
   },
 };
+
+/* ============================================
+   FRAMELESS
+   Table's frameless look on the data table: no outline or header band,
+   flush content, the raised tile on hover, and with `outerControl` the
+   grip or checkbox inside the tile's start.
+   ============================================ */
+
+const framelessRoom = (Story: () => React.ReactNode) => (
+  <div style={{ paddingInline: '56px' }}>
+    <Story />
+  </div>
+);
+
+const firstCellControl = (canvasElement: HTMLElement, row: number) => {
+  const cell = canvasElement.querySelectorAll<HTMLElement>('tbody tr')[row]?.children[0];
+  if (!cell) throw new Error(`no row ${row}`);
+  return cell.firstElementChild as HTMLElement;
+};
+
+export const Frameless: Story = {
+  args: { frameless: true, pageSize: 6 },
+  decorators: [framelessRoom],
+  play: async ({ canvasElement }) => {
+    const table = canvasElement.querySelector('table')!;
+    await expect(table).toHaveClass('ds-table--frameless');
+    await expect(table).not.toHaveClass('ds-table--bordered');
+    await expect(canvasElement.querySelector('.ds-data-table__frame--frameless')).not.toBeNull();
+  },
+};
+
+export const FramelessCompact: Story = {
+  name: 'Frameless (compact)',
+  args: { frameless: true, size: 'compact', pageSize: 6 },
+  decorators: [framelessRoom],
+};
+
+/** The checkbox hangs as the outer control; while any row is selected every row's shows, and selected rows meet at a seam. */
+export const FramelessSelectable: Story = {
+  name: 'Frameless (selectable, outer control)',
+  args: { frameless: true, outerControl: true, selectable: true, pageSize: 6 },
+  decorators: [framelessRoom],
+  play: async ({ canvasElement }) => {
+    const table = canvasElement.querySelector('table')!;
+    await expect(table).toHaveClass('ds-table--outer-control');
+    await expect(table).not.toHaveAttribute('data-selecting');
+    if (matchMedia('(hover: hover)').matches) {
+      await expect(getComputedStyle(firstCellControl(canvasElement, 3)).opacity).toBe('0');
+    }
+    const boxes = within(canvasElement).getAllByRole('checkbox');
+    await userEvent.click(boxes[1]);
+    await userEvent.click(boxes[2]);
+    await expect(table).toHaveAttribute('data-selecting');
+    await waitFor(() => expect(getComputedStyle(firstCellControl(canvasElement, 4)).opacity).toBe('1'));
+    // Two selected rows next to each other meet at a seam, not a merged slab.
+    const upper = canvasElement.querySelectorAll<HTMLElement>('tbody tr')[0].children[2] as HTMLElement;
+    await expect(getComputedStyle(upper).getPropertyValue('--ds-table-line').trim()).not.toBe('transparent');
+  },
+};
+
+export const FramelessReorder: Story = {
+  name: 'Frameless (row grip, outer control)',
+  args: {
+    columns: columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col)),
+    rows: rows.slice(0, 5),
+    reorderableRows: true,
+    frameless: true,
+    outerControl: true,
+    caption: 'Queue',
+  },
+  decorators: [framelessRoom],
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelector('table')).toHaveClass('ds-table--outer-control');
+    // Keyboard focus reveals the grip (a test cannot hold a real :hover).
+    const grips = canvasElement.querySelectorAll<HTMLElement>('.ds-data-table__grip');
+    await userEvent.keyboard('{Shift}');
+    grips[0].focus();
+    await expect(grips[0].matches(':focus-visible')).toBe(true);
+    await waitFor(() => expect(getComputedStyle(firstCellControl(canvasElement, 0)).opacity).toBe('1'));
+  },
+};
+
+export const FramelessPinned: Story = {
+  name: 'Frameless (pinned column)',
+  args: { columns: wideColumns, frameless: true, caption: 'Orders', pageSize: 6 },
+  decorators: [
+    (Story) => (
+      <div style={{ paddingInline: '56px', maxWidth: '520px' }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const pinned = canvasElement.querySelector<HTMLElement>('tbody .ds-data-table__cell--pinned')!;
+    // A pinned cell stays opaque on the surface it sits on, so rows scroll under it unseen.
+    await expect(getComputedStyle(pinned).backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+  },
+};
+

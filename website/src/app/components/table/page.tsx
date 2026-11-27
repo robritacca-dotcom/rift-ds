@@ -29,6 +29,51 @@ const basicRows = [
   { id: "4", cells: { name: "Dan Petrov", role: "Data Analyst", email: "dan@example.com" } },
 ];
 
+/* The outer control demo: a checkbox per row, its selection held here so
+   selected rows show the tint and two together meet at a seam. */
+function OuterControlDemo() {
+  const [selected, setSelected] = React.useState<string[]>(["2", "3"]);
+  const toggle = (id: string) =>
+    setSelected((ids) => (ids.includes(id) ? ids.filter((i) => i !== id) : [...ids, id]));
+  const all = selected.length === basicRows.length;
+  return (
+    <Table
+      frameless
+      outerControl
+      columns={[
+        {
+          key: "select",
+          header: (
+            <Checkbox
+              size="compact"
+              aria-label="Select all"
+              checked={all}
+              indeterminate={selected.length > 0 && !all}
+              onCheckedChange={() => setSelected(all ? [] : basicRows.map((row) => row.id))}
+            />
+          ),
+        },
+        ...basicColumns,
+      ]}
+      rows={basicRows.map((row) => ({
+        ...row,
+        selected: selected.includes(row.id),
+        cells: {
+          ...row.cells,
+          select: (
+            <Checkbox
+              size="compact"
+              aria-label={`Select ${row.cells.name}`}
+              checked={selected.includes(row.id)}
+              onCheckedChange={() => toggle(row.id)}
+            />
+          ),
+        },
+      }))}
+    />
+  );
+}
+
 export default function TablePage() {
   return (
     <div className={styles.dsContent}>
@@ -70,6 +115,28 @@ export default function TablePage() {
         <SectionTitle title="Striped" />
         <div className={styles.tableWrapper}>
           <Table columns={basicColumns} rows={basicRows} striped bordered />
+        </div>
+      </section>
+
+      {/* Frameless */}
+      <section className={styles.section}>
+        <SectionTitle title="Frameless" />
+        <div>
+          <Table columns={basicColumns} rows={basicRows} frameless />
+          <p className={styles.kitNote}>
+            No outline, header band or column dividers: the first and last columns line up with the page, and a hovered row lifts into a raised tile that reaches past them. The page needs a little room on both sides for that reach.
+          </p>
+        </div>
+      </section>
+
+      {/* Outer control */}
+      <section className={styles.section}>
+        <SectionTitle title="Outer control" />
+        <div>
+          <OuterControlDemo />
+          <p className={styles.kitNote}>
+            With <code>outerControl</code>, a frameless table’s first column holds the row’s control, a checkbox here or a drag grip, inside the start of the tile. It shows on hover, on focus and while any row is selected.
+          </p>
         </div>
       </section>
 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect } from 'storybook/test';
+import { expect, userEvent, waitFor } from 'storybook/test';
 import { Badge } from '../Badge/Badge';
 import { Table } from './Table';
 import { Button } from '../Button/Button';
@@ -452,3 +452,95 @@ export const PropsReference: Story = {
     ],
   },
 };
+
+/* ============================================
+   FRAMELESS
+   No outline, no header band, the outer columns' content flush with the
+   page, and a raised tile on the hovered row. The frame gives the tile its
+   reach (and the outer control its column) as page margin.
+   ============================================ */
+
+const framelessRoom = (Story: () => React.ReactNode) => (
+  <div style={{ paddingInline: '56px' }}>
+    <Story />
+  </div>
+);
+
+const cellOf = (canvasElement: HTMLElement, row: number, col = 1) => {
+  const cell = canvasElement.querySelectorAll<HTMLElement>('tbody tr')[row]?.children[col] as HTMLElement | undefined;
+  if (!cell) throw new Error(`no cell at row ${row}`);
+  return cell;
+};
+
+export const Frameless: Story = {
+  args: { columns: textColumns, rows: textRows, frameless: true },
+  decorators: [framelessRoom],
+  play: async ({ canvasElement }) => {
+    const table = canvasElement.querySelector('table')!;
+    await expect(table).toHaveClass('ds-table--frameless');
+    await expect(table).not.toHaveClass('ds-table--bordered');
+    await expect(canvasElement.querySelector('.ds-table__scroll--frameless')).not.toBeNull();
+    // The first column's content lines up with the frame the table sits in.
+    const frame = canvasElement.querySelector('.ds-table__scroll')!.parentElement!.getBoundingClientRect();
+    const firstText = cellOf(canvasElement, 0, 0).querySelector('.ds-table__cell-content')!.getBoundingClientRect();
+    await expect(Math.round(firstText.left - frame.left)).toBe(56);
+    // Rows keep their dividers; the last row ends the table with none.
+    const line = (row: number) => getComputedStyle(cellOf(canvasElement, row)).getPropertyValue('--ds-table-line').trim();
+    await expect(line(0)).not.toBe('transparent');
+    await expect(line(textRows.length - 1)).toBe('transparent');
+  },
+};
+
+export const FramelessCompact: Story = {
+  name: 'Frameless (compact)',
+  args: { columns: textColumns, rows: textRows, frameless: true, size: 'compact' },
+  decorators: [framelessRoom],
+};
+
+export const FramelessWithTotal: Story = {
+  name: 'Frameless (with total)',
+  args: { columns: textColumns, rows: totalRows, frameless: true },
+  decorators: [framelessRoom],
+  play: async ({ canvasElement }) => {
+    await expect(totalRuleOf(canvasElement)).toBe('solid true');
+  },
+};
+
+const selectColumns = [{ key: 'select', header: <Checkbox size="compact" aria-label="Select all" /> }, ...textColumns];
+const selectRows = textRows.map((row) => ({
+  ...row,
+  cells: { ...row.cells, select: <Checkbox size="compact" aria-label={`Select ${row.cells.name}`} /> },
+}));
+
+const controlOf = (canvasElement: HTMLElement, row: number) =>
+  cellOf(canvasElement, row, 0).firstElementChild as HTMLElement;
+
+/** The first column hangs as the row's outer control: inside the tile's start, shown on hover, focus or when checked. */
+export const FramelessOuterControl: Story = {
+  name: 'Frameless (outer control)',
+  args: { columns: selectColumns, rows: selectRows, frameless: true, outerControl: true },
+  decorators: [framelessRoom],
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelector('table')).toHaveClass('ds-table--outer-control');
+    // The content still lines up with the frame; the control sits in the 40px before it.
+    const frame = canvasElement.querySelector('.ds-table__scroll')!.parentElement!.getBoundingClientRect();
+    const nameCell = cellOf(canvasElement, 0, 1).querySelector('.ds-table__cell-content')!.getBoundingClientRect();
+    await expect(Math.round(nameCell.left - frame.left)).toBe(56);
+    // Hidden at rest where there is hover. (A test cannot hold a real
+    // :hover, so the reveal is checked by keyboard focus, which shows the
+    // control and the tile the same way.)
+    const hoverable = matchMedia('(hover: hover)').matches;
+    if (hoverable) await expect(getComputedStyle(controlOf(canvasElement, 2)).opacity).toBe('0');
+    // A key press first, so the focus that follows is keyboard focus.
+    const first = controlOf(canvasElement, 0).querySelector<HTMLElement>('[role="checkbox"]')!;
+    await userEvent.keyboard('{Shift}');
+    first.focus();
+    await expect(first.matches(':focus-visible')).toBe(true);
+    await waitFor(() => expect(getComputedStyle(controlOf(canvasElement, 0)).opacity).toBe('1'));
+    if (hoverable) await expect(getComputedStyle(controlOf(canvasElement, 2)).opacity).toBe('0');
+    // Checking one shows every row's control while any is checked.
+    await userEvent.keyboard(' ');
+    await waitFor(() => expect(getComputedStyle(controlOf(canvasElement, 3)).opacity).toBe('1'));
+  },
+};
+

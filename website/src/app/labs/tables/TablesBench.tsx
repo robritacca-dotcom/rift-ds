@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Button } from "rift-ds/components/Button/Button";
 import { DataTable } from "rift-ds/components/DataTable/DataTable";
+import { Icon } from "rift-ds/components/Icon/Icon";
 import { Prose } from "rift-ds/components/Prose/Prose";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { Table } from "rift-ds/components/Table/Table";
@@ -507,6 +508,50 @@ export function TablesBench() {
         note="What a table shows instead of its rows: no data yet, no rows matching the search, the first load, a failed load, and a refetch that failed over rows already shown. Open the table in a Dialog or a Drawer, open a menu inside it, and Escape closes the menu first, then the overlay, and focus comes back to the button."
       >
         {({ size, lines }) => <LoadStatesTable size={size} lines={lines} />}
+      </Station>
+
+      <Station
+        id="bench-frameless"
+        title="19. Frameless"
+        note="No outline, header band or column dividers; the outer columns' content flush with the page and a raised tile on the hovered row. The Table hangs a drag grip as its outer control, the DataTable its row checkbox, with two rows selected so their seam shows; the DataTable's Project column is pinned."
+        tunable="density"
+      >
+        {({ size }) => (
+          <div className={styles.framelessRoom}>
+            <Table
+              frameless
+              outerControl
+              size={size}
+              columns={[
+                { key: "grip", header: "" },
+                { key: "a", header: "Project" },
+                { key: "b", header: "Owner" },
+                { key: "c", header: "Due", align: "end" },
+              ]}
+              rows={projectRows.slice(0, 4).map((r) => ({
+                id: r.id,
+                cells: {
+                  grip: <Icon name="drag_indicator" size="500" tone="neutral" />,
+                  a: r.values.name,
+                  b: r.values.owner,
+                  c: r.values.due,
+                },
+              }))}
+              caption="Frameless table"
+            />
+            <DataTable
+              frameless
+              outerControl
+              selectable
+              size={size}
+              columns={listColumns.map((col, index) => (index === 0 ? { ...col, pin: "start" as const } : col))}
+              rows={projectRows}
+              defaultPageSize={5}
+              defaultSelectedIds={[projectRows[1].id, projectRows[2].id]}
+              caption="Frameless projects"
+            />
+          </div>
+        )}
       </Station>
     </div>
   );

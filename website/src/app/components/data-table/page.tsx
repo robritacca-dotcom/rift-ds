@@ -13,6 +13,7 @@ import {
   ControlledViewDemo,
   DetailsDemo,
   EditingDemo,
+  FramelessDemo,
   GroupingDemo,
   OverviewDemo,
   PeriodsDemo,
@@ -80,6 +81,18 @@ export default function DataTablePage() {
           under it.
         </p>
         <ColumnsDemo />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Frameless" />
+        <p className={styles.demoText}>
+          No outline, header band or column dividers: the first and last
+          columns line up with the page, and a hovered row lifts into a
+          raised tile. With outerControl the row checkbox, or the grip of
+          reorderable rows, sits inside the start of the tile, showing on
+          hover, on focus and while any row is selected.
+        </p>
+        <FramelessDemo />
       </section>
 
       <section className={styles.section}>

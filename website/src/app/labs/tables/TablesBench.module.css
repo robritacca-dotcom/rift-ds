@@ -166,3 +166,13 @@
   margin: 0;
   color: var(--color-text-secondary);
 }
+
+/* The frameless tables reach past their column (the tile's bleed, the
+   outer control's 40px), so their station gives them that room. */
+.framelessRoom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-1000);
+  padding-inline: var(--padding-1000);
+}
+

@@ -168,6 +168,21 @@ export function ColumnsDemo() {
   );
 }
 
+/** The frameless look, with the row checkbox hung as the outer control. */
+export function FramelessDemo() {
+  return (
+    <DataTable
+      columns={pick("account", "owner", "stage", "value")}
+      rows={ACCOUNTS_ROWS.slice(0, 5)}
+      frameless
+      outerControl
+      selectable
+      defaultSelectedIds={[ACCOUNTS_ROWS[1].id, ACCOUNTS_ROWS[2].id]}
+      caption="Accounts, frameless"
+    />
+  );
+}
+
 /** Edit a cell in place; the rows live in this component's state. */
 export function EditingDemo() {
   const [rows, setRows] = useState(() => ACCOUNTS_ROWS.slice(0, 4));

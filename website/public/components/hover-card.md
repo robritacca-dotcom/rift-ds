@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same dat
 - Import: `import { HoverCard } from 'rift-ds';`
 - Deep import: `import { HoverCard } from 'rift-ds/components/HoverCard/HoverCard';`
 - Rendering: client component (declares 'use client')
-- Size: 2.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 2.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/hover-card
 - Schema: https://rift-ds.com/schema/components/hover-card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

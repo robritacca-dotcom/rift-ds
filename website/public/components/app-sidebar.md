@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same dat
 - Import: `import { AppSidebar } from 'rift-ds';`
 - Deep import: `import { AppSidebar } from 'rift-ds/components/AppSidebar/AppSidebar';`
 - Rendering: client component (declares 'use client')
-- Size: 16.4 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 16.5 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/app-sidebar
 - Schema: https://rift-ds.com/schema/components/app-sidebar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

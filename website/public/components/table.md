@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same dat
 - Import: `import { Table } from 'rift-ds';`
 - Deep import: `import { Table } from 'rift-ds/components/Table/Table';`
 - Rendering: server-renderable (no 'use client')
-- Size: 1.1 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 1.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/table
 - Schema: https://rift-ds.com/schema/components/table.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -27,7 +27,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same dat
 | bordered | `boolean` | no | `false` | Adds an outer border + border-radius container, a tinted thead background, and `--color-divider` row lines — matching the bordered table style used on markdown content pages. |
 | columnDividers | `boolean` | no | `false` | Draws a vertical line between columns, as well as the lines between rows. |
 | frameless | `boolean` | no | `false` | Draws the table with no frame: no outline, no header band and no column dividers, the first and last columns' content flush with the page, and a hovered row lifted into a raised tile that reaches past the columns. The page needs room for that reach on both sides (`--padding-400`). Wins over `bordered`. |
-| outerControl | `boolean` | no | `false` | With `frameless`, makes the first column the row's outer control: a 40px column, its content centred, that sits inside the tile's start and shows on hover, on keyboard focus, when checked, or while any row's is checked. Put a drag grip or a checkbox in it. The page needs 40px of room on the table's start side for it. |
+| outerControl | `boolean` | no | `false` | With `frameless`, makes the first column the row's outer control: a 40px column, its content centred, that sits inside the tile's start and shows on hover, on keyboard focus, when checked, or while any row's is checked. Put a drag grip or a checkbox in it. The page needs 40px of room on the table's start side for it. Leave at least one other column without a width: when every column has one, the browser stretches them all, the control's with them. |
 | caption | `string` | no |  | Accessible caption for the table |
 | captionHidden | `boolean` | no | `false` | Whether to visually hide the caption (still available to screen readers) |
 | className | `string` | no | `''` | Additional CSS classes |

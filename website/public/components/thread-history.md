@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same dat
 - Import: `import { ThreadHistory } from 'rift-ds';`
 - Deep import: `import { ThreadHistory } from 'rift-ds/components/ThreadHistory/ThreadHistory';`
 - Rendering: server-renderable (no 'use client')
-- Size: 10.7 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 10.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/thread-history
 - Schema: https://rift-ds.com/schema/components/thread-history.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

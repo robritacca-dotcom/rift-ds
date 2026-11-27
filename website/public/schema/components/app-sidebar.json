@@ -512,7 +512,7 @@
     "note": "In its drawer form (below the mobile breakpoint, or when its host asks) the rail is a modal drawer: opening moves focus inside, Tab stays inside, and Escape closes it."
   },
   "size": {
-    "gzip": 16446
+    "gzip": 16506
   },
   "alternatives": [
     {

@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same dat
 - Import: `import { DrillMenu } from 'rift-ds';`
 - Deep import: `import { DrillMenu } from 'rift-ds/components/DrillMenu/DrillMenu';`
 - Rendering: client component (declares 'use client')
-- Size: 6.7 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/drill-menu
 - Schema: https://rift-ds.com/schema/components/drill-menu.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

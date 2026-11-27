@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same dat
 - Import: `import { SubNavPanel } from 'rift-ds';`
 - Deep import: `import { SubNavPanel } from 'rift-ds/components/SubNavPanel/SubNavPanel';`
 - Rendering: client component (declares 'use client')
-- Size: 6.1 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/sub-nav-panel
 - Schema: https://rift-ds.com/schema/components/sub-nav-panel.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

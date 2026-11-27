@@ -19700,7 +19700,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "outerControl",
             "type": "boolean",
             "required": false,
-            "description": "With `frameless`, makes the first column the row's outer control: a\n40px column, its content centred, that sits inside the tile's start and\nshows on hover, on keyboard focus, when checked, or while any row's is\nchecked. Put a drag grip or a checkbox in it. The page needs 40px of\nroom on the table's start side for it.",
+            "description": "With `frameless`, makes the first column the row's outer control: a\n40px column, its content centred, that sits inside the tile's start and\nshows on hover, on keyboard focus, when checked, or while any row's is\nchecked. Put a drag grip or a checkbox in it. The page needs 40px of\nroom on the table's start side for it. Leave at least one other column\nwithout a width: when every column has one, the browser stretches them\nall, the control's with them.",
             "defaultValue": "false"
           },
           {

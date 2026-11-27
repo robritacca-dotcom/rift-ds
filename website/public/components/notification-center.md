@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same dat
 - Import: `import { NotificationCenter } from 'rift-ds';`
 - Deep import: `import { NotificationCenter } from 'rift-ds/components/NotificationCenter/NotificationCenter';`
 - Rendering: client component (declares 'use client')
-- Size: 13.4 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 13.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/notification-center
 - Schema: https://rift-ds.com/schema/components/notification-center.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

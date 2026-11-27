@@ -176,7 +176,7 @@
     "note": "Its rows are links and buttons, and the browser owns Tab, Enter and Space. A step moves focus to the new level’s title, and back to the row it came from on the way out."
   },
   "size": {
-    "gzip": 6651
+    "gzip": 6771
   },
   "alternatives": [
     {

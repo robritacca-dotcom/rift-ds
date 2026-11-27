@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same dat
 - Import: `import { Popover } from 'rift-ds';`
 - Deep import: `import { Popover } from 'rift-ds/components/Popover/Popover';`
 - Rendering: client component (declares 'use client')
-- Size: 2.8 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 2.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/popover
 - Schema: https://rift-ds.com/schema/components/popover.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

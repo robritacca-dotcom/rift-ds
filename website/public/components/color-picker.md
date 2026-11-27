@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same dat
 - Import: `import { ColorPicker } from 'rift-ds';`
 - Deep import: `import { ColorPicker } from 'rift-ds/components/ColorPicker/ColorPicker';`
 - Rendering: client component (declares 'use client')
-- Size: 4.8 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 4.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/color-picker
 - Schema: https://rift-ds.com/schema/components/color-picker.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

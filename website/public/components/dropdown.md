@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same dat
 - Import: `import { Dropdown } from 'rift-ds';`
 - Deep import: `import { Dropdown } from 'rift-ds/components/Dropdown/Dropdown';`
 - Rendering: client component (declares 'use client')
-- Size: 5.0 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 5.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/dropdown
 - Schema: https://rift-ds.com/schema/components/dropdown.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

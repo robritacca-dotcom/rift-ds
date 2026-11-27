@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.40.0. The same dat
 - Import: `import { RichDropdown } from 'rift-ds';`
 - Deep import: `import { RichDropdown } from 'rift-ds/components/RichDropdown/RichDropdown';`
 - Rendering: client component (declares 'use client')
-- Size: 5.9 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/rich-dropdown
 - Schema: https://rift-ds.com/schema/components/rich-dropdown.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

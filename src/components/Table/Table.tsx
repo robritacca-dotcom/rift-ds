@@ -68,7 +68,9 @@ type TableOwnProps = {
    * 40px column, its content centred, that sits inside the tile's start and
    * shows on hover, on keyboard focus, when checked, or while any row's is
    * checked. Put a drag grip or a checkbox in it. The page needs 40px of
-   * room on the table's start side for it.
+   * room on the table's start side for it. Leave at least one other column
+   * without a width: when every column has one, the browser stretches them
+   * all, the control's with them.
    */
   outerControl?: boolean;
   /** Accessible caption for the table */

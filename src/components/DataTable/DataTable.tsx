@@ -1660,6 +1660,16 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     setMeasured(next);
   }, [needsMeasure, measured, tableEl, byKey, cellText]);
   const layoutReady = fixedLayout && !needsMeasure;
+  // A phone's stacked cards are their own surface, so frameless is the grid's.
+  const frameless = framelessProp && !stacked;
+  const outer = frameless && outerControl && utilityKeys.length > 0;
+  /* The filler column takes the width the columns leave over. The fixed
+     grid always draws it; a browser-laid-out table draws it too when it has
+     an outer control, because when every column has a width the browser
+     would otherwise stretch them all, the 40px control column with them,
+     and the content would leave the page's edge. Empty, it takes nothing
+     when some column has no width. */
+  const withFiller = layoutReady || outer;
 
   /* A column never gets narrower than its header needs: its padding, a
        little of its label, and the controls it carries, so a resize can
@@ -3134,7 +3144,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
             </td>
           );
         })}
-        {layoutReady && <td className={`ds-table__cell ${baseClass}__filler`} role="presentation" aria-hidden="true" />}
+        {withFiller && <td className={`ds-table__cell ${baseClass}__filler`} role="presentation" aria-hidden="true" />}
         {showActions && (
           <td
             className={`ds-table__cell ${baseClass}__actions ${baseClass}__cell--pinned ${baseClass}__cell--pinned-end${actionsEdge}`}
@@ -3209,7 +3219,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
             </td>
           );
         })}
-        {layoutReady && <td className={`ds-table__cell ${baseClass}__filler`} role="presentation" aria-hidden="true" />}
+        {withFiller && <td className={`ds-table__cell ${baseClass}__filler`} role="presentation" aria-hidden="true" />}
         {showActions && (
           <td
             className={`ds-table__cell ${baseClass}__actions ${baseClass}__cell--pinned ${baseClass}__cell--pinned-end${actionsEdge}`}
@@ -3495,7 +3505,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
             </Cell>
           );
         })}
-        {layoutReady && <td className={`ds-table__cell ${baseClass}__filler`} role="presentation" aria-hidden="true" />}
+        {withFiller && <td className={`ds-table__cell ${baseClass}__filler`} role="presentation" aria-hidden="true" />}
         {showActions && (
           <td
             data-col="ds-data-table-actions"
@@ -3669,16 +3679,13 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
           </div>
         </td>
       ))}
-      {layoutReady && <td className={`ds-table__cell ${baseClass}__filler`} />}
+      {withFiller && <td className={`ds-table__cell ${baseClass}__filler`} />}
       {showActions && <td className="ds-table__cell" />}
     </tr>
   ));
 
   const hasChrome = searchable || Boolean(toolbar);
   const classes = [baseClass, refreshing ? `${baseClass}--refreshing` : '', className].filter(Boolean).join(' ');
-  // A phone's stacked cards are their own surface, so frameless is the grid's.
-  const frameless = framelessProp && !stacked;
-  const outer = frameless && outerControl && utilityKeys.length > 0;
   const tableClasses = [
     'ds-table',
     `ds-table--${size}`,
@@ -3777,7 +3784,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                 <tr className="ds-table__row ds-table__row--header">
                   {utilityKeys.map(utilityHeader)}
                   {visibleKeys.map(header)}
-                  {layoutReady && (
+                  {withFiller && (
                     <th
                       className={`ds-table__header-cell ${baseClass}__filler`}
                       role="presentation"

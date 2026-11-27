@@ -170,6 +170,11 @@
 /* The frameless tables reach past their column (the tile's bleed, the
    outer control's 40px), so their station gives them that room. */
 .framelessRoom {
+  /* A station is a card, not the page: the frameless tables' sticky cells
+     and seams take the card's colour, and the hover tile steps off it. */
+  --ds-table-surface: var(--color-bg-container-primary);
+  --ds-table-tile: var(--color-bg-container-secondary);
+
   display: flex;
   flex-direction: column;
   gap: var(--gap-1000);

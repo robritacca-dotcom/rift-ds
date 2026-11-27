@@ -73,6 +73,22 @@
           "default": false
         },
         {
+          "name": "frameless",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws the table with no frame: no outline, no header band and no column\ndividers, the first and last columns' content flush with the page, and\na hovered row lifted into a raised tile that reaches past the columns.\nThe page needs room for that reach on both sides (`--padding-400`).\nWins over `bordered`.",
+          "default": false
+        },
+        {
+          "name": "outerControl",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "With `frameless`, makes the first column the row's outer control: a\n40px column, its content centred, that sits inside the tile's start and\nshows on hover, on keyboard focus, when checked, or while any row's is\nchecked. Put a drag grip or a checkbox in it. The page needs 40px of\nroom on the table's start side for it.",
+          "default": false
+        },
+        {
           "name": "caption",
           "type": "string",
           "typeKind": "primitive",

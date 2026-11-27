@@ -7630,6 +7630,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
+            "name": "frameless",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws the table with no frame, as Table's `frameless` does: no outline,\nno header band and no column dividers, the first and last columns'\ncontent flush with the page, and a hovered row lifted into a raised\ntile that reaches past the columns. The page needs room for that reach\non both sides (`--padding-400`). A phone's stacked cards keep their own\nlook.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "outerControl",
+            "type": "boolean",
+            "required": false,
+            "description": "With `frameless`, hangs the first utility column (the row grip of\n`reorderableRows`, else the checkbox of `selectable`) as the row's outer\ncontrol: inside the tile's start, showing on hover, on keyboard focus,\nwhen checked, or while any row is selected. The page needs 40px of room\non the table's start side for it.",
+            "defaultValue": "false"
+          },
+          {
             "name": "cellText",
             "type": "DataTableCellText",
             "required": false,
@@ -19673,6 +19687,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "boolean",
             "required": false,
             "description": "Draws a vertical line between columns, as well as the lines between rows.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "frameless",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws the table with no frame: no outline, no header band and no column\ndividers, the first and last columns' content flush with the page, and\na hovered row lifted into a raised tile that reaches past the columns.\nThe page needs room for that reach on both sides (`--padding-400`).\nWins over `bordered`.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "outerControl",
+            "type": "boolean",
+            "required": false,
+            "description": "With `frameless`, makes the first column the row's outer control: a\n40px column, its content centred, that sits inside the tile's start and\nshows on hover, on keyboard focus, when checked, or while any row's is\nchecked. Put a drag grip or a checkbox in it. The page needs 40px of\nroom on the table's start side for it.",
             "defaultValue": "false"
           },
           {

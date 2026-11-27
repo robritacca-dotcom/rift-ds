@@ -762,6 +762,22 @@
           "default": false
         },
         {
+          "name": "frameless",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws the table with no frame, as Table's `frameless` does: no outline,\nno header band and no column dividers, the first and last columns'\ncontent flush with the page, and a hovered row lifted into a raised\ntile that reaches past the columns. The page needs room for that reach\non both sides (`--padding-400`). A phone's stacked cards keep their own\nlook.",
+          "default": false
+        },
+        {
+          "name": "outerControl",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "With `frameless`, hangs the first utility column (the row grip of\n`reorderableRows`, else the checkbox of `selectable`) as the row's outer\ncontrol: inside the tile's start, showing on hover, on keyboard focus,\nwhen checked, or while any row is selected. The page needs 40px of room\non the table's start side for it.",
+          "default": false
+        },
+        {
           "name": "cellText",
           "type": "DataTableCellText",
           "typeKind": "enum",

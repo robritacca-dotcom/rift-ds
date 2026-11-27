@@ -100,33 +100,17 @@
   color: var(--color-text-secondary);
 }
 
-/* Colour */
+/* Colour: compact swatches in even columns, as many as the row holds. */
 .swatchGrid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* the compact swatch's floor */
   gap: var(--gap-400);
 }
 
-/* A wrapper the card is measured through; it takes the card's flex sizing. */
+/* A wrapper the card is measured through; the card fills it. */
 .swatch {
   display: flex;
-  flex: 1 1 0;
-}
-
-.seriesBars {
-  display: flex;
-  align-items: flex-end;
-  gap: var(--gap-200);
-  height: 120px;
-  padding: var(--padding-400);
-  border-radius: var(--radius-600);
-  background: var(--color-bg-container-primary);
-  border: var(--border-025) solid var(--color-bg-container-border);
-}
-
-.seriesBar {
-  flex: 1;
-  border-radius: var(--radius-200) var(--radius-200) 0 0;
+  min-width: 0;
 }
 
 /* Typography */

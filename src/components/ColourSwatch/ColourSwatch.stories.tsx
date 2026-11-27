@@ -49,6 +49,16 @@ export const PrimaryUI: Story = {
   },
 };
 
+/** Compact: a ramp-cell chip with the label and hex under it, for a page of many colours (the theme specimens). */
+export const Compact: Story = {
+  args: {
+    label: 'Primary',
+    cssVar: '--color-core-ui-primary',
+    size: 'compact',
+    dark: { hex: '#3CA5C6', rgb: '60 / 165 / 198' },
+  },
+};
+
 /** Accent colour */
 export const AccentRed: Story = {
   args: {

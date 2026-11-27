@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Alert } from "rift-ds/components/Alert/Alert";
 import { Avatar } from "rift-ds/components/Avatar/Avatar";
 import { Badge } from "rift-ds/components/Badge/Badge";
@@ -20,6 +20,7 @@ import { Textarea } from "rift-ds/components/Textarea/Textarea";
 import { ToggleSwitch } from "rift-ds/components/ToggleSwitch/ToggleSwitch";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import { installScopedThemes, THEME_SCOPE_ATTRIBUTE } from "@/lib/theme/scoped-theme";
+import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { themeTagline } from "@/lib/theme/presets";
 import { typeStyleColour } from "@/lib/theme/theme-overrides";
@@ -48,7 +49,6 @@ const COLOURS: ReadonlyArray<[label: string, token: string]> = [
 
 const STATUS = ["info", "positive", "warning", "error", "neutral"] as const;
 const ACCENTS = ["cobalt", "mint", "gold", "coral", "violet", "amber"];
-const SERIES = [1, 2, 3, 4, 5, 6];
 
 const TYPE: ReadonlyArray<[style: string, sample: string]> = [
   ["display-1", "Every pixel, one token."],
@@ -103,12 +103,13 @@ function useComputed<T>(read: (el: HTMLElement) => T, mode: string) {
   return [ref, value] as const;
 }
 
-/* The library's ColourSwatch card, the one the colour pages use, filled
-   with what the theme's token resolves to here. The card takes no ref, so
-   the wrapper is measured and the card itself is read through it. */
+/* The library's ColourSwatch in its compact size, a ramp-cell chip with
+   the label and hex under it, so the colours read at a glance and the type
+   and shape below come up the page. The card takes no ref, so the wrapper
+   is measured and the chip itself is read through it. */
 function Swatch({ label, token, mode }: { label: string; token: string; mode: string }) {
   const [ref, rgb] = useComputed(
-    (el) => getComputedStyle(el.firstElementChild ?? el).backgroundColor,
+    (el) => getComputedStyle(el.querySelector(".ds-colour-swatch__chip") ?? el.firstElementChild ?? el).backgroundColor,
     mode
   );
   const values = rgb
@@ -116,7 +117,7 @@ function Swatch({ label, token, mode }: { label: string; token: string; mode: st
     : { hex: " ", rgb: " " };
   return (
     <div ref={ref as React.RefObject<HTMLDivElement>} className={styles.swatch}>
-      <ColourSwatch label={label} cssVar={token} dark={values} />
+      <ColourSwatch label={label} cssVar={token} dark={values} size="compact" />
     </div>
   );
 }
@@ -190,6 +191,9 @@ export function ThemeSpecimen({ id, label }: ThemeSpecimenProps) {
   const [billing, setBilling] = useState("yearly");
   const fileUrl = `/themes/${id}/DESIGN.md`;
   const tagline = themeTagline(id);
+  /* Whether the site is wearing this theme now: Apply goes through the same
+     brand helper the gallery's cards and the header switcher use. */
+  const applied = useSyncExternalStore(subscribeBrand, readBrand, () => SERVED_THEME_ID) === id;
 
   /* The specimen is a theme scope (see scoped-theme.ts): it wears this
      theme whatever theme the site around it is wearing. Before paint, so
@@ -223,6 +227,14 @@ export function ThemeSpecimen({ id, label }: ThemeSpecimenProps) {
                   iconRight="arrow_forward"
                   href={`/playground?preset=${id}`}
                 />
+                <Button
+                  label={applied ? "Applied" : "Apply"}
+                  variant="primary"
+                  size="compact"
+                  iconLeft={applied ? "check" : "brush"}
+                  disabled={applied}
+                  onClick={() => applyBrand(id)}
+                />
               </div>
             </div>
             {tagline && <p className={styles.tagline}>{tagline}</p>}
@@ -241,15 +253,10 @@ export function ThemeSpecimen({ id, label }: ThemeSpecimenProps) {
                 <Swatch key={s} label={s[0].toUpperCase() + s.slice(1)} token={`--color-status-${s}-icon`} mode={mode} />
               ))}
             </div>
-            <div className={styles.subhead}>Accents and chart series</div>
+            <div className={styles.subhead}>Accents</div>
             <div className={`${styles.swatchGrid}`}>
               {ACCENTS.map((a) => (
                 <Swatch key={a} label={a[0].toUpperCase() + a.slice(1)} token={`--color-core-accent-${a}`} mode={mode} />
-              ))}
-            </div>
-            <div className={styles.seriesBars} aria-hidden="true">
-              {SERIES.map((n, i) => (
-                <span key={n} className={styles.seriesBar} style={{ background: `var(--color-chart-series-${n})`, height: `${92 - i * 12}%` }} />
               ))}
             </div>
           </Section>

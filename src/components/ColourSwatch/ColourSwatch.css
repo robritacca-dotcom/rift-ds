@@ -94,4 +94,53 @@
   word-break: break-word;
 }
 
+/* ============================================
+   COMPACT
+   A short chip of the colour, a primitive ramp
+   cell tall, with the label and hex under it on
+   the page, for many colours at a glance.
+   ============================================ */
+
+.ds-colour-swatch--compact {
+  justify-content: flex-start;
+  gap: var(--gap-200);
+  min-width: 120px;
+  min-height: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  overflow: visible;
+}
+
+.ds-colour-swatch__chip {
+  height: 44px; /* the primitive ramp's cell */
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-100);
+}
+
+.ds-colour-swatch__caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.ds-colour-swatch--compact .ds-colour-swatch__title {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: normal;
+  color: var(--color-text-primary);
+}
+
+.ds-colour-swatch__hex {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
 } /* @layer rift.components */

@@ -27,6 +27,14 @@ export interface ColourSwatchProps {
   borderVar?: string;
   /** The label of the row that prints the token's name, the value of `cssVar`, as text */
   tokenLabel?: string;
+  /**
+   * The card's size. `default` is the tall card, its values on panels over
+   * the colour. `compact` is a short chip of the colour, a primitive ramp
+   * cell tall, with the label and hex under it, for a page that shows many
+   * colours at a glance; the token name rides the chip's tooltip.
+   * @default 'default'
+   */
+  size?: 'default' | 'compact';
   /** Additional CSS classes */
   className?: string;
 }
@@ -46,11 +54,13 @@ export const ColourSwatch = ({
   status = false,
   borderVar,
   tokenLabel = 'Token',
+  size = 'default',
   className = '',
 }: ColourSwatchProps) => {
   const baseClass = 'ds-colour-swatch';
   const statusClass = status ? `${baseClass}--status` : '';
-  const classes = [baseClass, statusClass, className].filter(Boolean).join(' ');
+  const sizeClass = size === 'compact' ? `${baseClass}--compact` : '';
+  const classes = [baseClass, statusClass, sizeClass, className].filter(Boolean).join(' ');
 
   const values = theme === 'light' && light ? light : dark;
 
@@ -58,6 +68,21 @@ export const ColourSwatch = ({
     backgroundColor: `var(${cssVar})`,
     ...(status && borderVar ? { borderColor: `var(${borderVar})` } : {}),
   };
+
+  if (size === 'compact') {
+    /* The colour is the chip alone, so the words sit on the page and read
+       in every colour; the chip's hairline holds a colour that matches the
+       page. */
+    return (
+      <div className={classes}>
+        <div className={`${baseClass}__chip`} style={style} title={cssVar} />
+        <div className={`${baseClass}__caption`}>
+          <h3 className={`${baseClass}__title`}>{label}</h3>
+          <span className={`${baseClass}__hex`}>{values.hex}</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={classes} style={style}>

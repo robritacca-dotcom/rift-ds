@@ -11,7 +11,7 @@ How to read it:
 
 The live reference with swatches is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the names.
 
-## Colour (167)
+## Colour (168)
 
 Prefix: `--color-*`.
 
@@ -67,6 +67,7 @@ Prefix: `--color-*`.
 | `--color-avatar-text-5` | `#081633` (`--primitive-blue-10`) | `#EEF3FD` (`--primitive-blue-01`) |
 | `--color-avatar-text-6` | `#31164A` (`--primitive-purple-10`) | `#F7F0FE` (`--primitive-purple-01`) |
 | `--color-bg-app-shell` | `#F1F1F1` (`--primitive-neutral-01`) | `#0E0E0E` (`--primitive-neutral-09`) |
+| `--color-bg-app-shell-border` | `#D6D6D6` (`--primitive-neutral-02`) | `#232323` (`--primitive-neutral-08`) |
 | `--color-bg-app-surface` | `#FFFFFF` (`--primitive-neutral-00`) | `#000000` (`--primitive-neutral-11`) |
 | `--color-bg-container-border` | `#D6D6D6` (`--primitive-neutral-02`) | `#232323` (`--primitive-neutral-08`) |
 | `--color-bg-container-inverse` | `#0E0E0E` (`--primitive-neutral-09`) | `#F1F1F1` (`--primitive-neutral-01`) |

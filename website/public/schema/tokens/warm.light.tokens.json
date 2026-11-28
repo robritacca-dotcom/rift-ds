@@ -2110,6 +2110,10 @@
       "$type": "color",
       "$value": "{primitive.neutral-01}"
     },
+    "bg-app-shell-border": {
+      "$type": "color",
+      "$value": "{color.bg-container-border}"
+    },
     "bg-app-surface": {
       "$type": "color",
       "$value": "{primitive.neutral-00}"

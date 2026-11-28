@@ -2083,6 +2083,10 @@
       "$type": "color",
       "$value": "{primitive.neutral-09}"
     },
+    "bg-app-shell-border": {
+      "$type": "color",
+      "$value": "{color.bg-app-shell}"
+    },
     "bg-app-surface": {
       "$type": "color",
       "$value": "{primitive.neutral-11}"
@@ -2177,7 +2181,7 @@
     },
     "chart-series-1": {
       "$type": "color",
-      "$value": "{color.action-primary-bg}"
+      "$value": "{primitive.blue-07}"
     },
     "chart-series-2": {
       "$type": "color",
@@ -2471,7 +2475,7 @@
     },
     "status-error-text": {
       "$type": "color",
-      "$value": "{primitive.red-01}"
+      "$value": "{primitive.red-03}"
     },
     "status-info-bg": {
       "$type": "color",
@@ -2487,7 +2491,7 @@
     },
     "status-info-text": {
       "$type": "color",
-      "$value": "{primitive.blue-01}"
+      "$value": "{primitive.blue-03}"
     },
     "status-neutral-bg": {
       "$type": "color",
@@ -2519,7 +2523,7 @@
     },
     "status-positive-text": {
       "$type": "color",
-      "$value": "{primitive.green-01}"
+      "$value": "{primitive.green-03}"
     },
     "status-warning-bg": {
       "$type": "color",
@@ -2535,7 +2539,7 @@
     },
     "status-warning-text": {
       "$type": "color",
-      "$value": "{primitive.orange-01}"
+      "$value": "{primitive.orange-03}"
     },
     "table-body-bg": {
       "$type": "color",
@@ -2543,7 +2547,7 @@
     },
     "table-border": {
       "$type": "color",
-      "$value": "{color.divider}"
+      "$value": "{primitive.neutral-08}"
     },
     "table-cell-failed": {
       "$type": "color",
@@ -2551,7 +2555,7 @@
     },
     "table-divider": {
       "$type": "color",
-      "$value": "{color.divider}"
+      "$value": "{primitive.neutral-08}"
     },
     "table-header-bg": {
       "$type": "color",
@@ -2651,7 +2655,7 @@
     },
     "display-1-weight": {
       "$type": "fontWeight",
-      "$value": 300
+      "$value": 400
     },
     "display-2-family": {
       "$type": "fontFamily",
@@ -2672,7 +2676,7 @@
     },
     "display-2-weight": {
       "$type": "fontWeight",
-      "$value": 300
+      "$value": 400
     },
     "family-body": {
       "$type": "fontFamily",
@@ -2722,7 +2726,7 @@
     },
     "heading-1-weight": {
       "$type": "fontWeight",
-      "$value": 600
+      "$value": 700
     },
     "heading-2-family": {
       "$type": "fontFamily",
@@ -2743,7 +2747,7 @@
     },
     "heading-2-weight": {
       "$type": "fontWeight",
-      "$value": 600
+      "$value": 700
     },
     "heading-3-family": {
       "$type": "fontFamily",
@@ -2764,7 +2768,7 @@
     },
     "heading-3-weight": {
       "$type": "fontWeight",
-      "$value": 600
+      "$value": 700
     },
     "line-height-1100": {
       "$type": "dimension",
@@ -2834,7 +2838,7 @@
     },
     "mega-1-weight": {
       "$type": "fontWeight",
-      "$value": 300
+      "$value": 400
     },
     "mega-2-family": {
       "$type": "fontFamily",
@@ -2855,7 +2859,7 @@
     },
     "mega-2-weight": {
       "$type": "fontWeight",
-      "$value": 300
+      "$value": 400
     },
     "overline-family": {
       "$type": "fontFamily",
@@ -3079,7 +3083,7 @@
     },
     "sub-display-weight": {
       "$type": "fontWeight",
-      "$value": 300
+      "$value": 400
     },
     "title-body-family": {
       "$type": "fontFamily",
@@ -3100,7 +3104,7 @@
     },
     "title-body-weight": {
       "$type": "fontWeight",
-      "$value": 600
+      "$value": 700
     }
   },
   "gap": {

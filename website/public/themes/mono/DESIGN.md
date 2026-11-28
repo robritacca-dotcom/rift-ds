@@ -9,7 +9,7 @@ colors:
   primary-active: "#050505"
   on-primary: "#d6d6d6"
   primary-dark: "#f1f1f1"
-  canvas-light: "#f1f1f1"
+  canvas-light: "#ffffff"
   canvas-dark: "#050505"
   surface: "#ffffff"
   surface-dark: "rgba(14, 14, 14, 0.8)"
@@ -38,7 +38,7 @@ colors:
   accent-gold: "#f4cf5e"
   accent-mint: "#3eddb0"
   accent-violet: "#9a6bff"
-  chart-1: "#232323"
+  chart-1: "#3366f0"
   chart-2: "#12c98e"
   chart-3: "#f2c440"
   chart-4: "#ee4566"
@@ -49,43 +49,43 @@ typography:
   display-lg:
     fontFamily: "'Montserrat', sans-serif"
     fontSize: 96px
-    fontWeight: 300
+    fontWeight: 400
     lineHeight: 1.05
     letterSpacing: 0.02em
   display-md:
     fontFamily: "'Montserrat', sans-serif"
     fontSize: 64px
-    fontWeight: 300
+    fontWeight: 400
     lineHeight: 1.1
     letterSpacing: 0.015em
   sub-display:
     fontFamily: "'Montserrat', sans-serif"
     fontSize: 30px
-    fontWeight: 300
+    fontWeight: 400
     lineHeight: 44px
     letterSpacing: 0.015em
   heading-1:
     fontFamily: "'Montserrat', sans-serif"
     fontSize: 30px
-    fontWeight: 600
+    fontWeight: 700
     lineHeight: 44px
     letterSpacing: 0.015em
   heading-2:
     fontFamily: "'Montserrat', sans-serif"
     fontSize: 26px
-    fontWeight: 600
+    fontWeight: 700
     lineHeight: 32px
     letterSpacing: 0.015em
   heading-3:
     fontFamily: "'Montserrat', sans-serif"
     fontSize: 22px
-    fontWeight: 600
+    fontWeight: 700
     lineHeight: 28px
     letterSpacing: 0.015em
   title:
     fontFamily: "'Inter', sans-serif"
     fontSize: 16px
-    fontWeight: 600
+    fontWeight: 700
     lineHeight: 24px
     letterSpacing: -0.01em
   body-md:
@@ -173,7 +173,7 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `primary-hover` | `#0e0e0e` | `#d6d6d6` | `--color-action-primary-bg-hover` |
 | `primary-active` | `#050505` | `#bcbcbc` | `--color-action-primary-bg-active` |
 | `on-primary` | `#d6d6d6` | `#303030` | `--color-action-primary-text` |
-| `canvas-light` | `#f1f1f1` | `#050505` | `--color-bg-page-primary` |
+| `canvas-light` | `#ffffff` | `#050505` | `--color-bg-page-primary` |
 | `surface` | `#ffffff` | `rgba(14, 14, 14, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#f1f1f1` | `#303030` | `--color-bg-container-secondary` |
 | `ink` | `#050505` | `#f1f1f1` | `--color-text-primary` |
@@ -198,13 +198,13 @@ Montserrat headings over Inter text. Levels inside a tier share a weight and ste
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |
-| `display-lg` | Montserrat | 96px | 300 | 1.05 | 0.02em |
-| `display-md` | Montserrat | 64px | 300 | 1.1 | 0.015em |
-| `sub-display` | Montserrat | 30px | 300 | 44px | 0.015em |
-| `heading-1` | Montserrat | 30px | 600 | 44px | 0.015em |
-| `heading-2` | Montserrat | 26px | 600 | 32px | 0.015em |
-| `heading-3` | Montserrat | 22px | 600 | 28px | 0.015em |
-| `title` | Inter | 16px | 600 | 24px | -0.01em |
+| `display-lg` | Montserrat | 96px | 400 | 1.05 | 0.02em |
+| `display-md` | Montserrat | 64px | 400 | 1.1 | 0.015em |
+| `sub-display` | Montserrat | 30px | 400 | 44px | 0.015em |
+| `heading-1` | Montserrat | 30px | 700 | 44px | 0.015em |
+| `heading-2` | Montserrat | 26px | 700 | 32px | 0.015em |
+| `heading-3` | Montserrat | 22px | 700 | 28px | 0.015em |
+| `title` | Inter | 16px | 700 | 24px | -0.01em |
 | `body-md` | Inter | 16px | 400 | 24px | 0 |
 | `body-emphasis` | Inter | 16px | 500 | 24px | -0.01em |
 | `body-sm` | Inter | 14px | 400 | 20px | 0 |

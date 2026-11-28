@@ -311,22 +311,23 @@
   border-inline-end: var(--border-025) solid var(--color-bg-container-border);
 }
 
-/* Floating: the page plane, the rail a glass card off the edges. */
+/* Floating: the crisp app surface, the rail a card on the shell colour
+   off the edges. */
 .appShellFrame[data-mode="floating"] {
   padding: var(--padding-200);
   gap: var(--padding-200);
-  background: var(--color-bg-page-primary);
+  background: var(--color-bg-app-surface);
 }
 
 .appShellFrame[data-mode="floating"] .appShellRail {
-  border: var(--border-025) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--color-bg-app-shell-border);
   border-radius: var(--radius-300);
-  background: var(--color-bg-glass);
+  background: var(--color-bg-app-shell);
   box-shadow: var(--shadow-floating);
 }
 
 .appShellFrame[data-mode="floating"] .appShellContent {
-  background: var(--color-bg-page-primary);
+  background: var(--color-bg-app-surface);
 }
 
 /* Inset: the rail flush on the shell colour, the content a raised surface

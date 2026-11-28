@@ -80,9 +80,10 @@
   border: 1px solid var(--color-bg-container-border);
 }
 
-/* A tinted ground, so the floating glass cards read as cards. */
+/* The floating layout's crisp app surface, so the rail cards on the shell
+   colour read a step off it, as they do in an app. */
 .sidebarDemoTinted {
-  background-color: var(--color-bg-container-secondary);
+  background-color: var(--color-bg-app-surface);
 }
 
 /* The layout switch and the note that follows it. */

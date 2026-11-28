@@ -792,7 +792,7 @@
   width: 100%;
   min-width: 0;
   min-height: 0;
-  border: var(--border-025) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--ds-shell-edge-border, var(--color-bg-app-shell-border));
   border-radius: var(--radius-600);
   background-color: var(--color-bg-page-primary);
   overflow: hidden;
@@ -857,7 +857,7 @@
   flex: 1;
   min-width: 0;
   min-height: 0;
-  border: var(--border-025) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--ds-shell-edge-border, var(--color-bg-app-shell-border));
   border-radius: var(--radius-600);
   /* Solid, the agent pane's ground: see the aside rail's card. */
   background-color: var(--color-bg-page-primary);
@@ -1160,7 +1160,7 @@ html[data-chat-resizing] .ds-chat-launcher__panel {
 
 .ds-chat-launcher__panel--flat {
   background: var(--color-bg-app-surface);
-  border-color: var(--color-bg-container-border);
+  border-color: var(--ds-shell-edge-border, var(--color-bg-app-shell-border));
   box-shadow: var(--shadow-floating);
   backdrop-filter: none;
 }

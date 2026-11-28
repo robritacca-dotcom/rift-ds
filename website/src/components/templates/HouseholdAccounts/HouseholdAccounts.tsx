@@ -47,6 +47,7 @@ import {
   type DataTableRowAction,
 } from "rift-ds/components/DataTable/DataTable";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
+import { BREAKPOINT_MOBILE_PX, mediaBelow } from "rift-ds/tokens/breakpoints";
 import { compareDecimal, formatMoney, subtractDecimal, sumDecimal, type DecimalString } from "rift-ds/format";
 import { PORTRAITS } from "@/lib/attachment-demo";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
@@ -280,7 +281,9 @@ const optionsOf = (labels: string[]) => [...new Set(labels)].map((label) => ({ v
 /* Every column sorts from its header. A row's raw values are what it sorts
    by: the name, the type, the number, who holds it, the balance as a number. */
 const COLUMNS: DataTableColumn[] = [
-  { key: "account", header: "Account", rowHeader: true, sortable: true, render: (row) => <AccountName account={accountOf(row)} /> },
+  /* Wide enough for the mark and the longest name over its bank, so a
+     narrow screen scrolls the table sideways rather than cutting them. */
+  { key: "account", header: "Account", rowHeader: true, sortable: true, width: "240px", render: (row) => <AccountName account={accountOf(row)} /> },
   { key: "registration", header: "Registered", sortable: true, groupable: true, options: optionsOf(["Registered", "Non-registered"]) },
   { key: "type", header: "Type", sortable: true, groupable: true, options: optionsOf(HELD.map(typeOf)) },
   { key: "number", header: "Account number", sortable: true, filterable: false },
@@ -358,10 +361,26 @@ const CHAT_FALLBACK =
 
 /* ---------------------------------------------------------------- page */
 
+/* The mobile layout's query: at and below the width where the rail becomes
+   a drawer, the page has only the phone gutter at its sides, too little for
+   the frameless table's reach and its outer control, so the table takes its
+   mobile form there (bordered, the grip an ordinary first column) and, on a
+   phone, stacks each account as a card. */
+const MOBILE_QUERY = mediaBelow(BREAKPOINT_MOBILE_PX);
+const subscribeMobile = (onChange: () => void) => {
+  const media = window.matchMedia(MOBILE_QUERY);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+};
+const readMobile = () => window.matchMedia(MOBILE_QUERY).matches;
+const useMobile = () => React.useSyncExternalStore(subscribeMobile, readMobile, () => false);
+
 export default function HouseholdAccounts() {
   const [chatOpen, setChatOpen] = React.useState(false);
   /* The templates carousel's Mobile mode: previewed as a phone app. */
   const appFrame = useAppFrame();
+  /* The phone preview is the mobile layout too, whatever the window's width. */
+  const mobile = useMobile() || appFrame;
 
   return (
     <TemplateShell
@@ -421,14 +440,16 @@ export default function HouseholdAccounts() {
 
         <DataTable
           caption="Every account the Marlowes hold, today"
-          frameless
+          frameless={!mobile}
           locale={LOCALE}
           columns={COLUMNS}
           rows={ROWS}
           /* A grip in the frameless table's margin moves a row by hand
              (or Alt+Up and Alt+Down); a sort owns the order while it is on. */
           reorderableRows
-          outerControl
+          outerControl={!mobile}
+          /* On a phone each account is a card, its name and bank the title. */
+          phoneLayout="stack"
           rowActions={rowActions}
           /* The library's full table toolbar: search, filters, sorts,
              grouping, the Columns panel and the density switch, with the

@@ -63,6 +63,9 @@
     --color-ambient-4: #5C5C5C;
     --color-ambient-5: #707070;
     --color-ambient-6: #A7A7A7;
+    --color-bg-app-shell-border: var(--color-bg-app-shell);
+    --color-bg-page-primary: var(--primitive-neutral-00);
+    --color-chart-series-1: var(--primitive-blue-07);
     --color-chart-series-2: var(--primitive-green-07);
     --color-chart-series-3: var(--primitive-yellow-07);
     --color-chart-series-4: var(--primitive-red-07);
@@ -80,8 +83,25 @@
     --color-divider: var(--primitive-neutral-03);
     --color-input-border-hover: var(--primitive-neutral-06);
     --color-input-border-selected: var(--primitive-neutral-08);
+    --color-status-error-text: var(--primitive-red-08);
+    --color-status-positive-text: var(--primitive-green-08);
+    --color-status-warning-text: var(--primitive-orange-08);
+    --color-table-border: var(--primitive-neutral-02-a80);
+    --color-table-divider: var(--primitive-neutral-02-a80);
+    --color-table-header-bg: var(--primitive-neutral-01-a60);
+    --color-trend-down: var(--primitive-red-08);
+    --color-trend-up: var(--primitive-green-08);
+    --font-display-1-weight: 400;
+    --font-display-2-weight: 400;
     --font-family-heading: 'Montserrat', sans-serif;
     --font-family-primary: 'Inter', sans-serif;
+    --font-heading-1-weight: 700;
+    --font-heading-2-weight: 700;
+    --font-heading-3-weight: 700;
+    --font-mega-1-weight: 400;
+    --font-mega-2-weight: 400;
+    --font-sub-display-weight: 400;
+    --font-title-body-weight: 700;
     --primitive-blue-00: #FAFBFF;
     --primitive-blue-01: #F4F7FE;
     --primitive-blue-02: #DFE7FD;
@@ -193,10 +213,20 @@
     --color-ai-gradient-end: var(--primitive-neutral-03);
     --color-ambient-5: #F6F6F6;
     --color-ambient-6: #F9F9F9;
+    --color-bg-page-primary: var(--primitive-neutral-10);
     --color-core-ui-primary: var(--primitive-neutral-01);
     --color-core-ui-secondary: var(--primitive-neutral-05);
     --color-divider: var(--primitive-neutral-07);
     --color-input-border-hover: var(--primitive-neutral-03);
     --color-input-border-selected: var(--primitive-neutral-03);
+    --color-status-error-text: var(--primitive-red-03);
+    --color-status-info-text: var(--primitive-blue-03);
+    --color-status-positive-text: var(--primitive-green-03);
+    --color-status-warning-text: var(--primitive-orange-03);
+    --color-table-border: var(--primitive-neutral-08);
+    --color-table-divider: var(--primitive-neutral-08);
+    --color-table-header-bg: var(--primitive-neutral-08-a50);
+    --color-trend-down: var(--primitive-red-07);
+    --color-trend-up: var(--primitive-green-07);
   }
 }

@@ -229,8 +229,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     typeScale: 100,
     motionScale: 100,
     elevation: "flat",
-    displayWeight: SHIPPED_DISPLAY_WEIGHT,
-    headingWeight: SHIPPED_HEADING_WEIGHT,
+    // One step heavier than the base look on both display and headings,
+    // so the large numbers and titles hold their own on the white ground.
+    displayWeight: 400,
+    headingWeight: 700,
     bodyWeight: SHIPPED_BODY_WEIGHT,
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
@@ -262,9 +264,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // Blueprint's do. The AI gradient draws its default
     // red and blue stops from the spectral ramps below, so the AI entry
     // points are the one place colour sits in the chrome. Status colours
-    // take the spectral ramps below. A chart leads on the key, black or
-    // white like the action colour, and its later series draw from the same
-    // ramps (in the extras below), so a chart carries the colour a badge does.
+    // take the spectral ramps below. A chart leads on cobalt and its later
+    // series draw from the same ramps (in the extras below), so a chart
+    // carries the colour a badge does.
     accents: {
       coral: "#F2506F",
       violet: "#9A6BFF",
@@ -279,23 +281,88 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // globals.css that re-points these roles at the accents on their band
     // alone.
     ambient: ["#C9C9C9", "#ADADAD", "#8F8F8F", "#5C5C5C", "#707070", "#A7A7A7"],
-    // Hairlines carry Smoke's depth, so its dividers step ONE ramp
-    // notch stronger than the base theme's (which they inherit as
-    // near-invisible on this look's flat grounds): 02 to 03 in light,
-    // 08 to 07 in dark, alpha dropped. One notch is the middle ground:
-    // two lit the section rules but made every table hairline shout,
-    // since dozens of components ride this token.
+    // A crisp white ground in light mode: the page sits on the card white,
+    // so flat surfaces part on hairlines alone (the app shell keeps its
+    // off-grey, so a rail still reads a step off the page), and a
+    // table's rules and header fill stay light so it reads clean rather
+    // than ruled.
+    //
+    // Colour: the spectral ramps keep their bright 07 keys, but their deep
+    // steps (08 to 11) are rebuilt at the key's own hue and saturation
+    // instead of mixed toward black, which turned them brown and olive.
+    // Status text, trends and badges ride those deep steps, so they read
+    // as colour, not mud; 08 is the brightest step that holds AA on its
+    // own 02 wash. The chart leads on cobalt rather than the black key.
     extraOverrides: {
+      "--color-bg-page-primary": "var(--primitive-neutral-00)",
+      // Dividers step one notch stronger than the base theme's, since
+      // hairlines carry Smoke's depth; tables stay a notch lighter than
+      // that, so a grid of rules never shouts.
       "--color-divider": "var(--primitive-neutral-03)",
+      "--color-table-header-bg": "var(--primitive-neutral-01-a60)",
+      "--color-table-divider": "var(--primitive-neutral-02-a80)",
+      // Smoke is flat, so with no shadow the floating rail reads as a
+      // plain grey panel on the white page: its edge takes the shell
+      // colour and the hairline goes.
+      "--color-bg-app-shell-border": "var(--color-bg-app-shell)",
+      "--color-table-border": "var(--primitive-neutral-02-a80)",
+      "--color-status-positive-text": "var(--primitive-green-08)",
+      "--color-status-warning-text": "var(--primitive-orange-08)",
+      "--color-status-error-text": "var(--primitive-red-08)",
+      "--color-trend-up": "var(--primitive-green-08)",
+      "--color-trend-down": "var(--primitive-red-08)",
+      "--color-chart-series-1": "var(--primitive-blue-07)",
       "--color-chart-series-2": "var(--primitive-green-07)",
       "--color-chart-series-3": "var(--primitive-yellow-07)",
       "--color-chart-series-4": "var(--primitive-red-07)",
       "--color-chart-series-5": "var(--primitive-purple-07)",
       "--color-chart-series-6": "var(--primitive-orange-07)",
       "--color-chart-series-7": "var(--primitive-teal-07)",
+      "--primitive-red-08": "#B61131",
+      "--primitive-red-09": "#891028",
+      "--primitive-red-10": "#3E141C",
+      "--primitive-red-11": "#290F14",
+      "--primitive-orange-08": "#A53E08",
+      "--primitive-orange-09": "#762E09",
+      "--primitive-orange-10": "#402212",
+      "--primitive-orange-11": "#2A180E",
+      "--primitive-yellow-08": "#816209",
+      "--primitive-yellow-09": "#544008",
+      "--primitive-yellow-10": "#3F3313",
+      "--primitive-yellow-11": "#2A230F",
+      "--primitive-green-08": "#0A7553",
+      "--primitive-green-09": "#084934",
+      "--primitive-green-10": "#143E30",
+      "--primitive-green-11": "#0F2921",
+      "--primitive-teal-08": "#126D89",
+      "--primitive-teal-09": "#0F4C5F",
+      "--primitive-teal-10": "#15333C",
+      "--primitive-teal-11": "#102228",
+      "--primitive-blue-08": "#1B54EE",
+      "--primitive-blue-09": "#1444C8",
+      "--primitive-blue-10": "#131F3F",
+      "--primitive-blue-11": "#0F1629",
+      "--primitive-purple-08": "#6F24F2",
+      "--primitive-purple-09": "#5912D6",
+      "--primitive-purple-10": "#23123F",
+      "--primitive-purple-11": "#180E2A",
     },
     extraOverridesDark: {
+      // The dark ground keeps its own page and hairlines; the light
+      // mode's re-pointing above is undone here.
+      "--color-bg-page-primary": "var(--primitive-neutral-10)",
       "--color-divider": "var(--primitive-neutral-07)",
+      "--color-table-header-bg": "var(--primitive-neutral-08-a50)",
+      "--color-table-divider": "var(--primitive-neutral-08)",
+      "--color-table-border": "var(--primitive-neutral-08)",
+      // Status text takes the 03 tint, not the near-white 01, so a dark
+      // badge reads as its colour.
+      "--color-status-positive-text": "var(--primitive-green-03)",
+      "--color-status-warning-text": "var(--primitive-orange-03)",
+      "--color-status-error-text": "var(--primitive-red-03)",
+      "--color-status-info-text": "var(--primitive-blue-03)",
+      "--color-trend-up": "var(--primitive-green-07)",
+      "--color-trend-down": "var(--primitive-red-07)",
       // Smoke's key flips to near-white in dark mode, so the two blobs that
       // carry its lighter tones flip with it.
       "--color-ambient-5": "#F6F6F6",

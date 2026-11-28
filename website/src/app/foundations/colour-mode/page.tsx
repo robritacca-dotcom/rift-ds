@@ -133,6 +133,11 @@ const pageColours: SwatchData[] = [
     dark: { primitive: "--neutral--11--", hex: "#000000", rgb: "0 / 0 / 0" },
     light: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
   },
+  {
+    label: "App shell border", cssVar: "--color-bg-app-shell-border",
+    dark: { primitive: "--neutral--08--", hex: "#232323", rgb: "35 / 35 / 35" },
+    light: { primitive: "--neutral--02--", hex: "#D6D6D6", rgb: "214 / 214 / 214" },
+  },
 ];
 
 /* --- Container --- */

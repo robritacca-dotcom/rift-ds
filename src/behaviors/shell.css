@@ -60,7 +60,7 @@
 
   /* The raised edge, shared by floating and inset. */
   --ds-shell-radius: var(--radius-600);
-  --ds-shell-edge-border: var(--color-bg-container-border);
+  --ds-shell-edge-border: var(--color-bg-app-shell-border);
   --ds-shell-edge-shadow: var(--shadow-floating);
 }
 

@@ -447,6 +447,7 @@ export const SemanticColors: Story = {
         <ColorToken name="Inverse" value="--color-bg-page-inverse" />
         <ColorToken name="App shell" value="--color-bg-app-shell" />
         <ColorToken name="App surface" value="--color-bg-app-surface" />
+        <ColorToken name="App shell border" value="--color-bg-app-shell-border" />
       </TokenSection>
 
       <TokenSection title="Background - Container">

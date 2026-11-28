@@ -56,6 +56,11 @@
      so the content plane reads furthest forward. */
   --color-bg-app-shell: var(--primitive-neutral-01);
   --color-bg-app-surface: var(--primitive-neutral-00);
+  /* The hairline on the shell's raised edge: the floating rail card, the
+     inset content surface and a chat panel seated in the shell. The
+     container border by default; a flat theme may tone it to the shell
+     colour so the rail reads as a plain fill with no rule. */
+  --color-bg-app-shell-border: var(--color-bg-container-border);
 
   /* Background - Container */
   --color-bg-container-primary: var(--primitive-neutral-00);

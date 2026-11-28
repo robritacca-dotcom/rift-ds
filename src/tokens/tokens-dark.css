@@ -55,6 +55,7 @@
      so the content plane reads furthest forward. */
   --color-bg-app-shell: var(--primitive-neutral-09);
   --color-bg-app-surface: var(--primitive-neutral-11);
+  --color-bg-app-shell-border: var(--color-bg-container-border);
 
   /* Background - Container */
   --color-bg-container-primary: var(--primitive-neutral-09-a80);

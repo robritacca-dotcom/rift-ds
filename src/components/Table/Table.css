@@ -333,7 +333,8 @@
      container surface by default, which keeps a control in the row hovering
      with the contrast it has on a card), and --ds-table-surface, what a
      sticky cell and the seam between selected rows are painted with (the
-     page by default; a table on a card sets it to the card's colour).
+     surface of the app shell it sits in, else the page; a table on a card
+     sets it to the card's colour).
      ============================================ */
 
   .ds-table.ds-table--frameless {
@@ -485,7 +486,7 @@
      block of selected rows would read as one slab. Where they meet, their
      corners square off, so the block is one rounded shape. */
   .ds-table.ds-table--frameless .ds-table__body .ds-table__row.ds-table__row--selected:has(+ .ds-table__row--selected) > * {
-    --ds-table-line: var(--ds-table-surface, var(--color-bg-page-primary));
+    --ds-table-line: var(--ds-table-surface, var(--ds-shell-surface, var(--color-bg-page-primary)));
     --ds-table-line-size: 100%;
     --ds-table-line-at: bottom;
   }

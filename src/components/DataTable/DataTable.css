@@ -1388,7 +1388,7 @@
    past its column by the tile's bleed, or by the outer control's 40px on
    the start side. A sticky cell (a pinned column, a sticky header) keeps
    an opaque base, the surface the table sits on rather than the bordered
-   table's body, and paints the frameless line and tile over it instead of
+   table's body (an app shell's surface inside one, else the page), and paints the frameless line and tile over it instead of
    its own tint.
    ============================================ */
 
@@ -1405,12 +1405,21 @@
 
 .ds-table.ds-table--frameless .ds-data-table__cell--pinned,
 .ds-table.ds-table--frameless.ds-data-table__grid--sticky .ds-table__head .ds-table__header-cell {
-  --ds-table-base: var(--ds-table-surface, var(--color-bg-page-primary));
+  --ds-table-base: var(--ds-table-surface, var(--ds-shell-surface, var(--color-bg-page-primary)));
 
   background-color: var(--ds-table-base);
   background-image:
     linear-gradient(var(--ds-table-line), var(--ds-table-line)),
     linear-gradient(var(--ds-table-fill), var(--ds-table-fill));
+}
+
+/* The first row's tile draws its top edge on the header's line, one pixel
+   above the row, where an opaque pinned header cell stacks over it. So
+   while that row is lifted, a pinned header cell at either end runs its
+   own line on to where the tile's corner starts, and the edge reads
+   unbroken across the pinned column. */
+.ds-table.ds-table--frameless:has(.ds-table__body .ds-table__row:first-child:is(:hover, :has(:focus-visible))) .ds-table__head .ds-table__row > :is(:first-child, :last-child).ds-data-table__cell--pinned {
+  --ds-table-line-size: calc(100% - var(--ds-table-radius));
 }
 
 } /* @layer rift.components */

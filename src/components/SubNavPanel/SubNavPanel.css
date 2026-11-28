@@ -72,15 +72,16 @@
   flex-shrink: 0;
 }
 
+/* The heading takes the face AppSidebar's section headings wear (the
+   paragraph-sm face on the tertiary text colour, in sentence case), so the
+   rail and the panel beside it label their groups one way. */
 .ds-sub-nav-panel__title {
   margin: 0;
-  font-family: var(--font-overline-family);
-  font-size: var(--font-overline-size);
-  font-weight: var(--font-overline-weight);
-  line-height: var(--font-overline-line-height);
-  letter-spacing: var(--font-overline-letter-spacing);
-  text-transform: uppercase;
-  color: var(--color-text-secondary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
   min-width: 0;
   /* Wraps rather than truncates: the heading names the section, and a
      clipped name is the one thing the reader cannot recover from. */
@@ -97,8 +98,8 @@
      right edge as the rows' badges and chevrons. */
   margin-inline-end: calc(var(--padding-100) * -1);
   /* Centred on the heading's first line however many lines it wraps to. */
-  margin-top: calc((var(--font-overline-line-height) - 32px) / 2);
-  margin-bottom: calc((var(--font-overline-line-height) - 32px) / 2);
+  margin-top: calc((var(--font-paragraph-sm-line-height) - 32px) / 2);
+  margin-bottom: calc((var(--font-paragraph-sm-line-height) - 32px) / 2);
   padding: 0;
   flex-shrink: 0;
   border: none;

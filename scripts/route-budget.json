@@ -161,6 +161,9 @@
       "js": 605000,
       "css": 144000
     },
+    "/templates/household-accounts": {
+      "css": 151000
+    },
     "/templates/merchant-sales": {
       "js": 667000,
       "css": 177000

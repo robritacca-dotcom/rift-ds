@@ -1,0 +1,91 @@
+/* Templates: Fernhouse's household accounts. Every colour, space, radius
+   and type style is a semantic token; the only raw value is the column's
+   contained width, which pages own everywhere else on the site. The shell
+   is TemplateShell's; the page is the figures and the list of accounts
+   under its header. */
+
+.content {
+  width: 100%;
+  /* This screen's contained width: a list of five columns reads best in a
+     column narrower than a dashboard's. The shell centres the column at it
+     unless the page runs full width (the shell recipe's width axis). */
+  --ds-shell-contained-width: 1120px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  padding: var(--padding-500) var(--padding-1000) var(--padding-1000);
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-1000);
+  width: 100%;
+  min-width: 0;
+}
+
+/* Cash, investments and the house, a card each, on the dashboard rung
+   set: the card gutter matches the card inset. */
+.figures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-500);
+}
+
+/* The family's stat card, as merchant sales draws it. */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-300);
+  min-width: 0;
+  padding: var(--padding-500);
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid color-mix(in srgb, var(--color-bg-container-border) 60%, transparent);
+  border-radius: var(--radius-600);
+}
+
+/* The bank's mark, then the account's name over its bank. */
+.account {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-300);
+  white-space: nowrap;
+}
+
+.accountText {
+  display: flex;
+  flex-direction: column;
+}
+
+.mark {
+  flex: none;
+}
+
+.secondary {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+}
+
+.owners {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  white-space: nowrap;
+}
+
+/* One card a row when the column is narrow, so an open chat or an
+   expanded rail restacks them too. */
+@container template-content (max-width: 640px) {
+  .figures {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 1080px) {
+  .content {
+    padding: var(--padding-400);
+  }
+}

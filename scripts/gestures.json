@@ -195,6 +195,12 @@
       "axis": "x"
     },
     {
+      "label": "household accounts template: row grip",
+      "route": "/templates/household-accounts",
+      "grip": ".ds-data-table__grip",
+      "axis": "y"
+    },
+    {
       "label": "tables bench: row grip",
       "route": "/labs/tables",
       "grip": "#bench-stress .ds-data-table__grip",

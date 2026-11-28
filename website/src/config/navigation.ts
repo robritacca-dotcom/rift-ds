@@ -508,9 +508,9 @@ export const templatesSidebarLinks: NavLink[] = [
     description: "A month view with the sprint's to-dos on a rail beside it",
   },
   {
-    href: "/templates/accounts-by-month",
-    label: "Accounts by month",
-    description: "A household's accounts at each month end, against the month before",
+    href: "/templates/household-accounts",
+    label: "Household accounts",
+    description: "Every account a family holds, who owns it and what it holds today",
   },
   {
     href: "/templates/profit-and-loss",

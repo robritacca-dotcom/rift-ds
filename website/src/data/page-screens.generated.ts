@@ -779,9 +779,6 @@ export const pageScreens: Record<string, PageScreen> = {
   "/templates": {
     "section": "Site pages"
   },
-  "/templates/accounts-by-month": {
-    "about": "the accounts by month template rendered full viewport — its prose is a fictional household's balances; its name and summary reach the corpus through the site map's Templates list, drawn from templatesSidebarLinks"
-  },
   "/templates/analytics": {
     "about": "the analytics template rendered full viewport — its prose is fictional demo data; its name and summary reach the corpus through the site map's Templates list, drawn from templatesSidebarLinks"
   },
@@ -790,6 +787,9 @@ export const pageScreens: Record<string, PageScreen> = {
   },
   "/templates/docs": {
     "about": "the docs template rendered full viewport — its prose is a fictional UI kit's documentation; its name and summary reach the corpus through the site map's Templates list, drawn from templatesSidebarLinks"
+  },
+  "/templates/household-accounts": {
+    "about": "the household accounts template rendered full viewport — its prose is a fictional household's balances; its name and summary reach the corpus through the site map's Templates list, drawn from templatesSidebarLinks"
   },
   "/templates/landing-page": {
     "about": "the landing page template rendered full viewport — its prose is a fictional payments product's marketing page; its name and summary reach the corpus through the site map's Templates list, drawn from templatesSidebarLinks"

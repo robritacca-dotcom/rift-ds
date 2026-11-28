@@ -112,7 +112,7 @@ export const CollapsedByDefault: Story = {
   },
 };
 
-/** The rail floats as a glass card; the content stays centred. */
+/** The rail floats as a card on the shell colour; the content stays centred on the crisp surface. */
 export const Floating: Story = {
   args: {
     layout: 'floating',
@@ -122,7 +122,7 @@ export const Floating: Story = {
           Dashboard
         </h1>
         <p style={{ fontSize: 16, color: 'var(--color-text-tertiary)', maxWidth: 640 }}>
-          The rail floats off the viewport edges as a glass card, and the content stays centred beside it.
+          The rail floats off the viewport edges as a card on the shell colour, and the content stays centred beside it on the crisp surface.
         </p>
       </div>
     ),
@@ -238,7 +238,7 @@ export const WithToolbarFlush: Story = {
   args: { ...WithToolbar.args, layout: 'flush' },
 };
 
-/** The toolbar in the floating layout, beside the glass rail. */
+/** The toolbar in the floating layout, beside the floating rail. */
 export const WithToolbarFloating: Story = {
   args: { ...WithToolbar.args, layout: 'floating' },
 };

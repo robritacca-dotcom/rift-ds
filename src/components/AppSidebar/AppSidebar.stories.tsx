@@ -588,7 +588,7 @@ export const PanelModeExpanded: Story = {
   parameters: { contentOffset: 280 + 240 },
 };
 
-/** Both cards float: the side panel joins the rail as a second glass card. */
+/** Both cards float: the side panel joins the rail as a second card. */
 export const PanelModeFloating: Story = {
   args: {
     defaultExpanded: false,

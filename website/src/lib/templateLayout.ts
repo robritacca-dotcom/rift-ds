@@ -1,8 +1,8 @@
 /**
  * The template screens' shell layout, one of the three app shell modes
  * (rift-ds's shell recipe): `flush`, the rail on the shell colour behind a
- * hairline with the content crisp beside it; `floating`, the glass rail
- * with centred content; `inset`, the flush rail with the content in a
+ * hairline with the content crisp beside it; `floating`, the rail a card
+ * on the shell colour with the content centred on the crisp surface; `inset`, the flush rail with the content in a
  * raised inset surface.
  *
  * Two scopes, each its own choice with its own default, because the two

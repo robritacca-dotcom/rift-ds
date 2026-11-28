@@ -1462,7 +1462,7 @@
     width: 0;
     padding: 0;
     overflow: hidden;
-    /* Zero width still paints borders and the floating variant's glass
+    /* Zero width still paints borders and the floating variant's raised
        edge — a hairline sliver standing where the rail was. Visibility
        hides every painted box in one property, whatever the variant;
        the open drawer below restores it. */

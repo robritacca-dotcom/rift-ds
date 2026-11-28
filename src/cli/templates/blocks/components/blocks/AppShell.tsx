@@ -36,7 +36,8 @@ import styles from './AppShell.module.css';
  * How the sidebar and the content meet the page, one of the three app shell
  * modes: `flush` runs the sidebar edge to edge on the shell colour behind a
  * hairline, the content crisp beside it; `floating` lifts the sidebar into a
- * glass card off the edges; `inset` runs it flush and sets the content in a
+ * card on the shell colour off the edges, the content crisp on the app
+ * surface; `inset` runs it flush and sets the content in a
  * raised surface held off the other edges, scrolling inside itself.
  */
 const SHELL_LAYOUT: AppSidebarLayout = 'floating';

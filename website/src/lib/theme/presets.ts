@@ -264,7 +264,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // Blueprint's do. The AI gradient draws its default
     // red and blue stops from the spectral ramps below, so the AI entry
     // points are the one place colour sits in the chrome. Status colours
-    // take the spectral ramps below. A chart leads on cobalt and its later
+    // take the spectral ramps below. A chart leads on the blue ramp and its later
     // series draw from the same ramps (in the extras below), so a chart
     // carries the colour a badge does.
     accents: {
@@ -292,7 +292,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // instead of mixed toward black, which turned them brown and olive.
     // Status text, trends and badges ride those deep steps, so they read
     // as colour, not mud; 08 is the brightest step that holds AA on its
-    // own 02 wash. The chart leads on cobalt rather than the black key.
+    // own 02 wash. The chart leads on the blue ramp rather than the black key.
     extraOverrides: {
       "--color-bg-page-primary": "var(--primitive-neutral-00)",
       // Dividers step one notch stronger than the base theme's, since

@@ -209,6 +209,14 @@
 
 /* -------------------------------------------------------------- floating */
 
+/* The content sits on the crisp app surface (the shell recipe's floating
+   plane, white or near-black in every theme), never the page colour the
+   body paints, so the rail card on the shell colour reads a step off it. */
+.floating {
+  background-color: var(--ds-shell-plane);
+  --sticky-fill: var(--ds-shell-surface);
+}
+
 /* One inset source for the floating shell: the rail floats off the edges
    by the same value the assistant panel uses. */
 .floating .sidebar {

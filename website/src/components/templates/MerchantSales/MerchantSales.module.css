@@ -103,11 +103,14 @@
 /* The table sits directly on the page — the DataTable brings its own
    bordered chrome, so a panel around it would double-box it. SectionTitle
    binds to it at the region gap. */
+/* The orders sit apart from the charts above: a step of space more than
+   the page's own gap, then their title. */
 .tableSection {
   display: flex;
   flex-direction: column;
   gap: var(--gap-400);
   min-width: 0;
+  padding-block-start: var(--gap-500);
 }
 
 .statusCell {

@@ -30,6 +30,7 @@ import { Button } from "rift-ds/components/Button/Button";
 import { LegendTile } from "rift-ds/components/LegendTile/LegendTile";
 import { AreaChart, ComboChart } from "rift-ds/charts";
 import { Stat } from "rift-ds/components/Stat/Stat";
+import { Heading } from "rift-ds/components/Heading/Heading";
 import styles from "./MerchantSales.module.css";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import { MerchantChatProvider, MerchantChatWidget, useToastsClearOfPanel, type TableBridge } from "./MerchantChat";
@@ -444,8 +445,10 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
 
           {/* ----------------------------------------- table section */}
           {/* The table sits directly on the page: the DataTable brings its own
-              bordered chrome, so a panel around it would double-box it. */}
+              bordered chrome, so a panel around it would double-box it. Its
+              title wears the third heading tier, a step under the page's. */}
           <section className={styles.tableSection} aria-label="Orders">
+            <Heading level={2} tier="heading-3">Orders</Heading>
             <OrdersTable bridge={bridge} onSelectionChange={onRowSelection} onPageView={setPageView} onAsk={ask} edits={edits} onAction={onAction} />
           </section>
 

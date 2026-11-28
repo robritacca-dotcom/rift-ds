@@ -65,9 +65,9 @@ const appShells = [
   {
     id: "floating",
     title: "Floating",
-    plane: "The page colour",
-    rail: "A glass card held off the edges by the float gap",
-    content: "On the page, centred beside the card",
+    plane: "The app surface",
+    rail: "A card on the shell colour, held off the edges by the float gap",
+    content: "Crisp on the app surface, centred beside the card",
     edge: "Raised: the hairline and the floating shadow on the card",
     lever: "None",
   },

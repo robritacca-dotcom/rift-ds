@@ -46,8 +46,8 @@ type AppLayoutOwnProps = {
    * How the rail and the content meet the page, one of the three app shell
    * modes. `flush` runs the rail edge to edge on the shell
    * colour behind a hairline, the content centred beside it on the crisp
-   * app surface, nothing raised. `floating` floats the rail as a glass card,
-   * the content still centred. `inset` runs the rail flush on the shell
+   * app surface, nothing raised. `floating` floats the rail as a card on the
+   * shell colour, the content centred on the crisp app surface. `inset` runs the rail flush on the shell
    * colour and sets the content in a raised surface (hairline and floating
    * shadow) inset from the other edges, which scrolls inside itself, and is
    * the default. How wide the content runs is `width`, apart from the mode.

@@ -152,7 +152,7 @@ export interface ChatWidgetProps {
    * Seat the widget as a page in one of AppLayout's three shell modes, for a
    * host where the chat is the page (a chat home), not a panel over one.
    * `flush` runs the history rail on the shell colour behind a hairline
-   * beside the conversation; `floating` lifts the rail into a glass card;
+   * beside the conversation; `floating` lifts the rail into a card on the shell colour;
    * `inset` runs the rail flush and seats the conversation
    * and each trailing panel in raised surfaces. Left out, the widget draws
    * no shell and takes its host's ground, as a docked or floating panel

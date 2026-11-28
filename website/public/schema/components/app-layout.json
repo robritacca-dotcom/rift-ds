@@ -115,7 +115,7 @@
             "inset"
           ],
           "required": false,
-          "description": "How the rail and the content meet the page, one of the three app shell\nmodes. `flush` runs the rail edge to edge on the shell\ncolour behind a hairline, the content centred beside it on the crisp\napp surface, nothing raised. `floating` floats the rail as a glass card,\nthe content still centred. `inset` runs the rail flush on the shell\ncolour and sets the content in a raised surface (hairline and floating\nshadow) inset from the other edges, which scrolls inside itself, and is\nthe default. How wide the content runs is `width`, apart from the mode.",
+          "description": "How the rail and the content meet the page, one of the three app shell\nmodes. `flush` runs the rail edge to edge on the shell\ncolour behind a hairline, the content centred beside it on the crisp\napp surface, nothing raised. `floating` floats the rail as a card on the\nshell colour, the content centred on the crisp app surface. `inset` runs the rail flush on the shell\ncolour and sets the content in a raised surface (hairline and floating\nshadow) inset from the other edges, which scrolls inside itself, and is\nthe default. How wide the content runs is `width`, apart from the mode.",
           "default": "inset",
           "typeRefs": [
             "AppSidebarLayout"

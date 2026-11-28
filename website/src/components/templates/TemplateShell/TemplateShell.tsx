@@ -17,7 +17,7 @@
  *   hairline and the content column is centred on the crisp app surface;
  *   the page scrolls. A template is always the floor of its page, so it
  *   takes no backdrop: the blur is a chat's alone.
- * - `floating`: the rail floats as a glass card and the content column is
+ * - `floating`: the rail floats as a card on the shell colour and the content column is
  *   centred at the template's own max width; the page scrolls.
  * - `inset`: the rail runs flush on the app shell colour and the content
  *   sits in a surface inset from the other edges, scrolling

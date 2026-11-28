@@ -28,10 +28,10 @@
      something, so it is the chat's alone: an
      app layout or a template is always the
      floor of its page and stays solid.
-   - floating: the rail is a glass card held off
-     the edges by the float gap, hairline and
-     floating shadow; the content sits on the
-     page.
+   - floating: the rail is a card on the shell
+     colour held off the edges by the float gap,
+     hairline and floating shadow; the content
+     is crisp on the app surface around it.
    - inset: the rail runs flush on the shell
      plane and the content is a raised surface,
      hairline and floating shadow, held off the
@@ -58,12 +58,10 @@
   --ds-shell-gap: var(--ds-shell-inset, 10px);
   --ds-shell-float-gap: var(--ds-sidebar-float-inset, 20px);
 
-  /* The raised edge and the glass card, shared by floating and inset. */
+  /* The raised edge, shared by floating and inset. */
   --ds-shell-radius: var(--radius-600);
   --ds-shell-edge-border: var(--color-bg-container-border);
   --ds-shell-edge-shadow: var(--shadow-floating);
-  --ds-shell-glass: var(--color-bg-glass);
-  --ds-shell-glass-blur: blur(24px);
 }
 
 :where([data-ds-shell='flush']) {
@@ -88,9 +86,9 @@
 }
 
 :where([data-ds-shell='floating']) {
-  --ds-shell-plane: var(--color-bg-page-primary);
-  --ds-shell-surface: var(--color-bg-page-primary);
-  --ds-shell-rail-bg: var(--ds-shell-glass);
+  --ds-shell-plane: var(--color-bg-app-surface);
+  --ds-shell-surface: var(--color-bg-app-surface);
+  --ds-shell-rail-bg: var(--color-bg-app-shell);
   --ds-shell-rail-divider: transparent;
   --ds-shell-surface-border: transparent;
   --ds-shell-surface-shadow: none;

@@ -1527,17 +1527,17 @@ html[data-chat-resizing] .ds-chat-launcher__panel--floating .ds-chat-header {
   border-inline-end-color: var(--ds-shell-rail-divider);
 }
 
-/* Floating: the history rail lifts off the plane as a glass card, the
-   floating rail's; the trailing panels wear the same raised edge. */
+/* Floating: the history rail lifts off the plane as a card on the shell
+   colour, the floating rail's; the trailing panels wear the same raised
+   edge. */
 .ds-chat-widget__rails[data-ds-shell='floating'] > .ds-chat-widget__threads-rail {
   margin: var(--ds-shell-float-gap);
   margin-inline-end: 0;
   overflow: hidden;
-  background-color: var(--ds-shell-glass);
+  background-color: var(--ds-shell-rail-bg);
   border: var(--border-025) solid var(--ds-shell-edge-border);
   border-radius: var(--ds-shell-radius);
   box-shadow: var(--ds-shell-edge-shadow);
-  backdrop-filter: var(--ds-shell-glass-blur);
 }
 
 /* Raised trailing panels (floating and inset): the card keeps its

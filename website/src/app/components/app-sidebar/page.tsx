@@ -194,7 +194,7 @@ const layoutNotes: Record<DemoLayout, string> = {
   flush:
     "Flush runs the rail edge to edge on the shell colour behind a hairline divider, and the panel continues it on the same ground, nothing raised.",
   floating:
-    "Floating sets the rail as a glass card inset from the edges, and the panel joins it as a second card, one gap along from the first.",
+    "Floating sets the rail as a card on the shell colour inset from the edges, and the panel joins it as a second card, one gap along from the first.",
   inset:
     "Inset, the default, runs the rail flush on the app shell colour, the panel continues it with a divider between them, and the content sits in a raised inset surface beyond both, as the templates draw it.",
 };

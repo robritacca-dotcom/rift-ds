@@ -390,7 +390,7 @@ export default function AiChatPage() {
           the templates draw. <code>flush</code> runs the history rail on the shell colour
           behind a hairline with the conversation crisp beside it, and takes a{" "}
           <code>backdrop</code> of solid or blur. <code>floating</code> lifts the rail into a
-          glass card. <code>inset</code>, below, seats the conversation and each trailing panel
+          card on the shell colour. <code>inset</code>, below, seats the conversation and each trailing panel
           in raised surfaces, with the header controls in the panel&apos;s top row. Left out,
           the chat draws no shell and takes its host&apos;s ground. On a phone every mode gives
           way to the plain full-screen chat.

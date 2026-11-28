@@ -233,9 +233,9 @@ type AppSidebarOwnProps = {
   /**
    * How the rail meets the page, one of the three app shell modes. `flush`
    * runs it edge to edge on the shell colour behind a hairline divider,
-   * nothing raised. `floating` floats it off the viewport edges as a glass card:
-   * inset with rounded corners, the translucent glass fill over a backdrop
-   * blur, and the floating shadow (the inset defaults to 20px and is
+   * nothing raised. `floating` floats it off the viewport edges as a card on
+   * the shell colour beside the crisp app surface: inset with rounded
+   * corners, a hairline and the floating shadow (the inset defaults to 20px and is
    * overridable via the --ds-sidebar-float-inset custom property). `inset`
    * runs it flush on the app shell colour, beside a raised content surface
    * inset from the edges, as AppLayout's `inset` layout draws it. Inside a
@@ -246,7 +246,7 @@ type AppSidebarOwnProps = {
    */
   layout?: AppSidebarLayout;
   /**
-   * Floats the rail as a glass card, the same as `layout="floating"`.
+   * Floats the rail as a card, the same as `layout="floating"`.
    * @deprecated Use `layout="floating"`.
    */
   floating?: boolean;

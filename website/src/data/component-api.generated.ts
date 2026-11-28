@@ -1398,7 +1398,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "layout",
             "type": "AppSidebarLayout",
             "required": false,
-            "description": "How the rail and the content meet the page, one of the three app shell\nmodes. `flush` runs the rail edge to edge on the shell\ncolour behind a hairline, the content centred beside it on the crisp\napp surface, nothing raised. `floating` floats the rail as a glass card,\nthe content still centred. `inset` runs the rail flush on the shell\ncolour and sets the content in a raised surface (hairline and floating\nshadow) inset from the other edges, which scrolls inside itself, and is\nthe default. How wide the content runs is `width`, apart from the mode.",
+            "description": "How the rail and the content meet the page, one of the three app shell\nmodes. `flush` runs the rail edge to edge on the shell\ncolour behind a hairline, the content centred beside it on the crisp\napp surface, nothing raised. `floating` floats the rail as a card on the\nshell colour, the content centred on the crisp app surface. `inset` runs the rail flush on the shell\ncolour and sets the content in a raised surface (hairline and floating\nshadow) inset from the other edges, which scrolls inside itself, and is\nthe default. How wide the content runs is `width`, apart from the mode.",
             "values": [
               "floating",
               "flush",
@@ -1652,7 +1652,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "layout",
             "type": "AppSidebarLayout",
             "required": false,
-            "description": "How the rail meets the page, one of the three app shell modes. `flush`\nruns it edge to edge on the shell colour behind a hairline divider,\nnothing raised. `floating` floats it off the viewport edges as a glass card:\ninset with rounded corners, the translucent glass fill over a backdrop\nblur, and the floating shadow (the inset defaults to 20px and is\noverridable via the --ds-sidebar-float-inset custom property). `inset`\nruns it flush on the app shell colour, beside a raised content surface\ninset from the edges, as AppLayout's `inset` layout draws it. Inside a\nhost that marks itself a shell (AppLayout, a chat or template page), the\nrail reads that host's mode from the shell recipe. Defaults to\n`inset` (or `floating` while the deprecated `floating` is set).",
+            "description": "How the rail meets the page, one of the three app shell modes. `flush`\nruns it edge to edge on the shell colour behind a hairline divider,\nnothing raised. `floating` floats it off the viewport edges as a card on\nthe shell colour beside the crisp app surface: inset with rounded\ncorners, a hairline and the floating shadow (the inset defaults to 20px and is\noverridable via the --ds-sidebar-float-inset custom property). `inset`\nruns it flush on the app shell colour, beside a raised content surface\ninset from the edges, as AppLayout's `inset` layout draws it. Inside a\nhost that marks itself a shell (AppLayout, a chat or template page), the\nrail reads that host's mode from the shell recipe. Defaults to\n`inset` (or `floating` while the deprecated `floating` is set).",
             "values": [
               "floating",
               "flush",
@@ -1667,7 +1667,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "floating",
             "type": "boolean",
             "required": false,
-            "description": "Floats the rail as a glass card, the same as `layout=\"floating\"`.",
+            "description": "Floats the rail as a card, the same as `layout=\"floating\"`.",
             "defaultValue": "false",
             "deprecated": "Use `layout=\"floating\"`."
           },
@@ -23192,7 +23192,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "layout",
             "type": "ChatLayout",
             "required": false,
-            "description": "Seat the widget as a page in one of AppLayout's three shell modes, for a\nhost where the chat is the page (a chat home), not a panel over one.\n`flush` runs the history rail on the shell colour behind a hairline\nbeside the conversation; `floating` lifts the rail into a glass card;\n`inset` runs the rail flush and seats the conversation\nand each trailing panel in raised surfaces. Left out, the widget draws\nno shell and takes its host's ground, as a docked or floating panel\ndoes. Under the inline rail's 720px threshold floating and inset lay\nout flush on the solid backdrop, and below the mobile breakpoint every\nmode gives way to the plain full-screen chat.",
+            "description": "Seat the widget as a page in one of AppLayout's three shell modes, for a\nhost where the chat is the page (a chat home), not a panel over one.\n`flush` runs the history rail on the shell colour behind a hairline\nbeside the conversation; `floating` lifts the rail into a card on the shell colour;\n`inset` runs the rail flush and seats the conversation\nand each trailing panel in raised surfaces. Left out, the widget draws\nno shell and takes its host's ground, as a docked or floating panel\ndoes. Under the inline rail's 720px threshold floating and inset lay\nout flush on the solid backdrop, and below the mobile breakpoint every\nmode gives way to the plain full-screen chat.",
             "values": [
               "floating",
               "flush",

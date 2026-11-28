@@ -224,7 +224,7 @@
             "inset"
           ],
           "required": false,
-          "description": "How the rail meets the page, one of the three app shell modes. `flush`\nruns it edge to edge on the shell colour behind a hairline divider,\nnothing raised. `floating` floats it off the viewport edges as a glass card:\ninset with rounded corners, the translucent glass fill over a backdrop\nblur, and the floating shadow (the inset defaults to 20px and is\noverridable via the --ds-sidebar-float-inset custom property). `inset`\nruns it flush on the app shell colour, beside a raised content surface\ninset from the edges, as AppLayout's `inset` layout draws it. Inside a\nhost that marks itself a shell (AppLayout, a chat or template page), the\nrail reads that host's mode from the shell recipe. Defaults to\n`inset` (or `floating` while the deprecated `floating` is set).",
+          "description": "How the rail meets the page, one of the three app shell modes. `flush`\nruns it edge to edge on the shell colour behind a hairline divider,\nnothing raised. `floating` floats it off the viewport edges as a card on\nthe shell colour beside the crisp app surface: inset with rounded\ncorners, a hairline and the floating shadow (the inset defaults to 20px and is\noverridable via the --ds-sidebar-float-inset custom property). `inset`\nruns it flush on the app shell colour, beside a raised content surface\ninset from the edges, as AppLayout's `inset` layout draws it. Inside a\nhost that marks itself a shell (AppLayout, a chat or template page), the\nrail reads that host's mode from the shell recipe. Defaults to\n`inset` (or `floating` while the deprecated `floating` is set).",
           "default": "inset",
           "typeRefs": [
             "AppSidebarLayout"
@@ -235,7 +235,7 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Floats the rail as a glass card, the same as `layout=\"floating\"`.",
+          "description": "Floats the rail as a card, the same as `layout=\"floating\"`.",
           "default": false,
           "deprecated": "Use `layout=\"floating\"`."
         },

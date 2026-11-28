@@ -77,7 +77,7 @@ export default function AppLayoutPage() {
           picks one of the three app shell modes the templates and the chat share: inset
           (the default), the content in a raised surface of its own; flush, the rail on the
           shell colour behind a hairline with the content crisp beside it; or floating, the
-          rail as a glass card. The component
+          rail as a card on the shell colour with the content crisp around it. The component
           pins itself to the dark theme by default, which is why the demos below appear
           dark; pass theme=&quot;inherit&quot; to drop the pin and let the layout follow the
           surrounding data-theme like any other component.
@@ -135,7 +135,7 @@ export default function AppLayoutPage() {
           >
             <DemoContent
               heading="Dashboard"
-              body="The rail floats off the edges as a glass card, and the content stays centred beside it."
+              body="The rail floats off the edges as a card on the shell colour, and the content stays centred beside it on the crisp surface."
             />
           </AppLayout>
         </div>
